@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="In Tavola - Food App">
+  <meta name="author" content="Matteo Locatelli | iteodev.ch">
+  <title>In Tavola The Food App | Come Funzione ?</title>
+
+  <!-- Favicons-->
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" type="image/x-icon" href="img/apple-touch-icon-57x57-precomposed.png">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="img/apple-touch-icon-72x72-precomposed.png">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="img/apple-touch-icon-114x114-precomposed.png">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="img/apple-touch-icon-144x144-precomposed.png">
+
+  <!-- GOOGLE WEB FONT -->
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&amp;display=swap"
+    as="fetch" crossorigin="anonymous">
+  <script type="text/javascript">
+    !function (e, n, t) { "use strict"; var o = "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap", r = "__3perf_googleFonts_c2536"; function c(e) { (n.head || n.body).appendChild(e) } function a() { var e = n.createElement("link"); e.href = o, e.rel = "stylesheet", c(e) } function f(e) { if (!n.getElementById(r)) { var t = n.createElement("style"); t.id = r, c(t) } n.getElementById(r).innerHTML = e } e.FontFace && e.FontFace.prototype.hasOwnProperty("display") ? (t[r] && f(t[r]), fetch(o).then(function (e) { return e.text() }).then(function (e) { return e.replace(/@font-face {/g, "@font-face{font-display:swap;") }).then(function (e) { return t[r] = e }).then(f).catch(a)) : a() }(window, document, localStorage);
+  </script>
+
+  <!-- Bootstrap core CSS-->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- BASE CSS -->
+  <link href="css/bootstrap_customized.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+
+  <!-- SPECIFIC CSS -->
+  <link href="css/order-sign_up.css" rel="stylesheet">
+  <link href="css/submit.css" rel="stylesheet">
+  <link href="css/listing.css" rel="stylesheet">
+  <link href="css/home.css" rel="stylesheet">
+  <link href="css/contacts.css" rel="stylesheet">
+  <link href="css/detail-page.css" rel="stylesheet">
+  <link href="css/review.css" rel="stylesheet">
+
+
+  <!-- Main styles -->
+  <link href="css/admin.css" rel="stylesheet">
+  <!-- Icon fonts-->
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- Plugin styles -->
+  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+  <!-- Your custom styles -->
+
+</head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    
+  </body>
+    
+      <script src="js/common_scripts.min.js"></script>
+      <script src="js/common_func.js"></script>
+      <script src="assets/validate.js"></script>
+
+
+      <!-- SPECIFIC SCRIPTS -->
+      <script src="js/sticky_sidebar.min.js"></script>
+      <script src="js/sticky-kit.min.js"></script>
+      <script src="js/specific_listing.js"></script>
+      <script src="js/specific_detail.js"></script>
+      <script src="js/specific_review.js"></script>
+      
+      <!-- Map -->
+      <script src="js/main_map_scripts.js"></script>
+      <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH-1noGUoStq-5nLCbxHLhAPHN1kPrW2k&amp;libraries=places&amp;callback=initMap"></script> -->
+      <script src="js/leaflet_map/leaflet.min.js"></script>
+      <script src="js/leaflet_map/leaflet_markercluster.min.js"></script>
+      <script src="js/leaflet_map/leaflet_markers.js"></script>
+      <script src="js/leaflet_map/leaflet_func.js"></script>
+
+      <script src="js/sticky_sidebar.min.js"></script>
+      <script>
+        $('#sidebar_fixed').theiaStickySidebar({
+          minWidth: 991,
+          updateSidebarHeight: false,
+          additionalMarginTop: 30
+        });
+      </script>
+
+      <!-- Bootstrap core JavaScript-->
+      <script src="vendor/jquery/jquery.min.js"></script>
+      <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+      <!-- Core plugin JavaScript-->
+      <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+      <!-- Page level plugin JavaScript-->
+      <script src="vendor/chart.js/Chart.js"></script>
+      <script src="vendor/datatables/jquery.dataTables.js"></script>
+      <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+      <script src="vendor/jquery.selectbox-0.2.js"></script>
+      <script src="vendor/jquery.magnific-popup.min.js"></script>
+      <!-- Custom scripts for all pages-->
+      <script src="js/admin.js"></script>
+      <!-- Custom scripts for this page-->
+      <script src="js/admin-charts.js"></script>
+
+</html>
