@@ -13,8 +13,8 @@ import PuffLoader from "react-spinners/PuffLoader"
 toast.configure();
 const Login = () => {
     const [{}, dispatch] = useStateValue();
-    const [loading, setLoading] = useState(false);
     const histry = useHistory(); 
+    const [loading, setLoading] = useState(false);
     
     const loader = () =>{
         if(!loading){

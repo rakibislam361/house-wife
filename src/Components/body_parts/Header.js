@@ -16,6 +16,7 @@ const Header = () => {
     const [{header}, dispatch] = useStateValue();
     
     const user_token = localStorage.getItem('token');
+    const user_type = localStorage.getItem('user');
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [user, setUser] = useState();
@@ -23,19 +24,19 @@ const Header = () => {
 
 
     useEffect(() => {
-        try {
-            async function load() {
-                const response = await axios.get('http://intavola.softminion.com/api/profile?token='+user_token);
-                const data = await response;
-                setUser(data) 
+        if(user_token){
+            try {
+                async function load() {
+                 const response = await axios.get('http://intavola.softminion.com/api/profile?token='+user_token);
+                    const data = await response;
+                    setUser(data) 
+                }
+                load()  
+                
+            } catch (error) {
             }
-            load()  
-            
-        } catch (error) {
-            console.log(error);
         }
-        
-        },[]);
+    },[]);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -72,7 +73,7 @@ const Header = () => {
     }
 
     return ( 
-        <header style={header==="false" ? {display:'block'} : {display:'none' }} className="header clearfix element_to_stick">
+        <header className="header clearfix element_to_stick">
                 <div className="container">
                 <div id="logo">
                     <Link to="/">
@@ -102,7 +103,7 @@ const Header = () => {
                             
                             {user && 
                             <MenuItem className="">
-                                 <Link to={user.data.user.type === 1 ? '/user_profile' : '/housewife_profile'}>My account</Link>
+                                 <Link to={user_type === 1 ? '/user_profile' : '/housewife_profile'}>My account</Link>
                              </MenuItem>
                              }
                             <MenuItem className="" onClick={logOut}>Logout</MenuItem>

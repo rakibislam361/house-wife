@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { Link,useHistory } from 'react-router-dom';
+import { Link,Redirect,useHistory } from 'react-router-dom';
 import LoginModel from '../body_parts/LoginModel'
 
 
@@ -44,7 +44,6 @@ const Order = () => {
     });
 
     const onSubmit = (data) => {
-        console.log(data)
         loader();
         var config = {
           method: "POST",
@@ -70,8 +69,9 @@ const Order = () => {
                 type: "REMOVE_TO_BUY",
                 buynow: null,
               });
+              
              histry.push("/thankyou_page")
-          })
+        })
            
           .catch((error) => {
             toast.error(error.message, {

@@ -6,7 +6,6 @@ import {BrowserRouter as Router, Switch, Route, BrowserRouter } from "react-rout
 import About_us from './Components/pages/About_us'
 import Partner from './Components/pages/Partner'
 import Contact_us from './Components/pages/Contact_us'
-import Listing_list from './Components/pages/Listing_research'
 import Login from './Components/pages/Login'
 import Listing_header from './Components/body_parts/Listing_header'
 import Housewife_details from './Components/pages/Housewife_details'
@@ -26,6 +25,8 @@ import User_profile from './Components/admin_section/user_pages/User_profile'
 import ProtectedRoute from './Components/ProtectedRoute'
 import User_subscription from './Components/admin_section/user_pages/User_subscription'
 import ThankyouPage from './Components/pages/ThankyouPage';
+import Listing_research from './Components/pages/Listing_research';
+import Housewife_search_list from './Components/pages/Housewife_search_list';
 
 
 
@@ -101,14 +102,14 @@ useEffect(() => {
                         <Login />
                         <Footer />
                     </Route>
-                    <Route path="/housewife_list/:id">
-                        <Listing_header />
-                        <Listing_list />
-                        <Footer />
-                    </Route>
                     <Route path="/housewife_list">
                         <Listing_header />
-                        <Listing_list />
+                        <Listing_research />
+                        <Footer />
+                    </Route>
+                    <Route path="/housewife_search_list">
+                        <Listing_header />
+                        <Housewife_search_list />
                         <Footer />
                     </Route>
                     <Route path="/housewife_details">
@@ -122,7 +123,6 @@ useEffect(() => {
                         <Footer />
                     </Route>
                      <Route path="/thankyou_page">
-                        <Listing_header />
                         <ThankyouPage />
                         <Footer />
                     </Route>

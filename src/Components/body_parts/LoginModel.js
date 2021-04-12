@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '330px',
     width:'330px',
     margin: '40px auto',
-    marginTop:'-1%'
+    marginTop:'2%'
 },
   paper: {
     backgroundColor: theme.palette.background.paper,
@@ -157,16 +157,7 @@ export default function TransitionsModal(props) {
           }
       })
       .catch(error => {
-          toast.error(error.message,{
-            position: "bottom-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setLoading(false)
+
 
       });
 

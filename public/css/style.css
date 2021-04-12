@@ -3680,6 +3680,7 @@ header.black_nav .dropdown.user a:hover {
   -moz-backface-visibility: hidden;
   /* fix firefox animation glitch */
   padding-left: 0px !important;
+  display: flex;
 }
 
 .owl-carousel .owl-stage:after {

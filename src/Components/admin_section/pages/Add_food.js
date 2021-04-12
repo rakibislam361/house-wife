@@ -1,15 +1,151 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 import Side_nav from '../body_parts/Side_nav'
 import Admin_Footer from '../body_parts/Footer'
 import { withRouter } from 'react-router'
+import PropagateLoader from "react-spinners/PropagateLoader"
+
+
 
 const Add_food = () => {
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState();
+    const token = localStorage.getItem("token");
+    const [contryfood, setCountryfood] = useState([]);
+    const [foodcategory, setFoodcategory] = useState([]);
+
+
+console.log(contryfood)
+    useEffect(() => {
+      try {
+          async function load() {
+            const response = await axios.get('http://intavola.softminion.com/api/profile?token='+token);
+            const data = await response;
+            setUser(data) 
+            setLoading(false)             
+        }
+        load()  
+        
+      } catch (error) {
+        console.log(error);
+      }
+  
+    },[]);
+    
+    useEffect(() => {
+        try {
+          async function load() {
+            const response = await axios.get('http://intavola.softminion.com/api/housewife/food/country-food');
+            const data = await response;
+            setCountryfood(data.data.country_foods) 
+            setLoading(false)             
+        }
+        load() 
+        }catch (error) {
+        console.log(error);
+      }
+
+    }, [])
+
+
+     useEffect(() => {
+        try {
+        async function load() {
+            const response = await axios.get('http://intavola.softminion.com/api/housewife/food/category');
+            const data = await response;
+            setFoodcategory(data.data.categories) 
+            setLoading(false)             
+        }
+        load() 
+
+        }catch (error) {
+        console.log(error);
+      }
+
+    }, [])
+    
+
+    const loader =() =>{
+      if(!loading){
+          setLoading(true)
+      }
+      
+    }
+    const schema = yup.object().shape({
+        title_en: yup.string().required("Food name is reuired"),
+        country_food_id: yup.string(),
+        description_en: yup.string(),
+        status: yup.string(),
+        category_id: yup.string(),      
+   
+    });
+
+    const { register, handleSubmit, control, errors } = useForm({
+        resolver: yupResolver(schema),
+    });
+
+    const onSubmit = (data) => {
+    console.log(data) 
+    loader();
+    var config = {
+      method: "POST",
+      url: "http://intavola.softminion.com/api/housewife/food",
+      data: data,
+      headers: {
+        Authorization: `Basic ${token}`,
+      },
+    };
+    axios(config)
+      .then((response) => {
+        toast.success(response.data.message, {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+         {response ? setLoading(false) : setLoading(true)}
+      })
+        
+      .catch((error) => {
+        toast.error(error.message, {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+          setLoading(false)
+
+      });
+    };
+
+
     return (
           <body className="fixed-nav sticky-footer" id="page-top">
             <Side_nav />
                 <div className="content-wrapper">
-                    <div className="container-fluid">
-                        {/* Breadcrumbs*/}
+                {loading ? 
+                        <div className="row">
+                            <div className="loading-spiner">
+                                <div className="col-sm-12 col-md-4 col-xl-3">
+                                <PropagateLoader  color="#f74f07" loading={loading} size={15} />
+                                </div>
+                            </div>
+                        </div>
+                 : contryfood && foodcategory ?
+              
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="container-fluid">
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item">
                             <a href="#">Dashboard</a>
@@ -21,92 +157,125 @@ const Add_food = () => {
                             <h2><i className="fa fa-file" />Add Food</h2>
                             </div>
                             <div className="row">
-                            <div className="col-md-12">
-                                <div className="form-group">
-                                <label>Food Name*</label>
-                                <input type="text" className="form-control" placeholder="Name of the dish" />
+                                <div className="col-md-12">
+                                    <div className="form-group">
+                                    <label>Food Name*</label>
+                                        <input type="text" 
+                                        className="form-control"
+                                        name="title_en"
+                                        ref={register}
+                                        placeholder="Name of the dish" />
+                                         {errors.title_en && (
+                                            <span className="error_message">
+                                            {errors.title_en.message}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                             {/* /row*/}
                             <div className="row">
                             <div className="col-md-6">
                                 <div className="form-group">
+                                
+                                
                                 <label>Country Food*</label>
-                                <div className="styled-select">
-                                    <select>
-                                    <option>Italia</option>
-                                    <option>France</option>
-                                    <option>Spain</option>
-                                    <option>Japanese</option>
-                                    <option>Chinese</option>
-                                    <option>Mexican</option>
-                                    </select>
-                                </div>
+                                    <div className="styled-select">
+                                        <select 
+                                        ref={register}
+                                        name="country_food_id"
+                                        >  
+                                        <option defaultValue="DEFAULT" disabled> Country Food</option>
+                                        
+                                             {contryfood ? contryfood.map((contry) => (
+                                                <option selected key={contry.id} Value={contry.id}>{contry.country_en}</option>
+                                            )): ""}
+
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
                                 <label>Category*</label>
-                                <div className="styled-select">
-                                    <select>
-                                    <option>Appetizers</option>{/* Antipasti */}
-                                    <option>Cold dishes</option>{/* Piatti Freddi */}
-                                    <option>First</option>{/* Primi */}
-                                    <option>Seconds</option>{/* Secondi */}
-                                    <option>Side Dishes</option>{/* Contorni */}
-                                    <option>Desserts</option>{/* Dolci */}
-                                    </select>
-                                </div>
+                                    <div className="styled-select">
+                                        
+                                        <select name="category_id" ref={register}>
+                                            <option defaultValue="DEFAULT" disabled>Select Category</option>
+                                            
+                                            {foodcategory ? foodcategory.map((category) => (
+                                                <option selected key={category.id} Value={category.id}>{category.title_en}</option>
+                                            )): ""}
+
+                                            <option>Cold dishes</option>{/* Piatti Freddi */}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             </div>
                             {/* /row*/}
                             <div className="row">
-                            <div className="col-md-12">
-                                <div className="form-group">
-                                <label>Description</label>
-                                <div className="editor" />
+                                <div className="col-md-12">
+                                    <div className="form-group">
+                                    <label>Description</label>
+                                        <textarea  
+                                            className="form-control" 
+                                            rows="4" cols="50"
+                                            name="description_en"
+                                            ref={register}
+                                            >
+                                        </textarea>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                             {/* /row*/}
                             <div className="row">
                             <div className="col-md-12">
                                 <div className="form-group">
                                 <label>Photos*</label>
-                                <form action="../../file-upload.html" className="dropzone" />
+                                <input className="dropzone" />
                                 </div>
                             </div>
                             </div>
                             {/* /row*/}
+                            {/* <div className="row">
+                                <div className="col-md-12">
+                                    <div className="form-group">
+                                    <label>Tag</label>
+                                    <input type="text" className="form-control" placeholder="tag" />
+                                    </div>
+                                </div>
+                            </div> */}
+
                             <div className="row">
-                            <div className="col-md-12">
-                                <div className="form-group">
-                                <label>Tag</label>
-                                <input type="text" className="form-control" placeholder="tag" />
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                    <label>Status*</label>
+                                        <div className="styled-select">
+                                            <select name="status" ref={register}>
+                                                <option Value={1}>Active</option>{/* Attivo */}
+                                                <option Value={2}>Inactive</option>{/* Disattivo */}
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            </div>
-                            <div className="row">
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                <label>Status*</label>
-                                <div className="styled-select">
-                                    <select>
-                                    <option>Active</option>{/* Attivo */}
-                                    <option>Inactive</option>{/* Disattivo */}
-                                    </select>
-                                </div>
-                                </div>
-                            </div>
                             </div>
                             {/* /row*/}
                         </div>
                         {/* /box_general*/}
                         {/* /.container-wrapper*/}
-                        <p><a href="#0" className="btn_1 medium">Save</a></p>
+                        <p><button type="submit" className="btn_1 medium">Save</button></p>
                     </div>
+                    </form>
+                  :
+                  <div className="row">
+                      <div className="loading-spiner">
+                        <div className="col-sm-12 col-md-4 col-xl-3">
+                          <PropagateLoader  color="#f74f07" loading={loading} size={15} />
+                        </div>
+                    </div>
+                  </div> 
+                }   
                 </div>
             <Admin_Footer />
         </body>

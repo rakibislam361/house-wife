@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react' 
 import { Link, useHistory } from "react-router-dom"
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import MembershipPlan from "./MembershipPlan";
+import PuffLoader from "react-spinners/PuffLoader"
 
 toast.configure();
 const Partner = (props) => {
@@ -19,39 +20,52 @@ const Partner = (props) => {
     password_confirmation: yup.string().required("confirm password is a required field").min(6) .oneOf([yup.ref('password'), null], 'Passwords does not match'),
 
   });
-const histry = useHistory(); 
-   const { register, handleSubmit, errors, reset } = useForm({  
-    resolver:yupResolver(schema),
-   }); 
+  
+  const histry = useHistory(); 
+  const { register, handleSubmit, errors, reset } = useForm({  
+  resolver:yupResolver(schema),
+  }); 
 
-    const onSubmit = (data) =>{
-       const response = axios.post('http://intavola.softminion.com/api/auth/register', data)
-        .then(response =>{
-             toast.success(response.data.message,{
-              position: "bottom-left",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            }); histry.push('/login');
-            reset();
-        })
-        
-        .catch(error => {
-            toast.error("Something went wrong !",{
-              position: "bottom-left",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+  const [loading, setLoading] = useState(false);
+  
+  const loader = () =>{
+      if(!loading){
+      setLoading(true)
+      }    
+  }
+
+  const onSubmit = (data) =>{
+    loader();
+    const response = axios.post('http://intavola.softminion.com/api/auth/register', data)
+    .then(response =>{
+          toast.success(response.data.message,{
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }); histry.push('/login');
+        reset();
+        {response ? setLoading(false) : setLoading(true)}
+    })
+    
+    .catch(error => {
+        toast.error("Something went wrong !",{
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
         });
+        {error ? setLoading(false) : setLoading(true)}
 
-    } 
+    });
+
+  } 
    
     return (
       <main>
@@ -205,8 +219,11 @@ const histry = useHistory();
                 <p>Sfrutta i dati a disposizione per far crescere il tuo business. Monitora le richieste, controlla i tuoi progressi e attira nuovi clienti.</p>
               </div>
               <div id="message-register" />
-                 
-                <form method="post" onSubmit={handleSubmit(onSubmit)}>
+                  {loading ?
+                    <div className="loading-spiner">
+                       <PuffLoader  color="#f74f07" loading={loading} size={160} />
+                    </div> 
+                :  <form method="post" onSubmit={handleSubmit(onSubmit)}>
                 <h6>Dati personali</h6>
                 <div className="row">
                   <div className="col-lg-12">
@@ -286,6 +303,7 @@ const histry = useHistory();
                   <input type="submit" className="btn_1 gradient" defaultValue="INVIA" id="submit-register" />
                 </div>
               </form>
+                }
             </div>
           </div>
         </div>

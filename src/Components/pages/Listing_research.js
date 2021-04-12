@@ -1,24 +1,62 @@
-import React,{useState} from 'react'
-import { Link } from "react-router-dom"
+import React,{useState, useEffect} from 'react'
+import { Link, useParams } from "react-router-dom"
 import HouseWife from './SingleHousewife/HouseWife'
 import { Collapse } from 'react-bootstrap';
-import { useHistory , useLocation } from "react-router-dom";
 
-const Listing_research = () => {
+
+const Listing_research = (props) => {
     const [categorie, setCategorie] = useState(false);
     const [distanza, setDistanza] = useState(false);
     const [valutazione, setValutazione] = useState(false);
+    const [housewife, setHousewife] = useState([]);
+    const data = sessionStorage.getItem("search_result")
+    const search = JSON.parse(data) 
+    const [confood, setConFood] = useState();
+    const contry_food_id = sessionStorage.getItem("ctfood")
+      
     
-    const history = useHistory()
-    console.log(history.location.pathname)
-   
+    useEffect(() => {
+          try {
+            fetch("http://intavola.softminion.com/api/index")
+            .then((response)=> response.json())
+            .then((data)=> setConFood(data.country_foods))
+          } catch (error) {
+            
+          }
+      
+      }, []) 
+
+    useEffect(() => {
+    
+        try {
+          fetch("http://intavola.softminion.com/api/housewifes?country="+contry_food_id)
+          .then((response)=> response.json())
+          .then((data)=> setHousewife(data.housewives))
+        } catch (error) {
+          
+        }
+        
+     
+        // try {
+        //   fetch("http://intavola.softminion.com/api/search="+search[0].name)
+        //   .then((response)=> response.json())
+        //   .then((data)=> setHousewife(data.housewives))
+        // } catch (error) {
+          
+        // }
+         
+      
+     
+  }, [])
+
+       
     return (
         <main>
           <div className="page_header element_to_stick">
                 <div className="container">
                   <div className="row">
                     <div className="col-xl-8 col-lg-7 col-md-7 d-none d-md-block">
-                        <h1>145 casalinghe disponibili</h1>
+                        <h1>{housewife.length} casalinghe disponibili</h1>
                     </div>
 
                     <div className="col-xl-4 col-lg-5 col-md-5">
@@ -128,10 +166,10 @@ const Listing_research = () => {
                   {/* /filter_type */}
                   <div className="filter_type last">
                     <h4><Link
-                        onClick={() => setValutazione(!valutazione)}
-                        aria-expanded={valutazione}  
-                        className="closed">
-                          Valutazione</Link></h4>
+                      onClick={() => setValutazione(!valutazione)}
+                      aria-expanded={valutazione}  
+                      className="closed">
+                      Valutazione</Link></h4>
                     
                     <Collapse className="collapse" in={valutazione}>
                       <ul>
@@ -174,37 +212,15 @@ const Listing_research = () => {
                   <div className="col-12">
                     <h2 className="title_small">Tutto ciò che offre Bergamo</h2>
                     <div className="categories_carousel_inn listing" style={{display: "flex", justifyContent: "space-between"}}>
-                      <div className="item col-md-2">
+                    {confood?confood.map((food)=> 
+                      <div key={food.id} className="item col-md-2">
                         <figure>
                           <img src="img/cat_listing_1.jpg" data-src="img/cat_listing_1.jpg" alt="" className="owl-lazy" />
-                          <Link to="#0"><h3>Italiani</h3></Link>
+                          <Link to="#0"><h3>{food.country_en}</h3></Link>
                         </figure>
                       </div>
-                      <div className="item col-md-2">
-                        <figure>
-                          <img src="img/cat_listing_3.jpg" data-src="img/cat_listing_3.jpg" alt="" className="owl-lazy" />
-                          <Link to="#0"><h3>Dessert</h3></Link>
-                        </figure>
-                      </div>
-                      <div className="item col-md-2">
-                        <figure>
-                          <img src="img/cat_listing_2.jpg" data-src="img/cat_listing_2.jpg" alt="" className="owl-lazy" />
-                          <Link to="#0"><h3>Japonesi</h3></Link>
-                        </figure>
-                      </div>
-                      <div className="item col-md-2">
-                        <figure>
-                          <img src="img/cat_listing_8.jpg" data-src="img/cat_listing_8.jpg" alt="" className="owl-lazy" />
-                          <Link to="#0"><h3>Chinese</h3></Link>
-                        </figure>
-                      </div>
-                      <div className="item col-md-2">
-                        <figure>
-                          <img src="img/cat_listing_3.jpg" data-src="img/cat_listing_3.jpg" alt="" className="owl-lazy" />
-                          <Link to="#0"><h3>Dessert</h3></Link>
-                        </figure>
-                      </div>	
-                    </div>
+                    ) : ""}
+                 </div>
                     {/* /carousel */}
                   </div>
                 </div>
@@ -217,8 +233,15 @@ const Listing_research = () => {
                 <div className="row">
                   <div className="col-12"><h2 className="title_small">Casalinghe in Bergamo</h2></div>
                   
-                  <HouseWife />
-          
+                  {housewife && housewife.map((item, index)=> 
+                    <HouseWife
+                      key={index}
+                      id={item.id}
+                      name={item.name} 
+                      city={item.city}
+                      housewife_type={item.housewife_type}                  
+                    />
+                  )}
                 </div>
                 {/* /row */}
                 <div className="pagination_fg">

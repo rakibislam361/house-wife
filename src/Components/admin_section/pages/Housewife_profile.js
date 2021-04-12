@@ -19,40 +19,40 @@ const Housewife_profile = () => {
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
     
-        useEffect(() => {
-          try {
-             async function load() {
-               const response = await axios.get('http://intavola.softminion.com/api/profile?token='+token);
-                const data = await response;
-                setUser(data) 
-                setLoading(false)             
-            }
-            load()  
-            
-          } catch (error) {
-            console.log(error);
+      useEffect(() => {
+        try {
+            async function load() {
+              const response = await axios.get('http://intavola.softminion.com/api/profile?token='+token);
+              const data = await response;
+              setUser(data) 
+              setLoading(false)             
           }
-         
-        },[]);
-        
-        const loader =() =>{
-          if(!loading){
-             setLoading(true)
-          }
-         
+          load()  
+          
+        } catch (error) {
+          console.log(error);
         }
-
-
+    
+      },[]);
+      
+      const loader =() =>{
+        if(!loading){
+            setLoading(true)
+        }
+        
+      }
+      
+      const [files, setFiles] = useState([]);
+    
+      
       const schema = yup.object().shape({
         name: yup.string().required(),
         phone: yup.string().required(),
         email: yup.string().required(),
-        profile_image: yup.string(),
         address: yup.string().required(),
         city: yup.string().required(),
         country_id: yup.string().required(),
         zip_code: yup.string().required("zip code is a required field"),
-
         description_seo: yup.string(),
         keywords_seo: yup.string(),
 
@@ -62,7 +62,6 @@ const Housewife_profile = () => {
       });
 
       //profile image dropify .....
-      const [files, setFiles] = useState([]);
       const { getRootProps, getInputProps } = useDropzone({
         accept: "image/*",
         onDrop: (acceptedFiles) => {
@@ -76,6 +75,7 @@ const Housewife_profile = () => {
         },
       });
 
+  
       const images = files.map((file) => (
         <div key={file.name}>
           <div>
@@ -89,7 +89,7 @@ const Housewife_profile = () => {
       });
 
       const onSubmit = (data) => {
-          loader();
+        loader();
         var config = {
           method: "POST",
           url: "http://intavola.softminion.com/api/profile/update",
@@ -172,7 +172,6 @@ const Housewife_profile = () => {
                                     <input {...getInputProps({ onChange })} />
                                     <div className="dz-dropzone">
                                       <label
-                                        onChange={onChange}
                                         className={
                                           images.length > 0
                                             ? "dropzone-image"
@@ -325,7 +324,7 @@ const Housewife_profile = () => {
                                       id="country_id"
                                       ref={register}
                                     >
-                                      <option value="DEFAULT" disabled> Select country</option>
+                                      <option defaultValue="DEFAULT" disabled> Select country</option>
                                       {user ? user.data.countries.map(country=>{
                                         return(
                                           <option selected Value={country.id}>{country.name}</option>
@@ -352,7 +351,7 @@ const Housewife_profile = () => {
                                       id="housewife_type"
                                       ref={register}
                                       defaultChecked={user.data.user.housewife_type ==2 ? true : false}
-
+                                      checked
                                     />
                                     <span className="checkmark" />
                                   </label>
@@ -378,7 +377,6 @@ const Housewife_profile = () => {
                                       ref={register}
                                       id="housewife_type"
                                       defaultChecked={user.data.user.housewife_type == 3 ? true : false}
-
                                     />
                                     <span className="checkmark" />
                                   </label>

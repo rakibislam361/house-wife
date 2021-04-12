@@ -1,10 +1,24 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import { Link } from "react-router-dom";
 import Searchbox from './Searchbox';
 
 const Home = () => {
 
-   
+   const [confood, setConFood] = useState();
+       useEffect(() => {
+        try {
+          fetch("http://intavola.softminion.com/api/index")
+          .then((response)=> response.json())
+          .then((data)=> setConFood(data.country_foods))
+        } catch (error) {
+          
+        }
+     
+  }, []) 
+ 
+     const openCard = (event) => {
+    sessionStorage.setItem('ctfood',event.currentTarget.dataset.id)   
+    }; 
 
     return (
         <main> 
@@ -25,6 +39,8 @@ const Home = () => {
               </div>
               <div className="wave hero" />
             </div>
+            
+            
             <div className="bg_gray">
               <div className="container margin_60">
                 <div className="main_title center">
@@ -33,90 +49,54 @@ const Home = () => {
                   <p>Scegli il tuo piatto preferito, contatta direttamente l'utente e gustati la tua ricetta homemade!</p>
                 </div>
                 {/* /main_title */}
-                <div className="owl-carousel owl-theme categories_carousel owl-loaded owl-drag">
-                    <div className="owl-stage-outer">
-                      <div className="owl-stage" style={{transform: 'translate3d(0px, 0px, 0px)', transition: 'all 0s ease 0s', width: '1542px', paddingLeft: '50px', paddingRight: '50px'}}>
-                        <div className="owl-item active" style={{width: '186px', marginRight: '20px'}}>
-                          <div className="item_version_2">
-                  <Link to="/housewife_list">
-                    <figure>
-                      <span>26</span>
-                      <img src="img/bergamaschi.jpg" data-src ="img/bergamaschi.jpg" alt="" className="owl-lazy" width={350} height={450} style={{opacity: 1}} />
-                      <div className="info">
-                        <small>Piatti</small>
-                        <h3>Bergamaschi</h3>
-                      </div>
-                    </figure>
-                  </Link>
-                </div></div><div className="owl-item active" style={{width: '186px', marginRight: '20px'}}><div className="item_version_2">
-                  <Link to="/housewife_list">
-                    <figure>
-                      <span>34</span>
-                      <img src="img/milano.jpg" data-src = "img/milano.jpg" alt="" className="owl-lazy" width={350} height={450} style={{opacity: 1}} />
-                      <div className="info">
-                        <small>Piatti</small>
-                        <h3>Milanesi</h3>
-                      </div>
-                    </figure>
-                  </Link>
-                </div></div><div className="owl-item active" style={{width: '186px', marginRight: '20px'}}><div className="item_version_2">
-                  <Link to="/housewife_list">
-                    <figure>
-                      <span>15</span>
-                      <img src="img/emilia.jpg" data-src ="img/emilia.jpg" alt="" className="owl-lazy" width={350} height={450} style={{opacity: 1}} />
-                      <div className="info">
-                        <small>Piatti</small>
-                        <h3>Emilia Romagna</h3>
-                      </div>
-                    </figure>
-                  </Link>
-                </div></div><div className="owl-item active" style={{width: '186px', marginRight: '20px'}}><div className="item_version_2">
-                  <Link to="/housewife_list">
-                    <figure>
-                      <span>15</span>
-                      <img src="img/lazio.jpg" data-src="img/lazio.jpg" alt="" className="owl-lazy" width={350} height={450} style={{opacity: 1}} />
-                      <div className="info">
-                        <small>Piatti</small>
-                        <h3>Lazio</h3>
-                      </div>
-                    </figure>
-                  </Link>
-                </div></div><div className="owl-item active" style={{width: '186px', marginRight: '20px'}}><div className="item_version_2">
-                  <Link to="/housewife_list">
-                    <figure>
-                      <span>16</span>
-                      <img src="img/home_cat_pizza.jpg" data-src="img/home_cat_pizza.jpg" alt="" className="owl-lazy" width={350} height={450} style={{opacity: 1}} />
-                      <div className="info">
-                        <small>Piatti</small>
-                        <h3>Campania</h3>
-                      </div>
-                    </figure>
-                  </Link>
-                </div></div><div className="owl-item" style={{width: '186px', marginRight: '20px'}}><div className="item_version_2">
-                  <Link to="/housewife_list">
-                    <figure>
-                      <span>15</span>
-                      <img src="img/home_cat_placeholder.jpg" data-src="img/home_cat_pizza.jpg" alt="" className="owl-lazy" width={350} height={450} />
-                      <div className="info">
-                        <small>Piatti</small>
-                        <h3>Puglia</h3>
-                      </div>
-                    </figure>
-                  </Link>
-                </div></div><div className="owl-item" style={{width: '186px', marginRight: '20px'}}><div className="item_version_2">
-                  <Link to="/housewife_list">
-                    <figure>
-                      <span>10</span>
-                      <img src="img/home_cat_placeholder.jpg" data-src ="img/home_cat_pizza.jpg" alt="" className="owl-lazy" width={350} height={450} />
-                      <div className="info">
-                        <small>Piatti</small>
-                        <h3>Romani</h3>
-                      </div>
-                    </figure>
-                  </Link>
-                </div></div></div></div>
+               
+                {/* <div className="owl-carousel owl-theme categories_carousel"> */}
+                      {/* {confood?confood.map((food)=> 
+                         <div className="item_version_2">
+                            <a href="listing-research.html">
+                              <figure>
+                                <span>26</span>
+                                <img src="img/home_cat_placeholder.jpg" data-src="img/bergamaschi.jpg" alt="" className="owl-lazy" width={350} height={450} />
+                                <div className="info">
+                                  <small>Piatti</small>
+                                  <h3>Bergamaschi</h3>
+                                </div>
+                              </figure>
+                            </a>
+                        </div>
+                      ) : "" }
+                      </div> */}
 
+
+
+                <div className="owl-carousel owl-theme categories_carousel owl-loaded owl-drag"> 
+                    <div className="owl-stage-outer">
+                      <div className="owl-stage" style={{transform: 'translate3d(0px, 0px, 0px)', transition: 'all 0s ease 0s', width: '1542px', paddingLeft: '50px', paddingRight: '50px'}}>    
+                      {confood?confood.map((food)=> 
+                        <div key={food.id} className="owl-item active item_mobile" style={{width: '186px', marginRight: '20px'}}>
+                          <div className="item_version_2">
+                            <Link onClick={openCard} data-id={food.id} to="/housewife_list">
+                              <figure>
+                                <span>{food.id}</span>
+                                <img src="img/milano.jpg" data-src = "img/milano.jpg" alt="" className="owl-lazy" width={350} height={450} style={{opacity: 1}} />
+                                <div className="info">
+                                  <small>Piatti</small>
+                                  <h3>{food.country_en}</h3>
+                                </div>
+                              </figure>
+                            </Link>
+                          </div>
+                        </div>
+                       ) : ""}
+
+
+
+
+                       </div>
+                    </div>
                 </div>
+        
+                
                 {/* /carousel */}
               </div>
               {/* /container */}

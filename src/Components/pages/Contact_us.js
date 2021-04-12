@@ -23,26 +23,10 @@ const Contact_us = () => {
         <div className="bg_gray">
           <div className="container margin_60_40">
             <div className="row justify-content-center">
-              <div className="col-lg-4">
-                <div className="box_contacts">
+              <div className="col-lg-8">
+                <div className="box_contacts" style={{height:"40vh"}}>
                   <i className="icon_phone" />
                   <h2>Centro assistenza</h2>
-                  <Link to="#0">+39 XXX.XXX.XX.XX</Link>   <Link to="#0">info@intavolafoodapp.com</Link>
-                  <small>LUN - SAB 9:00-19:99</small>
-                </div>
-              </div>
-              {/*<div class="col-lg-4">
-		                <div class="box_contacts">
-		                    <i class="icon_pin_alt"></i>
-		                    <h2>Indirizzo</h2>
-		                    <div>Via (INSERIRE IL CAMPO)</div>
-		                    <small>LUN - SAB 9:00-19:99</small>
-		                </div>
-		            </div>*/}
-              <div className="col-lg-4">
-                <div className="box_contacts">
-                  <i className="icon_phone" />
-                  <h2>Registrazione via Telefono</h2>
                   <Link to="#0">+39 XXX.XXX.XX.XX</Link>   <Link to="#0">info@intavolafoodapp.com</Link>
                   <small>LUN - SAB 9:00-19:99</small>
                 </div>

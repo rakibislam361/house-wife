@@ -37,20 +37,19 @@ const [loading, setLoading] = useState(true);
     },[]);
 
     const loader =() =>{
-          if(!loading){
-            setLoading(true)
-          }
-            
-        }
+      if(!loading){
+        setLoading(true)
+      }    
+    }
 
-const schema = yup.object().shape({
-  name: yup.string().required(),
-  email: yup.string().required().email(),
-  phone: yup.string().required(),
-  country_id: yup.string().required(),
-  type: yup.string(),
+  const schema = yup.object().shape({
+    name: yup.string().required(),
+    email: yup.string().required().email(),
+    phone: yup.string().required(),
+    country_id: yup.string().required(),
+    type: yup.string(),
 
-});
+  });
 
 
   const [files, setFiles] = useState([]);

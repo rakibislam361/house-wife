@@ -1,3 +1,4 @@
+import React, {useState} from 'react' 
 import { Link, useHistory } from "react-router-dom"
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -5,6 +6,7 @@ import * as yup from 'yup'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import PuffLoader from "react-spinners/PuffLoader"
 
 toast.configure();
 const About_us = () => {
@@ -18,6 +20,14 @@ const About_us = () => {
 
   });
 
+const [loading, setLoading] = useState(false);
+
+const loader = () =>{
+    if(!loading){
+    setLoading(true)
+    }    
+} 
+
   const histry = useHistory(); 
 
    const { register, handleSubmit, errors, reset } = useForm({  
@@ -25,7 +35,7 @@ const About_us = () => {
    }); 
 
     const onSubmit = (data) =>{
-
+      loader();
       const response = axios.post('http://intavola.softminion.com/api/auth/register', data)
         .then(response =>{
              toast.success(response.data.message,{
@@ -38,6 +48,7 @@ const About_us = () => {
               progress: undefined,
             }); histry.push('/login');
             reset();
+          {response ? setLoading(false) : setLoading(true)}
 
         })
         .catch(error => {
@@ -50,6 +61,8 @@ const About_us = () => {
               draggable: true,
               progress: undefined,
             });
+          {error ? setLoading(false) : setLoading(true)}
+
         });
 
     }
@@ -128,8 +141,12 @@ const About_us = () => {
                 <p>Sfrutta i dati a disposizione per far crescere il tuo business. Monitora le richieste, controlla i tuoi progressi e attira nuovi clienti.</p>
               </div>
               <div id="message-register" />
-                 
-                <form method="post" onSubmit={handleSubmit(onSubmit)}>
+                  {loading ?
+                    <div className="loading-spiner">
+                       <PuffLoader  color="#f74f07" loading={loading} size={160} />
+                    </div> 
+                :
+                  <form method="post" onSubmit={handleSubmit(onSubmit)}>
                 <h6>Dati personali</h6>
                 <div className="row">
                   <div className="col-lg-12">
@@ -170,8 +187,8 @@ const About_us = () => {
                       className="form-control" 
                       placeholder="Telefono*" 
                       name="phone" 
-                      id="phone_register" 
-                      ref={register({ required: true })}/>
+                      id="phone" 
+                      ref={register}/>
                       {errors.phone &&<span className="error_message">{errors.phone.message}</span>}
                     </div>
                   </div>
@@ -209,7 +226,8 @@ const About_us = () => {
                   <input type="submit" className="btn_1 gradient" defaultValue="INVIA" id="submit-register" />
                 </div>
               </form>
-            </div>
+            
+                  }</div>
           </div>
         </div>
         {/* /container */}

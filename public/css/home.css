@@ -150,9 +150,17 @@
 @media (max-width: 767px) {
   .item_version_2 a .info h3 {
     font-size: 16px;
-    font-size: 1rem;
+    font-size: 0rem;
   }
 }
+
+@media (max-width: 767px){
+.owl-stage-outer .owl-stage .item_mobile {
+    width: 400px !important;
+  }
+}
+
+
 @media (max-width: 767px) {
   .item_version_2 a .info small {
     font-size: 12px;
