@@ -14,7 +14,7 @@ import { Collapse } from 'react-bootstrap';
 toast.configure();
 const Listing_header = () => {
     const histry = useHistory(); 
-    const user = localStorage.getItem('user');
+    const user_type = localStorage.getItem('user');
     const user_token = localStorage.getItem('token');
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -86,11 +86,11 @@ const Listing_header = () => {
                        style={{marginTop: "4%"}}
                    >
                             
-                       {user && 
+                      
                        <MenuItem>
-                            {user && <Link to={user === 1 ? '/user_profile' : '/housewife_profile'}>My account</Link>}
+                            <Link to={user_type === 1 ? '/user_profile' : user_type === 2 ? '/housewife_profile' : ""}>My account</Link>
                         </MenuItem>
-                        }
+                    
                        <MenuItem onClick={logOut}>Logout</MenuItem>
                    </Menu>
 
@@ -104,7 +104,7 @@ const Listing_header = () => {
                     <i className="icon_menu" /><span>Menu</span>
                 </a>
 
-                <Collapse in={openmenu}> 
+                <div in={openmenu}> 
                     <nav className="main-menu">
                         <div id="header_menu">
                             <a className="open_close" onClick={() => setOpen(null)}>
@@ -119,7 +119,7 @@ const Listing_header = () => {
                             <li><Link onClick={() => setOpen(null)} to="/contact_us">Contact</Link></li>
                         </ul>
                    </nav>    
-                </Collapse>
+                </div>
           </div>
         </header>
     )

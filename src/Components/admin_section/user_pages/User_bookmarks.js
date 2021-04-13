@@ -3,7 +3,7 @@ import { withRouter } from 'react-router'
 import User_side_nav from '../body_parts/User_side_nav'
 import Admin_Footer from '../body_parts/Footer'
 
-const Bookmarks = () => {
+const User_bookmarks = () => {
     return (
          <body className="fixed-nav sticky-footer" id="page-top">
             <User_side_nav />
@@ -85,4 +85,4 @@ const Bookmarks = () => {
     )
 }
 
-export default withRouter(Bookmarks) 
+export default withRouter(User_bookmarks) 

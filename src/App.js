@@ -22,11 +22,14 @@ import Leave_review from './Components/pages/Leave_review'
 import User_dashboard from './Components/admin_section/user_pages/User_dashboard'
 import Bookmarks from './Components/admin_section/pages/Bookmarks'
 import User_profile from './Components/admin_section/user_pages/User_profile'
+import User_review from './Components/admin_section/user_pages/User_review'
 import ProtectedRoute from './Components/ProtectedRoute'
 import User_subscription from './Components/admin_section/user_pages/User_subscription'
 import ThankyouPage from './Components/pages/ThankyouPage';
 import Listing_research from './Components/pages/Listing_research';
 import Housewife_search_list from './Components/pages/Housewife_search_list';
+import User_call_log from './Components/admin_section/user_pages/User_call_log';
+import User_bookmarks from './Components/admin_section/user_pages/User_bookmarks';
 
 
 
@@ -62,9 +65,9 @@ useEffect(() => {
                     {/* user section route */}
                     <ProtectedRoute isAuth={isAuth} path="/user_dashboard" component={User_dashboard} /> 
                     <ProtectedRoute isAuth={isAuth} path="/user_profile" component={User_profile} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/user_bookmark" component={Bookmarks} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/user_call_log" component={Call_log} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/user_reviews" component={Review} /> 
+                    <ProtectedRoute isAuth={isAuth} path="/user_bookmark" component={User_bookmarks} /> 
+                    <ProtectedRoute isAuth={isAuth} path="/user_call_log" component={User_call_log} /> 
+                    <ProtectedRoute isAuth={isAuth} path="/user_reviews" component={User_review} /> 
                     <ProtectedRoute isAuth={isAuth} path="/user_subscription" component={User_subscription} /> 
                     
                     {/* housewife section route */}

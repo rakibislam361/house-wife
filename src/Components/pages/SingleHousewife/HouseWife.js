@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from "react-router-dom"
 
-const HouseWife = ({id, name, city, housewife_type}) => {
+const HouseWife = ({id, name, city, housewife_type, img}) => {
    
   const openCard = (event) => {
     sessionStorage.setItem('housewife_id',event.currentTarget.dataset.id)   
@@ -11,7 +11,7 @@ const HouseWife = ({id, name, city, housewife_type}) => {
         <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6">
             <div className="strip">
             <figure>
-                <img src="http://localhost:3000/img/list_2.jpg" data-src="http://localhost:3000/img/list_2.jpg" className="img-fluid lazy" alt="" />
+                <img src={`img/${img}`} data-src={`img/${img}`} className="img-fluid lazy" alt="" />
                 <Link onClick={openCard} data-id={id} to="/housewife_details" className="strip_info">
                     <small>{city}</small>
                     <div className="item_title">

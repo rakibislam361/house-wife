@@ -2,7 +2,7 @@ import React,{useState, useEffect} from 'react'
 import { Link, useParams } from "react-router-dom"
 import HouseWife from './SingleHousewife/HouseWife'
 import { Collapse } from 'react-bootstrap';
-import PropagateLoader from "react-spinners/PropagateLoader"
+import PuffLoader from "react-spinners/PuffLoader"
 
 
 const Housewife_search_list = (props) => {
@@ -15,6 +15,11 @@ const Housewife_search_list = (props) => {
     const [confood, setConFood] = useState();
     const [loading, setLoading] = useState(true);
 
+    let HouseWife_image = ['menu_item_large_1.jpg',
+     'menu_item_large_4.jpg','location_3.jpg','location_4.jpg'
+     ,'location_7.jpg','location_8.jpg','location_9.jpg','location_10.jpg',
+    'location_11.jpg','location_12.jpg','location_list_1.jpg','location_list_2.jpg','location_list_3.jpg','location_list_4.jpg'
+    ]
 
     useEffect(() => {
           try {
@@ -32,18 +37,16 @@ const Housewife_search_list = (props) => {
           fetch("http://intavola.softminion.com/api/housewifes?search="+search.item)
           .then((response)=> response.json())
           .then((data)=> setHousewife(data.housewives))
-            setLoading(false)             
-
+        
         } catch (error) {
           
         }
          
   }, [])
-
-       
+    
     return (
         <main>
-        {housewife ? 
+        {housewife && confood ? 
             <>
                 <div className="page_header element_to_stick">
                         <div className="container">
@@ -229,12 +232,13 @@ const Housewife_search_list = (props) => {
                         {housewife ? housewife.map((item, index)=> 
                             <HouseWife
                             key={index}
+                            img={HouseWife_image[index]}
                             id={item.id}
                             name={item.name} 
                             city={item.city}
                             housewife_type={item.housewife_type}                  
                             />
-                        ): <h5 className="col-12" style={{height:"50vh", paddingTop:"25vh", display:"flex",justifyContent:"center"}}>No data found</h5>}
+                        ): <h5 className="col-12" style={{height:"50vh", paddingTop:"25vh", display:"flex",justifyContent:"center"}}>No matched data found</h5>}
                         </div>
                         {/* /row */}
                         <div className="pagination_fg">
@@ -253,13 +257,12 @@ const Housewife_search_list = (props) => {
                 {/* /container */}
             </>
         :
-            <div className="">
-                <div className="loading-spiner">
-                    <div className="col-sm-12 col-md-4 col-xl-3">
-                        <h1>Hello</h1>
-                        <PropagateLoader  color="red" loading={loading} size={15} />
-                    </div>
-                </div>
+            <div className="row">
+              <div className="col-12"> 
+                 <div className="loading-spiner">
+                    <PuffLoader  color="#f74f07" loading={loading} size={160} />
+                </div> 
+              </div> 
             </div>        
         }
         </main>

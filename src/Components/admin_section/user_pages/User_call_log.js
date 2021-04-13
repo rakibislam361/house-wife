@@ -2,10 +2,12 @@ import React,{useState, useEffect} from 'react'
 import User_side_nav from '../body_parts/User_side_nav'
 import Admin_Footer from '../body_parts/Footer'
 import axios from "axios";
+import PropagateLoader from "react-spinners/PropagateLoader"
+import { withRouter } from 'react-router'
 
-const Call_log = () => {
-    
-  
+
+
+const User_call_log = () => { 
 const [call, setCall]=useState()
 const [loading, setLoading] = useState(true);
 const token = localStorage.getItem("token");
@@ -13,7 +15,7 @@ const token = localStorage.getItem("token");
   useEffect(() => {
     try {
         async function load() {
-          const response = await axios.get('http://intavola.softminion.com/api/housewife/call-log?token='+token);
+          const response = await axios.get('http://intavola.softminion.com/api/user/log-history?token='+token);
           const data = await response;
           setCall(data.data.logs) 
           setLoading(false)             
@@ -97,4 +99,4 @@ const token = localStorage.getItem("token");
     )
 }
 
-export default withRouter(Call_log) 
+export default withRouter(User_call_log) 

@@ -17,6 +17,7 @@ const Header = () => {
     
     const user_token = localStorage.getItem('token');
     const user_type = localStorage.getItem('user');
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [user, setUser] = useState();
@@ -84,7 +85,7 @@ const Header = () => {
                 
                 <div className="layer" />{/* Opacity Mask Menu Mobile */}
                 <ul id="top_menu">
-                    { !user_token 
+                    {!user_token 
                     ?
                         <li><Signin_model_form /></li>
                     :
@@ -101,11 +102,11 @@ const Header = () => {
                             style={{marginTop:'5%'}}
                         >
                             
-                            {user && 
+                    
                             <MenuItem className="">
-                                 <Link to={user_type === 1 ? '/user_profile' : '/housewife_profile'}>My account</Link>
+                                 <Link to={user_type === "1" ? '/user_profile' : user_type === "2" ? '/housewife_profile' : ""}>My account</Link>
                              </MenuItem>
-                             }
+                             
                             <MenuItem className="" onClick={logOut}>Logout</MenuItem>
                         </Menu>
 

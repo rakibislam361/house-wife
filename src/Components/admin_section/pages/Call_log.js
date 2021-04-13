@@ -25,7 +25,7 @@ const token = localStorage.getItem("token");
       load()  
       
     } catch (error) {
-      console.log(error);
+        setLoading(false)             
     }
 
   },[]);
@@ -48,7 +48,7 @@ const token = localStorage.getItem("token");
                   <div className="card-header">
                     <i className="fa fa-table" /> Received calls</div>
                   <div className="card-body">
-                    {!call? 
+                    {loading? 
                         <div className="loading-spiner">
                           <div className="col-sm-12 col-md-4 col-xl-3">
                             <PropagateLoader  color="#f74f07" loading={loading} size={15} />

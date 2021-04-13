@@ -1,0 +1,41 @@
+1. Login: 
+	http://intavola.softminion.com/api/auth/login
+2. Register:
+	http://intavola.softminion.com/api/auth/register
+3. Logout:
+	http://intavola.softminion.com/api/auth/logout
+4. Refresh token:
+	http://intavola.softminion.com/api/auth/refresh
+5. Index:
+	http://intavola.softminion.com/api/index
+6. Country Food:
+	http://intavola.softminion.com/api/country-food/show/{id}
+7. Housewife:
+	http://intavola.softminion.com/api/housewife/show/{id}
+8. Provide rating:
+	http://intavola.softminion.com/api/housewife/provide_rating
+9. Profile:
+	http://intavola.softminion.com/api/profile
+10. Profile update:
+	http://intavola.softminion.com/api/profile/update
+11. Email verification:
+	http://intavola.softminion.com/api/email/verify/{id}
+12. Email Resend:
+	http://intavola.softminion.com/api/email/resend
+13. Search:
+	http://intavola.softminion.com/api/search/{housewife}
+14. Get packages:
+	http://intavola.softminion.com/api/package/index
+15. Show Package:
+	http://intavola.softminion.com/api/package/show/{id}
+16. Package Order:
+	http://intavola.softminion.com/api/package/order
+17. Add Food:
+	http://intavola.softminion.com/api/housewife/food (POST)
+	http://intavola.softminion.com/api/housewife/food (GET)
+18. Country Food:
+	http://intavola.softminion.com/api/housewife/food/country-food (GET)
+19. Category:
+	http://intavola.softminion.com/api/housewife/food/category (GET)
+
+	

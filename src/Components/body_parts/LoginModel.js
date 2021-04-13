@@ -131,34 +131,27 @@ export default function TransitionsModal(props) {
  
   const onRegistration = (data) =>{
     loader()
-    console.log(data)
     const response = axios.post('http://intavola.softminion.com/api/auth/register', data)
       .then(response =>{
-            toast.success(response.data.message,{
-            position: "bottom-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
+          toast.success(response.data.message,{
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        reset();
+          {response ? setLoading(false) : setLoading(true)}
+          // the user just logged in / the user was logged in             
+          handleClose()
+          dispatch({
+            type: "SET_USER",
+            user:  response.data.user.id,
           });
-          reset();
-          if (response) {
-             {response ? setLoading(false) : setLoading(true)}
-              // the user just logged in / the user was logged in             
-              handleClose()
-              dispatch({
-                type: "SET_USER",
-                user:  response.data.user.id,
-              });
-          } else {
-          
-          }
       })
       .catch(error => {
-
-
       });
 
   }
@@ -174,11 +167,11 @@ export default function TransitionsModal(props) {
           setDisplay1("block")
       }
   }
+  
   const formChange1 = () =>{
       if(display1){
           setDisplay1("none")
           setDisplay("block")
-
       }
   }
  
@@ -236,60 +229,59 @@ export default function TransitionsModal(props) {
                   </div>
                 :   
                     <> 
-                        <form style={{display:display}} method="post" onSubmit={onLogin}>
-                            <div className="sign-in-wrapper">
-                                <div className="form-group">
-                                    <label>Email</label>
-                                    <input 
-                                    className="form-control" 
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    value={email}
-                                    onChange={(e)=>{setEmail(e.target.value)}} 
-                                    placeholder="Email"
-                                   />
-                                    <i className="icon_mail_alt" />
-                                    {emailError &&<span className="error_message">{emailError}</span>}
-                                </div>
-                                <div className="form-group">
-                                    <label>Password</label>
-                                    <input 
-                                    className="form-control" 
-                                    type="password"
-                                    name="password"
-                                    id="password"
-                                    value={password}
-                                    onChange={(e)=>setPassword(e.target.value)} 
-                                    placeholder="Password"
-                                   />
-                                    <i className="icon_lock_alt" />
-                                    {passwordError && <span className="error_message">{passwordError}</span>}
-                                </div>
-                                
-                                <div className="clearfix ">
-                                    <div className="checkboxes float-left">
-                                        <label className="container_check">Ricordati di me
-                                        <input type="checkbox" />
-                                        <span className="checkmark" />
-                                        </label>
-                                    </div>
-                                    
-                                    <div className="float-right">
-                                        <a id="forgot">dimenticato la password?</a>
-                                    </div>
+                      <form style={{display:display}} method="post" onSubmit={onLogin}>
+                          <div className="sign-in-wrapper">
+                              <div className="form-group">
+                                  <label>Email</label>
+                                  <input 
+                                  className="form-control" 
+                                  type="email"
+                                  name="email"
+                                  id="email"
+                                  value={email}
+                                  onChange={(e)=>{setEmail(e.target.value)}} 
+                                  placeholder="Email"
+                                  />
+                                  <i className="icon_mail_alt" />
+                                  {emailError &&<span className="error_message">{emailError}</span>}
+                              </div>
+                              <div className="form-group">
+                                  <label>Password</label>
+                                  <input 
+                                  className="form-control" 
+                                  type="password"
+                                  name="password"
+                                  id="password"
+                                  value={password}
+                                  onChange={(e)=>setPassword(e.target.value)} 
+                                  placeholder="Password"
+                                  />
+                                  <i className="icon_lock_alt" />
+                                  {passwordError && <span className="error_message">{passwordError}</span>}
+                              </div>
+                              
+                              <div className="clearfix ">
+                                  <div className="checkboxes float-left">
+                                      <label className="container_check">Ricordati di me
+                                      <input type="checkbox" />
+                                      <span className="checkmark" />
+                                      </label>
+                                  </div>
+                                  
+                                  <div className="float-right">
+                                      <a id="forgot">dimenticato la password?</a>
+                                  </div>
 
-                                    <div className="text-center">
-                                        <button type="submit" className="btn_1 full-width mb_5">Sign in</button>
-                                    </div>
-                                    <div className="divider"><span>or</span></div>
-                                    <Link onClick={formChange} className="social_bt casalinga">{props.secondButton}</Link>         
-                            
-                                </div>
-                            </div>
-                        </form>
-                        
-                        <form style={{display:display1}} method="post" onSubmit={handleSubmit(onRegistration)}>
+                                  <div className="text-center">
+                                      <button type="submit" className="btn_1 full-width mb_5">Sign in</button>
+                                  </div>
+                                  <div className="divider"><span>or</span></div>
+                                  <Link onClick={formChange} className="social_bt casalinga">{props.secondButton}</Link>         
+                          
+                              </div>
+                          </div>
+                      </form>
+                      <form style={{display:display1}} method="post" onSubmit={handleSubmit(onRegistration)}>
                         <div className="sign-in">
                             <div className="form-group">
                                 <input 
@@ -371,7 +363,6 @@ export default function TransitionsModal(props) {
                             </div>
                         </div>
                     </form>
-                    
                     </>
                 }
             </div>   

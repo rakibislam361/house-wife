@@ -20,14 +20,12 @@ const Add_food = () => {
     const [foodcategory, setFoodcategory] = useState([]);
 
 
-console.log(contryfood)
     useEffect(() => {
       try {
           async function load() {
             const response = await axios.get('http://intavola.softminion.com/api/profile?token='+token);
             const data = await response;
-            setUser(data) 
-            setLoading(false)             
+            setUser(data)              
         }
         load()  
         
@@ -42,8 +40,7 @@ console.log(contryfood)
           async function load() {
             const response = await axios.get('http://intavola.softminion.com/api/housewife/food/country-food');
             const data = await response;
-            setCountryfood(data.data.country_foods) 
-            setLoading(false)             
+            setCountryfood(data.data.country_foods)              
         }
         load() 
         }catch (error) {
@@ -52,7 +49,9 @@ console.log(contryfood)
 
     }, [])
 
-
+    // if(contryfood && foodcategory){
+    //     setLoading(false)
+    // }
      useEffect(() => {
         try {
         async function load() {
@@ -64,7 +63,7 @@ console.log(contryfood)
         load() 
 
         }catch (error) {
-        console.log(error);
+        
       }
 
     }, [])
@@ -143,130 +142,150 @@ console.log(contryfood)
                             </div>
                         </div>
                  : contryfood && foodcategory ?
-              
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="container-fluid">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item">
-                            <a href="#">Dashboard</a>
-                            </li>
-                            <li className="breadcrumb-item active">Add Food</li>
-                        </ol>
-                        <div className="box_general padding_bottom">
-                            <div className="header_box version_2">
-                            <h2><i className="fa fa-file" />Add Food</h2>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <div className="form-group">
-                                    <label>Food Name*</label>
-                                        <input type="text" 
-                                        className="form-control"
-                                        name="title_en"
-                                        ref={register}
-                                        placeholder="Name of the dish" />
-                                         {errors.title_en && (
-                                            <span className="error_message">
-                                            {errors.title_en.message}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                            {/* /row*/}
-                            <div className="row">
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                
-                                
-                                <label>Country Food*</label>
-                                    <div className="styled-select">
-                                        <select 
-                                        ref={register}
-                                        name="country_food_id"
-                                        >  
-                                        <option defaultValue="DEFAULT" disabled> Country Food</option>
-                                        
-                                             {contryfood ? contryfood.map((contry) => (
-                                                <option selected key={contry.id} Value={contry.id}>{contry.country_en}</option>
-                                            )): ""}
-
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                <label>Category*</label>
-                                    <div className="styled-select">
-                                        
-                                        <select name="category_id" ref={register}>
-                                            <option defaultValue="DEFAULT" disabled>Select Category</option>
-                                            
-                                            {foodcategory ? foodcategory.map((category) => (
-                                                <option selected key={category.id} Value={category.id}>{category.title_en}</option>
-                                            )): ""}
-
-                                            <option>Cold dishes</option>{/* Piatti Freddi */}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                            {/* /row*/}
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <div className="form-group">
-                                    <label>Description</label>
-                                        <textarea  
-                                            className="form-control" 
-                                            rows="4" cols="50"
-                                            name="description_en"
-                                            ref={register}
-                                            >
-                                        </textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            {/* /row*/}
-                            <div className="row">
+                    <div className="container-fluid">
+                            <ol className="breadcrumb">
+                                <li className="breadcrumb-item">
+                                <a href="#">Dashboard</a>
+                                </li>
+                                <li className="breadcrumb-item active">Add Food</li>
+                            </ol>
+                    <form>
+                        <div className="row">
                             <div className="col-md-12">
-                                <div className="form-group">
-                                <label>Photos*</label>
-                                <input className="dropzone" />
+                                <div className="box_general padding_bottom">
+                                <div className="header_box version_2">
+                                    <h2>
+                                    <i className="fa fa-lock" />
+                                        Add menu
+                                    </h2>
                                 </div>
-                            </div>
-                            </div>
-                            {/* /row*/}
-                            {/* <div className="row">
-                                <div className="col-md-12">
-                                    <div className="form-group">
-                                    <label>Tag</label>
-                                    <input type="text" className="form-control" placeholder="tag" />
+                                <div className="row">
+                                    <div className="col-md-4"> 
+                                         <div className="form-group">
+                                        <label>Menu title (italian)</label>
+                                        <input name="title_it" className="form-control" type="text" />
+                                    </div>
+                                    </div>
+                                    <div className="col-md-4">    
+                                        <div className="form-group">
+                                            <label>Menu title (english)</label>
+                                            <input name="title_en" className="form-control" type="text" />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-4">      
+                                       <div className="form-group">
+                                           <button type="submit" className="mt-4 btn_1 medium">Save</button>
+                                       </div>
                                     </div>
                                 </div>
-                            </div> */}
-
-                            <div className="row">
+                                </div>
+                            </div>
+                        </div>       
+                    </form>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        
+                            <div className="box_general padding_bottom">
+                                <div className="header_box version_2">
+                                    <h2><i className="fa fa-file" />Add Food</h2>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <div className="form-group">
+                                        <label>Food Name*</label>
+                                            <input type="text" 
+                                            className="form-control"
+                                            name="title_en"
+                                            ref={register}
+                                            placeholder="Name of the dish" />
+                                            {errors.title_en && (
+                                                <span className="error_message">
+                                                {errors.title_en.message}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* /row*/}
+                                <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                    <label>Status*</label>
+                                    
+                                    
+                                    <label>Country Food*</label>
                                         <div className="styled-select">
-                                            <select name="status" ref={register}>
-                                                <option Value={1}>Active</option>{/* Attivo */}
-                                                <option Value={2}>Inactive</option>{/* Disattivo */}
+                                            <select 
+                                            ref={register}
+                                            name="country_food_id"
+                                            >  
+                                            <option defaultValue="DEFAULT" disabled> Country Food</option>
+                                            
+                                                {contryfood ? contryfood.map((contry) => (
+                                                    <option selected key={contry.id} Value={contry.id}>{contry.country_en}</option>
+                                                )): ""}
+
                                             </select>
                                         </div>
                                     </div>
                                 </div>
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                    <label>Category*</label>
+                                        <div className="styled-select">
+                                            
+                                            <select name="category_id" ref={register}>
+                                                <option defaultValue="DEFAULT" disabled>Select Category</option>                                            
+                                                {foodcategory ? foodcategory.map((category) => (
+                                                    <option selected key={category.id} Value={category.id}>{category.title_en}</option>
+                                                )): ""}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                {/* /row*/}
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <div className="form-group">
+                                        <label>Description</label>
+                                            <textarea  
+                                                className="form-control" 
+                                                rows="4" cols="50"
+                                                name="description_en"
+                                                ref={register}
+                                                >
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* /row*/}
+                                <div className="row">
+                                <div className="col-md-12">
+                                    <div className="form-group">
+                                    <label>Photos*</label>
+                                    <input className="dropzone" />
+                                    </div>
+                                </div>
+                                </div>
+                                {/* /row*/}
+        
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="form-group">
+                                        <label>Status*</label>
+                                            <div className="styled-select">
+                                                <select name="status" ref={register}>
+                                                    <option Value={1}>Active</option>{/* Attivo */}
+                                                    <option Value={2}>Inactive</option>{/* Disattivo */}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* /row*/}
                             </div>
-                            {/* /row*/}
-                        </div>
-                        {/* /box_general*/}
-                        {/* /.container-wrapper*/}
                         <p><button type="submit" className="btn_1 medium">Save</button></p>
-                    </div>
                     </form>
+                    </div>        
                   :
                   <div className="row">
                       <div className="loading-spiner">

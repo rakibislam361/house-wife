@@ -3,7 +3,7 @@ import User_side_nav from '../body_parts/User_side_nav'
 import Admin_Footer from '../body_parts/Footer'
 import { withRouter } from 'react-router'
 
-const Subscription = () => {
+const User_subscription = () => {
     return (
         <body className="fixed-nav sticky-footer" id="page-top">
             <User_side_nav />
@@ -75,4 +75,4 @@ const Subscription = () => {
     )
 }
 
-export default withRouter(Subscription) 
+export default withRouter(User_subscription) 
