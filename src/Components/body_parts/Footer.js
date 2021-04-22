@@ -8,6 +8,7 @@ const Footer = () => {
     const [registration, setRegistration] = useState(false);
     const [login, setLogin] = useState(false);
     const [example, setExample] = useState(false);
+    const user_type = localStorage.getItem('user');
     
     return (
         <>    
@@ -38,9 +39,16 @@ const Footer = () => {
 
                     <Collapse className="dont-collapse-sm links" in={registration}>
                         <ul id="registration-collapse">
-                        <li><Link to="/login">Accedi</Link></li>
-                        <li><Link to="/partner">Registrati Online</Link></li>
-                        <li><Link to="/contact_us">Registrati Telefonicamente</Link></li>
+                             {user_type? 
+                            <li> 
+                                <Link to={user_type === "1" ? '/user_profile' : user_type === "2" ? '/housewife_profile' : "/login"}>My account</Link>
+                            </li> 
+                        :   <>
+                                <li><Link to="/login">Accedi</Link></li>
+                                <li><Link to="/partner">Registrati Online</Link></li>
+                                <li><Link to="/contact_us">Registrati Telefonicamente</Link></li>
+                            </>
+                        }
                         </ul>
                     </Collapse>
                     </div>
@@ -52,8 +60,16 @@ const Footer = () => {
                     </h3>
                     <Collapse className="dont-collapse-sm links" in={login}>
                         <ul id="login-collapse">
-                        <li><Link to="/login" id="sign-in">Accedi</Link></li>
-                        <li><Link to="/about">Registrati</Link></li>
+                        {user_type? 
+                            <li> 
+                                <Link to={user_type === "1" ? '/user_profile' : user_type === "2" ? '/housewife_profile' : "/login"}>My account</Link>
+                            </li> 
+                        :
+                            <>
+                                <li><Link to="/login" id="sign-in">Accedi</Link></li>
+                                <li><Link to="/about">Registrati</Link></li>
+                            </>
+                        }
                         </ul>
                     </Collapse>
                     </div>

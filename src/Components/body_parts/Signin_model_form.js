@@ -86,7 +86,7 @@ export default function TransitionsModal() {
           }
       })
       .catch(error => {
-          toast.error(error.message,{
+          toast.error(error.error,{
             position: "bottom-left",
             autoClose: 5000,
             hideProgressBar: false,

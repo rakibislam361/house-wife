@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom"
 import HouseWife from './SingleHousewife/HouseWife'
 import { Collapse } from 'react-bootstrap';
 import PuffLoader from "react-spinners/PuffLoader"
+import Slider from 'react-slick';
 
 
 const Housewife_search_list = (props) => {
@@ -14,12 +15,67 @@ const Housewife_search_list = (props) => {
     const search = JSON.parse(data) 
     const [confood, setConFood] = useState();
     const [loading, setLoading] = useState(true);
+    const contry_food_id = sessionStorage.getItem("ctfood")
+
+    let images =['bergamaschi.jpg', 'emiliani.png', 'liguri.jpg', 'napoletani.jpg',
+  'piemontesi.jpg', 'romani.jpg', 'siciliani.jpg','umbri.jpg','milanesi.jpg'];
+  
 
     let HouseWife_image = ['menu_item_large_1.jpg',
      'menu_item_large_4.jpg','location_3.jpg','location_4.jpg'
      ,'location_7.jpg','location_8.jpg','location_9.jpg','location_10.jpg',
     'location_11.jpg','location_12.jpg','location_list_1.jpg','location_list_2.jpg','location_list_3.jpg','location_list_4.jpg'
     ]
+
+      var settings = {
+      autoplay: true,
+      speed:1500,
+      autoplaySpeed: 2500,
+      slidesToShow: 5,
+      slidesToScroll: 1,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            speed:1500,
+            autoplaySpeed: 2500,
+            infinite: true,
+            dots: true
+          }
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            speed:1500,
+            autoplaySpeed: 2500,
+            slidesToScroll: 2
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 2,
+            speed:1500,
+            autoplaySpeed: 2500,
+            slidesToScroll: 1
+          }
+        }
+    
+      ]
+    };
+
+
+    const openCard = (event) => {
+      sessionStorage.setItem('ctfood',event.currentTarget.dataset.id)
+       try {
+          fetch("http://intavola.softminion.com/api/housewifes?country="+contry_food_id)
+          .then((response)=> response.json())
+          .then((data)=> setHousewife(data.housewives))
+        } catch (error) {}   
+    };
 
     useEffect(() => {
           try {
@@ -33,16 +89,20 @@ const Housewife_search_list = (props) => {
       }, []) 
 
     useEffect(() => {     
-        try {
-          fetch("http://intavola.softminion.com/api/housewifes?search="+search.item)
-          .then((response)=> response.json())
-          .then((data)=> setHousewife(data.housewives))
-        
-        } catch (error) {
-          
-        }
-         
-  }, [])
+       if(search){
+            try {
+             fetch("http://intavola.softminion.com/api/housewifes?search="+search.item)
+             .then((response)=> response.json())
+             .then((data)=> setHousewife(data.housewives))
+            } catch (error) {}
+       }else{
+            try {
+             fetch("http://intavola.softminion.com/api/housewifes")
+             .then((response)=> response.json())
+             .then((data)=> setHousewife(data.housewives))
+            } catch (error) {}
+        }  
+     }, [])
     
     return (
         <main>
@@ -106,7 +166,7 @@ const Housewife_search_list = (props) => {
                         {/* /filter_type */}
                         <div className="filter_type">
                             
-                            <h4><Link  
+                            <h4><Link 
                             onClick={() => setCategorie(!categorie)}
                             aria-expanded={categorie} 
                             className="closed">
@@ -142,6 +202,7 @@ const Housewife_search_list = (props) => {
                             </Collapse>
 
                         </div>
+                        
                         {/* /filter_type */}
                         <div className="filter_type">
                             <h4><Link
@@ -151,10 +212,10 @@ const Housewife_search_list = (props) => {
                                 Distanza</Link></h4>
                             
                             <Collapse className="collapse" in={distanza}>
-                            <>
+                                <>
                                 <div className="distance"> Raggio intorno alla destinazione selezionata <span /> km</div>
-                                <div className="add_bottom_25"><input type="range" min={10} max={50} step={5} defaultValue={20} data-orientation="horizontal" /></div>
-                            </>
+                                <div className="add_bottom_25"><input className="input_ranger" type="range" min={10} max={50} step={5} defaultValue={20} data-orientation="horizontal" /></div>
+                                </>
                             </Collapse>
 
                         </div>
@@ -207,15 +268,19 @@ const Housewife_search_list = (props) => {
                         <div className="row">
                         <div className="col-12">
                             <h2 className="title_small">Tutto ciò che offre Bergamo</h2>
-                            <div className="categories_carousel_inn listing" style={{display: "flex", justifyContent: "space-between"}}>
-                            {confood?confood.map((food)=> 
-                            <div key={food.id} className="item col-md-2">
+                            <div className="categories_carousel_inn listing">
+                            
+                            <Slider {...settings}>
+                            {confood?confood.map((food, index)=> 
+                              <div key={food.id} className="item col-md-10">
                                 <figure>
-                                <img src="img/cat_listing_1.jpg" data-src="img/cat_listing_1.jpg" alt="" className="owl-lazy" />
-                                <Link to="#0"><h3>{food.country_en}</h3></Link>
+                                  <img src={`img/piatti/${images[index]}`} data-src={`img/piatti/${images[index]}`} alt="" className="owl-lazy" />
+                                  <Link onClick={openCard} data-id={food.id} to="/housewife_search_list"><h3>{food.country_en}</h3></Link>
                                 </figure>
-                            </div>
+                              </div>
                             ) : ""}
+                          </Slider>
+      
                         </div>
                             {/* /carousel */}
                         </div>

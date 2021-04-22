@@ -6,7 +6,7 @@ import axios from 'axios';
 import {useCombobox} from "downshift"
 import { Link, useParams,useHistory } from 'react-router-dom';
 
-const Searchbox = () => {
+const Searchbox = ({btn_class,name }) => {
 //     const [inputItems , setInputItems] = useState([]);
 //     const [housewives, setHousewives] = useState([]);
 //     const [singleHousewife, setSingleHousewife] = useState("") 
@@ -64,7 +64,7 @@ const Searchbox = () => {
                 </div>
                 
                 <div className="col-lg-2">
-                <button className="btn_1 gradient" type="submit">Cerca</button>
+                    <button className={btn_class} type="submit">{name}</button>
                 </div>    
             </div>
               {/* <ul {...getMenuProps()} className="search_result">

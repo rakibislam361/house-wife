@@ -2,7 +2,7 @@ import React from 'react'
 import { useStateValue } from '../StateProvider';
 import {Link, useHistory} from 'react-router-dom'
 
-const MembershipPlan = ({id,month,title,price,profile_gallery,caricamento_iatti,telephone_support,unsubscribe }) => {
+const MembershipPlan = ({id,month,title,price,profile_gallery, dsc }) => {
     const [{ buynow }, dispatch] = useStateValue(); 
     const histry = useHistory()
     const buyNow = () => {
@@ -25,13 +25,7 @@ const MembershipPlan = ({id,month,title,price,profile_gallery,caricamento_iatti,
                     <p>{title}</p>
                 </div>
                 <p className="plan-price">€ {price}</p>
-                <ul className="plan-features">
-                    <li><strong>{month} Mesi:</strong> Validità</li>
-                    <li><strong>{profile_gallery}:</strong> Illimitato</li>
-                    <li><strong>{caricamento_iatti}:</strong> Illimitato</li>
-                    <li><strong>{telephone_support}:</strong> SI</li>
-                    <li><strong>{unsubscribe}:</strong> SI</li>
-                </ul>
+                <p>{dsc}</p>
                 <Link onClick={buyNow} className="btn_1 gray btn_scroll">Buy</Link>
             </div>
                 

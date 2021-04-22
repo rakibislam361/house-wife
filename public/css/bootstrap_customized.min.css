@@ -1253,7 +1253,7 @@ textarea.form-control {
   opacity: 0;
 }
 .collapse:not(.show) {
-  display: none;
+  display: table-column-group;
 }
 .collapsing {
   position: relative;

@@ -7,9 +7,12 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import PuffLoader from "react-spinners/PuffLoader"
+import LoginModel from '../body_parts/LoginModel'
 
 toast.configure();
 const About_us = () => {
+  
+  const user_type = localStorage.getItem('user');
   const schema = yup.object().shape({
     name: yup.string().required(),
     email: yup.string().required().email(),
@@ -75,7 +78,11 @@ const loader = () =>{
                 <div className="col-lg-10">
                   <h1>Come Ordinare ?</h1>
                   <p>Trova la Casalinga, consulta il menu, e mettiti in contatto telefonicamente!</p>
-                  <a href="#submit" className="btn_1 gradient btn_scroll">REGISTRATI ORA</a>
+                  {!user_type ? 
+                    <div className="d-flex justify-content-center">
+                      <LoginModel name={"REGISTRATI ORA"} secondButton="REGISTRATI COME UTENTE" user_type={1} />
+                    </div>
+                  : "" }
                 </div>
               </div>
               {/* /row */}
@@ -133,7 +140,9 @@ const loader = () =>{
           {/* /row */}
         </div>
         {/* /container */}
-        <div className="container margin_60_20" id="submit">
+        
+        {!user_type? 
+          <div className="container margin_60_20" id="submit">
           <div className="row justify-content-center">
             <div className="col-lg-5">
               <div className="text-center add_bottom_15">
@@ -230,7 +239,7 @@ const loader = () =>{
                   }</div>
           </div>
         </div>
-        {/* /container */}
+        : ""}
       </main>
 
     )

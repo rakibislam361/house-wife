@@ -1,9 +1,27 @@
-import React from 'react'
+import React,{useState} from 'react'
 import Side_nav from '../body_parts/Side_nav'
 import Admin_Footer from '../body_parts/Footer'
 import { withRouter } from 'react-router'
+import MaterialTable from 'material-table'
+import {Link} from 'react-router-dom'
 
 const Subscription = () => {
+
+const [data, setData] = useState([]);
+
+const columns = 
+    [
+        { title: 'Name', field: 'name' },
+        { title: 'Surname', field: 'surname' },
+        { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
+        {
+        title: 'Birth Place',
+        field: 'birthCity',
+        lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
+        },
+    ]
+
+    
     return (
             <body className="fixed-nav sticky-footer" id="page-top">
                 <Side_nav />
@@ -12,7 +30,7 @@ const Subscription = () => {
                         {/* Breadcrumbs*/}
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item">
-                            <a href="#">Dashboard</a>
+                                <Link to="/housewife_dashboard">Dashboard</Link>
                             </li>
                             <li className="breadcrumb-item active">Subscription</li>
                         </ol>
@@ -66,6 +84,21 @@ const Subscription = () => {
                             </div>
                             <div className="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                         </div>
+                        <div className="card mb-3">
+                            <div className="card-header">
+                            <i className="fa fa-table" /> Inscriptions</div>
+                            <div className="card-body">
+                            <div className="table-responsive">
+                                 <MaterialTable
+                                    title="Basic Filtering Preview"
+                                    columns={columns}
+                                    data={data}        
+                                />
+                            </div>
+                            </div>
+                            <div className="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                        </div>
+                        
                         {/* /tables*/}
                         </div>
                         {/* /container-fluid*/}

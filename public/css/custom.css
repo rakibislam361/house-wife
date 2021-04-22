@@ -88,8 +88,9 @@ element.style {
   cursor: pointer;
   border-radius:5px;
   padding-left: 25px;
-  max-height: 200px;
+  max-height: 100px;
   overflow: auto;
+  z-index: 99999;
 }
 .search_list{
   list-style: none;
@@ -101,3 +102,82 @@ element.style {
 .search_list > a{
   color: black !important;
 }
+
+.carousel-indicators {
+  display: none !important;
+}
+
+
+/* .carousel-control-next-icon, .carousel-control-prev-icon {
+    border-radius: 50% !important;
+    background-color: rgb(54, 49, 49) !important;
+    width: 56% !important;
+    height: 50% !important;
+} */
+
+
+.slick-slide .slick-active .slick-current{
+  width: 170px !important;
+}
+
+
+.review-range{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.rangeslider {
+    height: 5px;
+    width: 100%;
+    background: white;
+}
+
+.secondary_nav ul li a {
+    border-radius: 20px !important;
+    padding: 5px 15px !important;
+    background-color: rgba(0, 0, 0, 0.05)!important;
+}
+
+.secondary_nav ul li a {
+    display: inline-block !important;
+}
+
+.secondary_nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.secondary_nav {
+    width: 100%;
+    background-color: #fff !important;
+    border-top: 1px solid #ededed !important;
+    padding: 20px 0 !important;
+    position: relative !important;
+}
+
+.list-group-item{
+  border: none !important;
+}
+
+.is_stuck_nav {
+    position: fixed !important;
+    top: 0px !important;
+    width: 431px;
+    z-index: 99999;
+}
+
+.input_ranger{
+  width: 100%;
+}
+
+.slick-list > .slick-arrow > .slick-next {
+    display: block;
+    background-color: #c94643;
+    border-radius: 100%;
+    width: 5%;
+    height: 21%;
+}
+

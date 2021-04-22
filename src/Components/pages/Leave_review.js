@@ -1,62 +1,149 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
+import { Link, useHistory } from "react-router-dom"
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios'; 
+import PropagateLoader from "react-spinners/PropagateLoader"
+import LoginModel from '../body_parts/LoginModel'
+
+
 
 const Leave_review = () => {
+  const token = localStorage.getItem("token");
+  const housewife_id = sessionStorage.getItem('housewife_id')
+  const user_id = localStorage.getItem("id");
+  const [housewife_name, setHousewifeName] = useState(); 
+  
+  useEffect(() => {
+    try {
+          async function load() {
+          const response = await axios.get('http://intavola.softminion.com/api/housewife/show/'+housewife_id);
+          const data = await response;     
+          setHousewifeName(data.data.housewife)
+          setLoading(false)             
+      }
+      load()  
+      
+    } catch (error) {
+    }
+
+  },[]);
+  
+  
+  const schema = yup.object().shape({
+    service: yup.string(),
+    quality: yup.string(),
+    price: yup.string(),
+    punctuality: yup.string(),
+    user_id:yup.string().required(),
+    housewife_id:yup.string()
+  
+  });
+  const [loading, setLoading] = useState(false);
+  const loader = () =>{
+      if(!loading){
+      setLoading(true)
+      }    
+  }
+  const { register, handleSubmit, errors, reset } = useForm({  
+    resolver:yupResolver(schema),
+  }); 
+
+   const onSubmit = (data) =>{
+    loader();
+    var config = {
+        method: 'post',
+        url: 'http://intavola.softminion.com/api/housewife/provide_ratings?token='+token,
+        data: data
+    };
+     axios(config)
+    .then(response =>{
+          toast.success(response.data.message,{
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        reset();
+        {response ? setLoading(false) : setLoading(true)}
+    })
+    
+    .catch(error => {
+        toast.error("Something went wrong !",{
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        {error ? setLoading(false) : setLoading(true)}
+
+    });
+
+   }
+
     return (
-        <>
-          <main className="bg_gray">
-        <div className="container margin_60_20">
-          <div className="row justify-content-center">
-            <div className="col-lg-8">
-              <div className="box_general write_review">
-                <h1 className="add_bottom_15">Scrivi una recensione per "nome casalinga"</h1>
-                <label className="d-block add_bottom_15">Valutazione complessiva</label>
-                <div className="row">
-                  <div className="col-md-3 add_bottom_25">
-                    <div className="add_bottom_15">Qualità del cibo<strong className="food_quality_val" /></div>
-                    <input type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="food_quality" name="food_quality" />
+        <main className="bg_gray">
+            <div className="container margin_60_20">
+              <div className="row justify-content-center">
+                <div className="col-lg-8">
+                  {!housewife_name || loading 
+                    ? 
+                      <div className="loading-spiner">
+                          <div className="col-sm-12 col-md-4 col-xl-3">
+                          <PropagateLoader  color="#f74f07" loading={loading} size={15} />
+                          </div>
+                      </div>                      
+                    :
+                      <form onSubmit={handleSubmit(onSubmit)}> 
+                      <div className="box_general write_review">
+                      <h1 className="add_bottom_15">{housewife_name.name}</h1>
+                      <label className="d-block add_bottom_15">Valutazione complessiva</label>
+                      <div className="row">
+                        <div className="col-md-3 add_bottom_25">
+                          <div className="add_bottom_15">Qualità del cibo<strong className="food_quality_val" /></div>
+                          <input 
+                          className="rangeslider" ref={register} type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="food_quality" name="quality" />
+                        </div>
+                        <div className="col-md-3 add_bottom_25">
+                          <div className="add_bottom_15">Servizio <strong className="service_val" /></div>
+                          <input className="rangeslider" ref={register} type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="service" name="service" />
+                        </div>
+                        <div className="col-md-3 add_bottom_25">
+                          <div className="add_bottom_15">Puntualità <strong className="location_val" /></div>
+                          <input className="rangeslider" ref={register} type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="location" name="punctuality" />
+                        </div>
+                        <div className="col-md-3 add_bottom_25">
+                          <div className="add_bottom_15">Prezzo <strong className="price_val" /></div>
+                          <input className="rangeslider" ref={register} type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="price" name="price" />
+                          <input className="rangeslider" ref={register} type="hidden" name="housewife_id" value={housewife_id} />
+                          <input ref={register} type="hidden" name="user_id" value={user_id} />
+                        </div>
+                      </div>
+                        <div className="col-md-3 add_bottom_25">
+                      {!token?
+                        <LoginModel name={"SUBMIT"} secondButton="REGISTRATI COME UTENTE" user_type={1} />
+                        :
+                        <button type="submit" className="btn_1">Invia recensione</button>
+                      }
+
+                        </div>
+                    </div>
+                    </form>
+                  }
                   </div>
-                  <div className="col-md-3 add_bottom_25">
-                    <div className="add_bottom_15">Servizio <strong className="service_val" /></div>
-                    <input type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="service" name="service" />
-                  </div>
-                  <div className="col-md-3 add_bottom_25">
-                    <div className="add_bottom_15">Puntualità <strong className="location_val" /></div>
-                    <input type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="location" name="location" />
-                  </div>
-                  <div className="col-md-3 add_bottom_25">
-                    <div className="add_bottom_15">Prezzo <strong className="price_val" /></div>
-                    <input type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="price" name="price" />
-                  </div>
-                </div>
-                {/*<div class="form-group">
-		                    <label>Title of your review</label>
-		                    <input class="form-control" type="text" placeholder="If you could say it in one sentence, what would you say?">
-		                </div>
-		                <div class="form-group">
-		                    <label>Your review</label>
-		                    <textarea class="form-control" style="height: 180px;" placeholder="Write your review to help others learn about this online business"></textarea>
-		                </div>
-		                <div class="form-group">
-		                    <label>Add your photo (optional)</label>
-		                    <div class="fileupload"><input type="file" name="fileupload" accept="image/*"></div>
-		                </div>
-		                <div class="form-group">
-		                    <div class="checkboxes float-left add_bottom_15 add_top_15">
-		                        <label class="container_check">Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his.
-		                            <input type="checkbox">
-		                            <span class="checkmark"></span>
-		                        </label>
-		                    </div>
-		                </div>*/}
-                <a href="confirm.html" className="btn_1">Invia recensione</a>
               </div>
+              {/* /row */}
             </div>
-          </div>
-          {/* /row */}
-        </div>
-        {/* /container */}
-      </main>  
-        </>
+          </main>   
     )
 }
 

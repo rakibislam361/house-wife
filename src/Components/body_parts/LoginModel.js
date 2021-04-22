@@ -214,7 +214,6 @@ export default function TransitionsModal(props) {
       >
         <Fade in={open}>
           <div className="zoom-anim-dialog ">
-                
             <div id="sign-in-dialog" className="">
               <div className="modal_header" style={{display:'d-flex'}}>
                 <h3>{ display==="block" ? "Accedi" : "Registration " }  </h3>

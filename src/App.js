@@ -30,6 +30,8 @@ import Listing_research from './Components/pages/Listing_research';
 import Housewife_search_list from './Components/pages/Housewife_search_list';
 import User_call_log from './Components/admin_section/user_pages/User_call_log';
 import User_bookmarks from './Components/admin_section/user_pages/User_bookmarks';
+import Add_menu from './Components/admin_section/pages/Add_menu';
+import Food_list from './Components/admin_section/pages/Food_list';
 
 
 
@@ -74,7 +76,9 @@ useEffect(() => {
                     <ProtectedRoute isAuth={isAuth} path="/housewife_dashboard" component={Housewife_dashboard} /> 
                     <ProtectedRoute isAuth={isAuth} path="/housewife_profile" component={Housewife_profile} /> 
                     <ProtectedRoute isAuth={isAuth} path="/add_food" component={Add_food} /> 
+                    <ProtectedRoute isAuth={isAuth} path="/add_menu" component={Add_menu} /> 
                     <ProtectedRoute isAuth={isAuth} path="/menu_list" component={Menu_list} /> 
+                    <ProtectedRoute isAuth={isAuth} path="/food_list" component={Food_list} /> 
                     <ProtectedRoute isAuth={isAuth} path="/subscription" component={Subscription} /> 
                     <ProtectedRoute isAuth={isAuth} path="/call_log" component={Call_log} /> 
                     <ProtectedRoute isAuth={isAuth} path="/reviews" component={Review} /> 
@@ -96,7 +100,7 @@ useEffect(() => {
                         <Footer />
                     </Route>
                     <Route path="/leave_review">
-                        <Header />
+                        <Listing_header />
                         <Leave_review />
                         <Footer />
                     </Route>

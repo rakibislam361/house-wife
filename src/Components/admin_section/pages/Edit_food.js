@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 const Edit_food = () => {
     return (
@@ -7,7 +8,7 @@ const Edit_food = () => {
                 {/* Breadcrumbs*/}
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item">
-                    <a href="#">Dashboard</a>
+                    <Link to="/housewife_dashboard">Dashboard</Link>
                     </li>
                     <li className="breadcrumb-item active">Edit Food</li>
                 </ol>

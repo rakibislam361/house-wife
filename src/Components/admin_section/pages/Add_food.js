@@ -9,7 +9,7 @@ import Side_nav from '../body_parts/Side_nav'
 import Admin_Footer from '../body_parts/Footer'
 import { withRouter } from 'react-router'
 import PropagateLoader from "react-spinners/PropagateLoader"
-
+import {Link} from 'react-router-dom'
 
 
 const Add_food = () => {
@@ -27,11 +27,8 @@ const Add_food = () => {
             const data = await response;
             setUser(data)              
         }
-        load()  
-        
-      } catch (error) {
-        console.log(error);
-      }
+        load()    
+      } catch (error) {}
   
     },[]);
     
@@ -44,14 +41,10 @@ const Add_food = () => {
         }
         load() 
         }catch (error) {
-        console.log(error);
       }
 
     }, [])
 
-    // if(contryfood && foodcategory){
-    //     setLoading(false)
-    // }
      useEffect(() => {
         try {
         async function load() {
@@ -62,9 +55,7 @@ const Add_food = () => {
         }
         load() 
 
-        }catch (error) {
-        
-      }
+        }catch (error) {}
 
     }, [])
     
@@ -80,25 +71,45 @@ const Add_food = () => {
         country_food_id: yup.string(),
         description_en: yup.string(),
         status: yup.string(),
-        category_id: yup.string(),      
+        category_id: yup.string(),   
    
     });
 
     const { register, handleSubmit, control, errors } = useForm({
         resolver: yupResolver(schema),
     });
+    
+    const [image, setImage] =useState([])
+    const handleChange = (e) => {
+        if (e.target.name === "image") {
+            setImage(
+                 e.target.files[0],
+            );
+        }
+    };
+
 
     const onSubmit = (data) => {
-    console.log(data) 
     loader();
+ 
+    var formdata = new FormData();
+    formdata.append('title_en', data.title_en);
+    formdata.append('country_food_id', data.country_food_id);
+    formdata.append('description_en', data.description_en);
+    formdata.append('status', data.status);
+    formdata.append('category_id', data.category_id); 
+    formdata.append('image', image, image.name);
+
     var config = {
       method: "POST",
       url: "http://intavola.softminion.com/api/housewife/food",
-      data: data,
+      data: formdata,
       headers: {
         Authorization: `Basic ${token}`,
+        'content-type': 'multipart/form-data',
       },
     };
+console.log(formdata)
     axios(config)
       .then((response) => {
         toast.success(response.data.message, {
@@ -124,7 +135,6 @@ const Add_food = () => {
           progress: undefined,
         });
           setLoading(false)
-
       });
     };
 
@@ -143,47 +153,14 @@ const Add_food = () => {
                         </div>
                  : contryfood && foodcategory ?
                     <div className="container-fluid">
-                            <ol className="breadcrumb">
-                                <li className="breadcrumb-item">
-                                <a href="#">Dashboard</a>
-                                </li>
-                                <li className="breadcrumb-item active">Add Food</li>
-                            </ol>
-                    <form>
-                        <div className="row">
-                            <div className="col-md-12">
-                                <div className="box_general padding_bottom">
-                                <div className="header_box version_2">
-                                    <h2>
-                                    <i className="fa fa-lock" />
-                                        Add menu
-                                    </h2>
-                                </div>
-                                <div className="row">
-                                    <div className="col-md-4"> 
-                                         <div className="form-group">
-                                        <label>Menu title (italian)</label>
-                                        <input name="title_it" className="form-control" type="text" />
-                                    </div>
-                                    </div>
-                                    <div className="col-md-4">    
-                                        <div className="form-group">
-                                            <label>Menu title (english)</label>
-                                            <input name="title_en" className="form-control" type="text" />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-4">      
-                                       <div className="form-group">
-                                           <button type="submit" className="mt-4 btn_1 medium">Save</button>
-                                       </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>       
-                    </form>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        
+                        <ol className="breadcrumb">
+                            <li className="breadcrumb-item">
+                                <Link to="/housewife_dashboard">Dashboard</Link>
+                            </li>
+                            <li className="breadcrumb-item active">Add Food</li>
+                        </ol>
+               
+                        <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="box_general padding_bottom">
                                 <div className="header_box version_2">
                                     <h2><i className="fa fa-file" />Add Food</h2>
@@ -209,18 +186,15 @@ const Add_food = () => {
                                 <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                    
-                                    
                                     <label>Country Food*</label>
                                         <div className="styled-select">
                                             <select 
                                             ref={register}
                                             name="country_food_id"
                                             >  
-                                            <option defaultValue="DEFAULT" disabled> Country Food</option>
-                                            
+                                                <option selected defaultValue="DEFAULT" disabled>Select Country Food</option>                                            
                                                 {contryfood ? contryfood.map((contry) => (
-                                                    <option selected key={contry.id} Value={contry.id}>{contry.country_en}</option>
+                                                    <option key={contry.id} value={contry.id}>{contry.country_en}</option>
                                                 )): ""}
 
                                             </select>
@@ -231,11 +205,10 @@ const Add_food = () => {
                                     <div className="form-group">
                                     <label>Category*</label>
                                         <div className="styled-select">
-                                            
                                             <select name="category_id" ref={register}>
-                                                <option defaultValue="DEFAULT" disabled>Select Category</option>                                            
+                                                <option selected defaultValue="DEFAULT" disabled>Select Category</option>                                            
                                                 {foodcategory ? foodcategory.map((category) => (
-                                                    <option selected key={category.id} Value={category.id}>{category.title_en}</option>
+                                                    <option key={category.id} value={category.id}>{category.title_en}</option>
                                                 )): ""}
                                             </select>
                                         </div>
@@ -261,8 +234,16 @@ const Add_food = () => {
                                 <div className="row">
                                 <div className="col-md-12">
                                     <div className="form-group">
-                                    <label>Photos*</label>
-                                    <input className="dropzone" />
+                                        <label>Photos*</label>               
+                                        <div className="form-group">
+                                            <input accept="image/*"
+                                                type="file" 
+                                                name="image" 
+                                                multiple 
+                                                ref={register} 
+                                                onChange={handleChange}
+                                            />  
+                                        </div>
                                     </div>
                                 </div>
                                 </div>
@@ -283,8 +264,9 @@ const Add_food = () => {
                                 </div>
                                 {/* /row*/}
                             </div>
-                        <p><button type="submit" className="btn_1 medium">Save</button></p>
-                    </form>
+                            <p><button type="submit" className="btn_1 medium">Save</button></p>
+                        </form>
+         
                     </div>        
                   :
                   <div className="row">

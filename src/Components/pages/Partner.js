@@ -1,4 +1,4 @@
-import React, {useState} from 'react' 
+import React, {useState, useEffect} from 'react' 
 import { Link, useHistory } from "react-router-dom"
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,9 +8,16 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import MembershipPlan from "./MembershipPlan";
 import PuffLoader from "react-spinners/PuffLoader"
+import LoginModel from '../body_parts/LoginModel'
+ 
+
 
 toast.configure();
 const Partner = (props) => {
+
+  const [packages, setPackage] = useState();
+  const user_type = localStorage.getItem('user');
+  
   const schema = yup.object().shape({
     name: yup.string().required(),
     email: yup.string().required().email(),
@@ -21,6 +28,14 @@ const Partner = (props) => {
 
   });
   
+ useEffect(() => {     
+      try {
+        fetch("http://intavola.softminion.com/api/package/index")
+        .then((response)=> response.json())
+        .then((data)=> setPackage(data.packages))     
+      } catch (error) {}  
+  }, [])
+
   const histry = useHistory(); 
   const { register, handleSubmit, errors, reset } = useForm({  
   resolver:yupResolver(schema),
@@ -76,8 +91,12 @@ const Partner = (props) => {
                 <div className="col-lg-10">
                   <h1>Diventa subito partner di <br />In Tavola The Food App</h1>
                   <p>Aumenta la tua visibilità fino al 100% grazie alla nostra piattaforma!</p>
-                  <Link to="/order" className="btn_1 gradient btn_scroll">ISCRIVITI ORA</Link>
-                </div>
+                   {!user_type ? 
+                      <div className="d-flex justify-content-center">
+                        <LoginModel name={"ISCRIVITI ORA"} secondButton="REGISTRATI COME CASALINGA" user_type={2} />
+                      </div>
+                    : ""}
+                  </div>
               </div>
               {/* /row */}
             </div>
@@ -177,17 +196,20 @@ const Partner = (props) => {
               <p>Potrai iscriverti semplicemente dalla nostra piattaforma o telefonicamente contattando il seguente numero :  +39 XXX XXX.XX.XX</p>
             </div>
             <div className="row plans">
-              <MembershipPlan
-                id={1}
-                month={1}
-                title="Come Prova"
-                price={2.50}
-                profile_gallery="Profile Gallery"
-                caricamento_iatti="Caricamento Piatti"
-                telephone_support="Telephone Support"
-                unsubscribe="Unsubscribe"
-              />
+              {packages? packages.map((single_package)=>
                 <MembershipPlan
+                  id={single_package.id}
+                  month={single_package.title_en}
+                  title={single_package.title_en}
+                  dsc={single_package.description_en}
+                  price={single_package.price}
+                /> )
+              : 
+                <div className="loading-spiner">
+                    <PuffLoader  color="#f74f07" loading={loading} size={160} />
+                </div>
+            }
+                {/* <MembershipPlan
                 id={2}
                 month={12}
                 title="Il più scelto"
@@ -206,11 +228,12 @@ const Partner = (props) => {
                 caricamento_iatti="Caricamento Piatti"
                 telephone_support="Telephone Support"
                 unsubscribe="Unsubscribe"
-              />
+              /> */}
             </div>{/* End row plans*/}
           </div>
           {/* /container */}
         </div>
+     {!user_type ?
         <div className="container margin_60_20" id="submit">
           <div className="row justify-content-center">
             <div className="col-lg-5">
@@ -307,7 +330,7 @@ const Partner = (props) => {
             </div>
           </div>
         </div>
-        {/* /container */}
+      : ""}
       </main>
     )
 }

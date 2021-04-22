@@ -51,7 +51,7 @@ const Login = () => {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('user', response.data.user_type);
 
-                {response?.data.user.type === 1 ?  histry.push('/user_dashboard') :  histry.push('/housewife_profile')}
+                {response?.data.user.type === 1 ?  histry.push('/user_dashboard') :  histry.push('/housewife_dashboard')}
                 dispatch({
                     type: "SET_USER",
                     user: response.data.id,
@@ -120,7 +120,6 @@ const Login = () => {
                   <button className="btn_1 gradient full-width">Login Now! </button>
                     <div className="text-center mt-2"><small>Don't have an acccount? <strong><Link to="/about">Sign Up</Link></strong></small></div>
                 </form>
-                
                 }
                 <div className="copy">© 2021 In Tavola The Food App - by <Link to="https://www.iteodev.ch" title="iteodev.ch">iteodev.ch</Link></div>
                 </aside>

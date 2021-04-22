@@ -545,6 +545,13 @@ body.sidenav-toggled .navbar-sidenav-tooltip.show {
     column-count: 1;
   }
 }
+
+@media (min-width: 992px) {
+  #quick-collapse {
+  display: block !important ;
+  }
+}
+
 @media (min-width: 768px) {
   .card-columns {
     column-count: 2;

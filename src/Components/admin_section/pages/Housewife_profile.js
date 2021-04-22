@@ -55,7 +55,7 @@ const Housewife_profile = () => {
         zip_code: yup.string().required("zip code is a required field"),
         description_seo: yup.string(),
         keywords_seo: yup.string(),
-
+        image:yup.string(),
         housewife_type: yup.string().required(),
         map_url: yup.string(),
         type: yup.string(),
@@ -165,7 +165,8 @@ const Housewife_profile = () => {
                             </div>
                             <div className="dropzone">
                               <Controller
-                                name="profile_image"
+                                name="image"
+                                ref={register}
                                 control={control}
                                 render={({ onChange }) => (
                                   <div {...getRootProps()}>
@@ -327,7 +328,7 @@ const Housewife_profile = () => {
                                       <option defaultValue="DEFAULT" disabled> Select country</option>
                                       {user ? user.data.countries.map(country=>{
                                         return(
-                                          <option selected Value={country.id}>{country.name}</option>
+                                          <option selected defaultValue={country.id}>{country.name}</option>
                                         )
                                       }) : ""}
 
@@ -350,8 +351,8 @@ const Housewife_profile = () => {
                                       value={1}
                                       id="housewife_type"
                                       ref={register}
-                                      defaultChecked={user.data.user.housewife_type ==2 ? true : false}
-                                      checked
+                                      defaultChecked={user.data.user.housewife_type ==1 ? true : false}
+                                      
                                     />
                                     <span className="checkmark" />
                                   </label>
@@ -377,6 +378,7 @@ const Housewife_profile = () => {
                                       ref={register}
                                       id="housewife_type"
                                       defaultChecked={user.data.user.housewife_type == 3 ? true : false}
+
                                     />
                                     <span className="checkmark" />
                                   </label>

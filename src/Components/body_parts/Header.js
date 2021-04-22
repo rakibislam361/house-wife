@@ -8,6 +8,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useStateValue } from '../StateProvider';
+import { Collapse } from 'react-bootstrap';
 
 
 toast.configure();
@@ -74,69 +75,68 @@ const Header = () => {
     }
 
     return ( 
-        <header className="header clearfix element_to_stick">
-                <div className="container">
-                <div id="logo">
-                    <Link to="/">
-                    <img src="img/logo_menu.png" width={175} height={80} alt="" className="logo_normal" />
-                    <img src="img/logo.png" width={131} height={60} alt="" className="logo_sticky" />
-                    </Link>
-                </div>
-                
-                <div className="layer" />{/* Opacity Mask Menu Mobile */}
-                <ul id="top_menu">
-                    {!user_token 
-                    ?
-                        <li><Signin_model_form /></li>
-                    :
-                        <li aria-haspopup="true" onClick={handleClick}><Link className="login">Login</Link></li>
-                    }
-                  
-                        <Menu
-                            id="fade-menu"
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={open}
-                            onClose={handleClose}
-                            TransitionComponent={Fade}
-                            style={{marginTop:'5%'}}
-                        >
-                            
+            <header className="header clearfix element_to_stick">
+                <div className="container" >
+                    <div id="logo">
+                        <Link to="/">
+                            <img src="img/logo_menu.png" width="175" height="80" alt="" className="logo_normal"/>
+	                        <img src="img/logo.png" width="131" height="60" alt="" className="logo_sticky"/>
+                        </Link>
+                    </div>
                     
-                            <MenuItem className="">
-                                 <Link to={user_type === "1" ? '/user_profile' : user_type === "2" ? '/housewife_profile' : ""}>My account</Link>
-                             </MenuItem>
-                             
-                            <MenuItem className="" onClick={logOut}>Logout</MenuItem>
-                        </Menu>
+                    <div className="layer" />{/* Opacity Mask Menu Mobile */}
+                    <ul id="top_menu">
+                        {!user_token 
+                        ?
+                            <li><Signin_model_form /></li>
+                        :
+                            <li aria-haspopup="true" onClick={handleClick}><Link className="login">Login</Link></li>
+                        }
+                            <Menu
+                                id="fade-menu"
+                                anchorEl={anchorEl}
+                                keepMounted
+                                open={open}
+                                onClose={handleClose}
+                                TransitionComponent={Fade}
+                                style={{marginTop:'5%'}}
+                            >
+                                
+                                <MenuItem className="">
+                                    <Link to={user_type === "1" ? '/user_profile' : user_type === "2" ? '/housewife_profile' : ""}>My account</Link>
+                                </MenuItem>
+                                
+                                <MenuItem className="" onClick={logOut}>Logout</MenuItem>
+                            </Menu>
 
-                    <li><Link to="/" className="wishlist_bt_top" title="Your wishlist">Preferiti</Link></li>
-                </ul>
+                        <li><Link to="/" className="wishlist_bt_top" title="Your wishlist">Preferiti</Link></li>
+                    </ul>
 
-                {/* /top_menu */}
-                <a className="open_close" 
-                    onClick={() => setOpen(openmenu)}
-                    aria-expanded={open} >
-                    <i className="icon_menu" /><span>Menu</span>
-                </a>
+                    {/* /top_menu */}
+                     <a className="open_close" 
+                        onClick={() => setOpen(!openmenu)}
+                        >
+                        <i className="icon_menu" /><span>Menu</span>
+                    </a>
 
-                <div in={openmenu}> 
-                    <nav className="main-menu">
-                        <div id="header_menu">
+                    <Collapse className="main-menu" in={openmenu}> 
+                        <nav className="">
+                            <div id="header_menu">
                             <a className="open_close" onClick={() => setOpen(null)}>
                                 <i className="icon_close" /><span>Menu</span>
                             </a>
-                            <Link to="/"><img src="../img/logo_mobile.png" width={153} height={70} alt=""/></Link>
+                            <Link to="/">
+                                <img src="../img/logo_mobile.png" width={153} height={70} alt=""/>
+                            </Link>
                         </div>
-                        <ul>
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/about">Come Ordinare ?</Link></li>
-                            <li><Link to="/partner">Diventa Casalinga</Link></li>
-                            <li><Link to="/contact_us">Contact</Link></li>
-                        </ul>
-                   </nav>    
-                </div>
-            
+                            <ul>
+                                <li><Link onClick={()=>setOpen(null)} to="/">Home</Link></li>
+                                <li><Link onClick={()=>setOpen(null)} to="/about">Come Ordinare ?</Link></li>
+                                <li><Link onClick={()=>setOpen(null)} to="/partner">Diventa Casalinga</Link></li>
+                                <li><Link onClick={()=>setOpen(null)} to="/contact_us">Contact</Link></li>
+                            </ul>
+                        </nav>    
+                    </Collapse>       
                 </div>
             </header>     
     

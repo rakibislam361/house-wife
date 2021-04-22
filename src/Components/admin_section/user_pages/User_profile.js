@@ -29,12 +29,10 @@ const [loading, setLoading] = useState(true);
             setLoading(false)             
         }
         load()  
-        
       } catch (error) {
-        console.log(error);
       }
       
-    },[]);
+    },[user]);
 
     const loader =() =>{
       if(!loading){
@@ -99,6 +97,7 @@ const [loading, setLoading] = useState(true);
           draggable: true,
           progress: undefined,
         });
+       
         {response ? setLoading(false) : setLoading(true)}
       })
       .catch((error) => {
@@ -144,114 +143,114 @@ const [loading, setLoading] = useState(true);
                       </div>
                  : user 
                  ?  <div className="row">
-              <div className="col-md-4">
-                    <div className="form-group">
-                      <label>Your cover photo</label>
-                    </div>
-                    <div className="dropzone">
-                      <Controller
-                        name="profile_image"
-                        control={control}
-                        render={({ onChange }) => (
-                          <div {...getRootProps()}>
-                            <input {...getInputProps({ onChange })} />
-                            <div className="dz-dropzone">
-                              <label
-                                onChange={onChange}
-                                className={
-                                  images.length > 0
-                                    ? "dropzone-image"
-                                    : "dropzone-label"
-                                }
-                              >
-                                {images.length > 0
-                                  ? images
-                                  : "Drop files here to upload"}
-                              </label>
-                            </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                          <label>Your cover photo</label>
+                        </div>
+                        <div className="dropzone">
+                          <Controller
+                            name="profile_image"
+                            control={control}
+                            render={({ onChange }) => (
+                              <div {...getRootProps()}>
+                                <input {...getInputProps({ onChange })} />
+                                <div className="dz-dropzone">
+                                  <label
+                                    onChange={onChange}
+                                    className={
+                                      images.length > 0
+                                        ? "dropzone-image"
+                                        : "dropzone-label"
+                                    }
+                                  >
+                                    {images.length > 0
+                                      ? images
+                                      : "Drop files here to upload"}
+                                  </label>
+                                </div>
+                              </div>
+                            )}
+                          />
+                        </div>
+                      </div>
+                      
+                    <div className="col-md-8 add_top_30">
+                      <form method="post" onSubmit={handleSubmit(onSubmit)}>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="form-group">
+                            <label>Nome Completo</label>
+                              <input type="text"
+                                name="name" 
+                                id="name" 
+                                className="form-control" 
+                                defaultValue={user.data.user.name}  
+                                placeholder="Your full name"
+                                ref={register} />
+                                {errors.name && <span className="error_message">{errors.name.message}</span>}
                           </div>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                <div className="col-md-8 add_top_30">
-                  <form method="post" onSubmit={handleSubmit(onSubmit)}>
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <label>Nome Completo</label>
-                          <input type="text"
-                            name="name" 
-                            id="name" 
-                            className="form-control" 
-                            defaultValue={user.data.user.name}  
-                            placeholder="Your full name"
-                            ref={register} />
-                            {errors.name && <span className="error_message">{errors.name.message}</span>}
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  {/* /row*/}
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Telefono</label>
-                        <input type="text" 
-                          name="phone" 
-                          id="phone" 
-                          defaultValue={user.data.user.phone} 
-                          className="form-control" 
-                          placeholder="Telephone number"
-                          ref={register} />
-                          {errors.phone && <span className="error_message">{errors.phone.message}</span>}
+                      {/* /row*/}
+                      <div className="row">
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>Telefono</label>
+                            <input type="text" 
+                              name="phone" 
+                              id="phone" 
+                              defaultValue={user.data.user.phone} 
+                              className="form-control" 
+                              placeholder="Telephone number"
+                              ref={register} />
+                              {errors.phone && <span className="error_message">{errors.phone.message}</span>}
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>Email</label>
+                            <input type="email" 
+                              name="email" 
+                              email="email" 
+                              defaultValue={user.data.user.email} 
+                              className="form-control" 
+                              placeholder="Your email"
+                              ref={register} />
+                              {errors.email && <span className="error_message">{errors.email.message}</span>}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Email</label>
-                        <input type="email" 
-                          name="email" 
-                          email="email" 
-                          defaultValue={user.data.user.email} 
-                          className="form-control" 
-                          placeholder="Your email"
-                          ref={register} />
-                          {errors.email && <span className="error_message">{errors.email.message}</span>}
-                      </div>
-                    </div>
-                  </div>
-                  {/* /row*/}
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Country</label>
-                          <div className="styled-select" >
-                              <select
-                                name="country_id"
-                                id="country_id"
-                                ref={register}
-                              >
-                                <option value="DEFAULT" disabled> Select country</option>
-                                {user ? user.data.countries.map(country=>{
-                                  return(
-                                    <option selected Value={country.id}>{country.name}</option>
-                                  )
-                                }) : ""}
+                      {/* /row*/}
+                      <div className="row">
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>Country</label>
+                              <div className="styled-select" >
+                                  <select
+                                    name="country_id"
+                                    id="country_id"
+                                    ref={register}
+                                  >
+                                    <option value="DEFAULT" disabled> Select country</option>
+                                    {user ? user.data.countries.map(country=>{
+                                      return(
+                                        <option selected Value={country.id}>{country.name}</option>
+                                      )
+                                    }) : ""}
 
-                              </select>
-                              <input name="type" type="hidden" className="" defaultValue={1} ref={register} />
-                        </div>                    
+                                  </select>
+                                  <input name="type" type="hidden" className="" defaultValue={1} ref={register} />
+                            </div>                    
+                          </div>
+                        </div>
                       </div>
+                          <input type="submit" className="btn_1 medium" defaultValue="Save" />
+
+                      {/* /row*/}
+                      </form>
+                      {/* /row*/}
                     </div>
                   </div>
-                      <input type="submit" className="btn_1 medium" defaultValue="Save" />
-
-                  {/* /row*/}
-                  </form>
-                  {/* /row*/}
-                </div>
-              </div>
                  : <div className="row">
                       <div className="loading-spiner">
                         <div className="col-sm-12 col-md-4 col-xl-3">

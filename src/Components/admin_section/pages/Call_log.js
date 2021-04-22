@@ -6,6 +6,7 @@ import axios from "axios";
 import PropagateLoader from "react-spinners/PropagateLoader"
 import { format } from "date-fns";
 import { FormText } from 'react-bootstrap';
+import {Link} from 'react-router-dom'
 
 
 const Call_log = () => {
@@ -39,7 +40,7 @@ const token = localStorage.getItem("token");
                 {/* Breadcrumbs*/}
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <a href="#">Dashboard</a>
+                    <Link to="/housewife_dashboard">Dashboard</Link>
                   </li>
                   <li className="breadcrumb-item active">Call Log</li>
                 </ol>

@@ -99,18 +99,21 @@ const Listing_header = () => {
           {/* /top_menu */}
 
                 <a className="open_close" 
-                    onClick={() => setOpen(openmenu)}
-                    aria-expanded={open} >
+                    onClick={() => setOpen(!openmenu)}
+                     >
                     <i className="icon_menu" /><span>Menu</span>
                 </a>
 
-                <div in={openmenu}> 
-                    <nav className="main-menu">
+        
+                <Collapse className="main-menu" in={openmenu}> 
+                    <nav className="">
                         <div id="header_menu">
                             <a className="open_close" onClick={() => setOpen(null)}>
                                 <i className="icon_close" /><span>Menu</span>
                             </a>
-                            <Link to="/"><img src="../img/logo_mobile.png" width={153} height={70} alt=""/></Link>
+                            <Link to="/">
+                                <img src="../img/logo_mobile.png" width={153} height={70} alt=""/>
+                            </Link>
                         </div>
                         <ul>
                             <li><Link onClick={() => setOpen(null)} to="/">Home</Link></li>
@@ -119,7 +122,7 @@ const Listing_header = () => {
                             <li><Link onClick={() => setOpen(null)} to="/contact_us">Contact</Link></li>
                         </ul>
                    </nav>    
-                </div>
+                </Collapse>
           </div>
         </header>
     )

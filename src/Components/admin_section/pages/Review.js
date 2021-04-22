@@ -2,6 +2,7 @@ import React from 'react'
 import Side_nav from '../body_parts/Side_nav'
 import Admin_Footer from '../body_parts/Footer'
 import { withRouter } from 'react-router'
+import {Link} from 'react-router-dom'
 
 const Review = () => {
     return (
@@ -12,7 +13,7 @@ const Review = () => {
                     {/* Breadcrumbs*/}
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item">
-                        <a href="#">Dashboard</a>
+                            <Link to="/housewife_dashboard">Dashboard</Link>
                         </li>
                         <li className="breadcrumb-item active">Reviews</li>
                     </ol>
