@@ -5,17 +5,19 @@ import { withRouter } from 'react-router'
 import PropagateLoader from "react-spinners/PropagateLoader"
 import axios from "axios";
 import MaterialTable from 'material-table'
-import {Link} from 'react-router-dom'
+import packageJson from './../../../../package.json';
+import {Link, useHistory} from 'react-router-dom'
 
 
 const Food_list = () => {
     const token = localStorage.getItem("token");
     const [loading, setLoading] = useState(true);
+    const history = useHistory()
 
     useEffect(() => {
       try {
           async function load() {
-            const response = await axios.get('http://intavola.softminion.com/api/housewife/food?token='+token);
+            const response = await axios.get(`${packageJson.api_url}/api/housewife/food?token=`+token);
             const data = await response;
             setData(data.data.foods)
             setLoading(false)             
@@ -28,9 +30,9 @@ const Food_list = () => {
 const [data, setData] = useState();
 const columns = 
     [
-        { title: 'Cover', 
+        { title: 'Image', 
           field: 'image',
-           render: rowData => <img src="img/item_1.jpg" width={80} height={80} alt="" />
+           render: rowData => <img src={rowData.image} width={80} height={80} alt="" />
         },
         { title: 'Name', field: 'title_en' },
         { title: 'Category', field: 'category' },
@@ -71,20 +73,24 @@ const columns =
                                 actions={[
                                     {
                                       icon: 'edit',
-                                      tooltip: 'Edit User',
-                                      onClick: (event, rowData) => alert("You saved " + rowData.name)
+                                      tooltip: 'Edit ',
+                                      onClick: (event, rowData) =>{
+                                        sessionStorage.setItem('food', rowData.id)
+                                        history.push('/edit_food')
+                                      }
                                     },
                                     rowData => ({
                                       icon: 'delete',
-                                      tooltip: 'Delete User',
+                                      tooltip: 'Delete food',
                                       onClick: (event, rowData) => alert("You want to delete " + rowData.name),
-                                      disabled: rowData.birthYear < 2000
+                                  
                                     })
                                   ]}
                                     options={{
-                                      actionsColumnIndex: -1,    
-                              }}                           
-                            />
+                                      actionsColumnIndex: -1,
+                                      exportButton: true,    
+                                    }}                           
+                              />
                          : 
                           <div className="row">
                               <div className="loading-spiner">

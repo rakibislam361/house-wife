@@ -32,6 +32,9 @@ import User_call_log from './Components/admin_section/user_pages/User_call_log';
 import User_bookmarks from './Components/admin_section/user_pages/User_bookmarks';
 import Add_menu from './Components/admin_section/pages/Add_menu';
 import Food_list from './Components/admin_section/pages/Food_list';
+import Favorie_list from './Components/pages/Favorite_list';
+import Menu_update from './Components/admin_section/pages/update_pages/Menu_update';
+import Update_food from './Components/admin_section/pages/update_pages/Update_food';
 
 
 
@@ -82,6 +85,8 @@ useEffect(() => {
                     <ProtectedRoute isAuth={isAuth} path="/subscription" component={Subscription} /> 
                     <ProtectedRoute isAuth={isAuth} path="/call_log" component={Call_log} /> 
                     <ProtectedRoute isAuth={isAuth} path="/reviews" component={Review} /> 
+                    <ProtectedRoute isAuth={isAuth} path="/edit_menu" component={Menu_update} /> 
+                    <ProtectedRoute isAuth={isAuth} path="/edit_food" component={Update_food} /> 
       
                     {/* Home page rowte */}
                      <Route path="/about">
@@ -122,6 +127,11 @@ useEffect(() => {
                     <Route path="/housewife_details">
                         <Listing_header />
                         <Housewife_details />
+                        <Footer />
+                    </Route>
+                    <Route path="/favorite_lists">
+                        <Listing_header />
+                        <Favorie_list />
                         <Footer />
                     </Route>
                     <Route path="/order">

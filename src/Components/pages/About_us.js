@@ -8,6 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import PuffLoader from "react-spinners/PuffLoader"
 import LoginModel from '../body_parts/LoginModel'
+import packageJson from './../../../package.json';
+
+
 
 toast.configure();
 const About_us = () => {
@@ -39,7 +42,7 @@ const loader = () =>{
 
     const onSubmit = (data) =>{
       loader();
-      const response = axios.post('http://intavola.softminion.com/api/auth/register', data)
+      const response = axios.post(`${packageJson.api_url}/api/auth/register`, data)
         .then(response =>{
              toast.success(response.data.message,{
               position: "bottom-left",

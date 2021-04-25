@@ -9,6 +9,7 @@ import axios from 'axios';
 import MembershipPlan from "./MembershipPlan";
 import PuffLoader from "react-spinners/PuffLoader"
 import LoginModel from '../body_parts/LoginModel'
+import packageJson from './../../../package.json';
  
 
 
@@ -30,7 +31,7 @@ const Partner = (props) => {
   
  useEffect(() => {     
       try {
-        fetch("http://intavola.softminion.com/api/package/index")
+        fetch(`${packageJson.api_url}/api/package/index`)
         .then((response)=> response.json())
         .then((data)=> setPackage(data.packages))     
       } catch (error) {}  
@@ -51,7 +52,7 @@ const Partner = (props) => {
 
   const onSubmit = (data) =>{
     loader();
-    const response = axios.post('http://intavola.softminion.com/api/auth/register', data)
+    const response = axios.post(`${packageJson.api_url}/api/auth/register`, data)
     .then(response =>{
           toast.success(response.data.message,{
           position: "bottom-left",

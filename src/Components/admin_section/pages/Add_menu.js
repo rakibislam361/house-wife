@@ -6,6 +6,9 @@ import Side_nav from '../body_parts/Side_nav';
 import Admin_Footer from '../body_parts/Footer'
 import PropagateLoader from "react-spinners/PropagateLoader"
 import {Link} from 'react-router-dom'
+import packageJson from './../../../../package.json';
+
+
 
 toast.configure();
 const Add_menu = () => {
@@ -35,7 +38,7 @@ const Add_menu = () => {
     loader();
     var config = {
         method: 'post',
-        url: 'http://intavola.softminion.com/api/housewife/food-menu?token='+token,
+        url: `${packageJson.api_url}/api/housewife/food-menu?token=`+token,
         data: data
     };
 

@@ -13,6 +13,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import { useStateValue } from '../StateProvider';
 import PuffLoader from "react-spinners/PuffLoader"
+import packageJson from './../../../package.json';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -57,7 +58,7 @@ export default function TransitionsModal() {
     
   const onSubmit = (data) =>{
     loader()
-    const response = axios.post('http://intavola.softminion.com/api/auth/login', data)
+    const response = axios.post(`${packageJson.api_url}/api/auth/login`, data)
       .then(response =>{
             toast.success(response.data.message,{
             position: "bottom-left",
@@ -127,7 +128,7 @@ export default function TransitionsModal() {
 
   return (
     <div >
-      <Link className="login" onClick={handleOpen}></Link>
+      <a className="login" onClick={handleOpen}></a>
       <Modal
         aria-labelledby="modal_header"
         aria-describedby="sign-in-dialog"

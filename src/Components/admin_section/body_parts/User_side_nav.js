@@ -4,6 +4,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { useStateValue } from '../../StateProvider';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import packageJson from './../../../../package.json';
 
 
 toast.configure();
@@ -15,7 +16,7 @@ const [open, setOpen] = useState(true);
 const histry = useHistory(); 
  const logOut = () => {
     if(token){
-    const response = axios.post('http://intavola.softminion.com/api/auth/logout?token='+token)
+    const response = axios.post(`${packageJson.api_url}/api/auth/logout?token=`+token)
 
      .then(response=>{
         toast.success(response.data.message,{
@@ -86,14 +87,14 @@ const histry = useHistory();
                             </ul>
                             <ul className="navbar-nav sidenav-toggler">
                                 <li className="nav-item">
-                                <Link className="nav-link text-center" id="sidenavToggler">
+                                <a className="nav-link text-center" id="sidenavToggler">
                                     <i className="fa fa-fw fa-angle-left" />
-                                </Link>
+                                </a>
                                 </li>
                             </ul>
                             <ul className="navbar-nav ml-auto">
                                 <li className="nav-item">
-                                    <Link onClick={logOut} className="nav-link"><i className="fa fa-fw fa-sign-out"></i>Logout</Link>
+                                    <a onClick={logOut} className="nav-link"><i className="fa fa-fw fa-sign-out"></i>Logout</a>
                                 </li>
                             </ul>
              

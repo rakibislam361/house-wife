@@ -1,10 +1,46 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import { withRouter } from 'react-router'
 import User_side_nav from '../body_parts/User_side_nav'
 import Admin_Footer from '../body_parts/Footer'
+import packageJson from './../../../../package.json';
+
+import axios from "axios";
+import PropagateLoader from "react-spinners/PropagateLoader"
+import MaterialTable from 'material-table';
+import * as moment from 'moment'
 
 const User_bookmarks = () => {
-    return (
+  const token = localStorage.getItem("token");
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+      try {
+          async function load() {
+            const response = await axios.get(`${packageJson.api_url}/api/user/wishlist?token=`+token);
+            const data = await response;
+            setData(data.data.wishlists)
+            setLoading(false)             
+        }
+        load()  
+      } catch (error) {}
+  
+    },[]);
+  
+const columns = 
+    [
+        { title: 'Cover', 
+          field: 'image',
+           render: rowData => <img src="img/item_1.jpg" width={80} height={80} alt="" />
+        },
+        { title: 'Name', field: 'name' },
+        { title: 'Address', field: 'address' },
+
+    ]
+
+
+
+  return (
          <body className="fixed-nav sticky-footer" id="page-top">
             <User_side_nav />
               <div className="content-wrapper">
@@ -16,66 +52,31 @@ const User_bookmarks = () => {
                     </li>
                     <li className="breadcrumb-item active">Bookmarks</li>
                   </ol>
-                  <div className="box_general">
-                    <div className="header_box">
-                      <h2 className="d-inline-block">Bookmarks</h2>
-                      <div className="filter">
-                        <select name="orderby" className="selectbox">
-                          <option value="Any time">Any time</option>
-                          <option value="Latest">Latest</option>
-                          <option value="Oldest">Oldest</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="list_general">
-                      <ul>
-                        <li>
-                          <figure><img src="img/item_1.jpg" alt="" /></figure>
-                          <small>Pizza - Italian</small>
-                          <h4>La Monnalisa</h4>
-                          <p />
-                          <p><a href="#0" className="btn_1 gray"><i className="fa fa-fw fa-eye" /> View item</a></p>
-                          <ul className="buttons">
-                            <li><a href="#0" className="btn_1 gray delete wishlist_close"><i className="fa fa-fw fa-times-circle-o" /> Cancel</a></li>
-                          </ul>
-                        </li>
-                        <li>
-                          <figure><img src="img/item_2.jpg" alt="" /></figure>
-                          <small>Pizza - Italian</small>
-                          <h4>Da Alfredo</h4>
-                          <p />
-                          <p><a href="#0" className="btn_1 gray"><i className="fa fa-fw fa-eye" /> View item</a></p>
-                          <ul className="buttons">
-                            <li><a href="#0" className="btn_1 gray delete wishlist_close"><i className="fa fa-fw fa-times-circle-o" /> Cancel</a></li>
-                          </ul>
-                        </li>
-                        <li>
-                          <figure><img src="img/item_3.jpg" alt="" /></figure>
-                          <small>Japanese</small>
-                          <h4>Sushi Gold</h4>
-                          <p />
-                          <p><a href="#0" className="btn_1 gray"><i className="fa fa-fw fa-eye" /> View item</a></p>
-                          <ul className="buttons">
-                            <li><a href="#0" className="btn_1 gray delete wishlist_close"><i className="fa fa-fw fa-times-circle-o" /> Cancel</a></li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </div>
+                  <div className="">
+                   
+                    <MaterialTable
+                          title="Bookmark Housewife list"
+                          columns={columns}
+                          data={data}
+                            actions={[
+                                {
+                                  icon: 'edit',
+                                  tooltip: 'Edit User',
+                                  onClick: (event, rowData) => alert("You saved " + rowData.name)
+                                },
+                                rowData => ({
+                                  icon: 'delete',
+                                  tooltip: 'Delete User',
+                                  onClick: (event, rowData) => alert("You want to delete " + rowData.name),
+                                  disabled: rowData.birthYear < 2000
+                                })
+                              ]}
+                            options={{
+                              actionsColumnIndex: -1,
+                            }}                           
+                        />
                   </div>
-                  {/* /box_general*/}
-                  <nav aria-label="...">
-                    <ul className="pagination pagination-sm add_bottom_30">
-                      <li className="page-item disabled">
-                        <a className="page-link" href="#" tabIndex={-1}>Previous</a>
-                      </li>
-                      <li className="page-item"><a className="page-link" href="#">1</a></li>
-                      <li className="page-item"><a className="page-link" href="#">2</a></li>
-                      <li className="page-item"><a className="page-link" href="#">3</a></li>
-                      <li className="page-item">
-                        <a className="page-link" href="#">Next</a>
-                      </li>
-                    </ul>
-                  </nav>
+             
                   {/* /pagination*/}
                 </div>
                 {/* /container-fluid*/}

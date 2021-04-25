@@ -4,29 +4,63 @@ import Admin_Footer from '../body_parts/Footer'
 import axios from "axios";
 import PropagateLoader from "react-spinners/PropagateLoader"
 import { withRouter } from 'react-router'
-
+import MaterialTable from 'material-table';
+import * as moment from 'moment'
+import packageJson from './../../../../package.json';
 
 
 const User_call_log = () => { 
-const [call, setCall]=useState()
-const [loading, setLoading] = useState(true);
-const token = localStorage.getItem("token");
+
+  const [call, setCall]=useState()
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     try {
         async function load() {
-          const response = await axios.get('http://intavola.softminion.com/api/user/log-history?token='+token);
+          const response = await axios.get(`${packageJson.api_url}/api/user/log-history?token=`+token);
           const data = await response;
           setCall(data.data.logs) 
           setLoading(false)             
       }
       load()  
       
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
 
   },[]);
+
+  
+  const columns = 
+      [
+          { title: 'Housewife Name', field: 'housewife_name' },
+          { title: 'Phone', field: 'housewife_phone' },
+          { title: 'Date', field: 'created_at',
+            render: rowData =>{
+              const date = moment(rowData.created_at).format('LL')
+              return(
+                date
+              )
+            } 
+          
+          },
+          { title: 'Time', field: 'created_at',
+            render: rowData =>{
+              const date = moment(rowData.created_at).format('LT')
+              return(
+                date
+              )
+            } 
+          
+          },
+          { title: 'Status', field: 'status',
+          render: rowData => {
+              return(
+                rowData.status == 1 ? <i className="approved">Active</i> :
+              <i className="cancel">Inactive</i> 
+              )
+            }
+        }
+      ]
 
   
     return (
@@ -43,52 +77,38 @@ const token = localStorage.getItem("token");
                     </ol>
                     {/* Example DataTables Card*/}
                     <div className="card mb-3">
-                      <div className="card-header">
-                        <i className="fa fa-table" /> Received calls</div>
                       <div className="card-body">
                     {!call? 
                         <div className="loading-spiner">
-                          <div className="col-sm-12 col-md-4 col-xl-3">
                             <PropagateLoader  color="#f74f07" loading={loading} size={15} />
-                          </div>
                         </div>
                       : 
                        <div className="table-responsive">
-                        <table className="table table-bordered" id="dataTable" width="100%" cellSpacing={0}>
-                          <thead>
-                            <tr>
-                              <th>HouseWife Name</th>
-                              <th>Phone</th>
-                              <th>Date</th>
-                              <th>Time</th>
-                              <th>Status</th>
-                            </tr>
-                          </thead>
-                          <tfoot>
-                            <tr>
-                              <th>HouseWife name</th>
-                              <th>Telefono</th>
-                              <th>Date</th>
-                              <th>Orario</th>
-                              <th>Status</th>
-                            </tr>
-                          </tfoot>
-                          <tbody>
-                            {call ? call.map((call_list) =>( 
-                              <tr>
-                                <td>{call_list.housewife_name}</td>
-                                <td>{call_list.housewife_phone}</td>
-                                <td>{call_list.created_at}</td>
-                                <td>11:35</td>
-                                <td><i className="approved">Delivered</i></td>
-                              </tr>
-                            )):"" }
-                          </tbody>
-                        </table>
+                        <MaterialTable
+                              title="Call logs"
+                              columns={columns}
+                              data={call}
+                                actions={[
+                                    {
+                                      icon: 'edit',
+                                      tooltip: 'Edit User',
+                                      onClick: (event, rowData) => alert("You saved " + rowData.name)
+                                    },
+                                    rowData => ({
+                                      icon: 'delete',
+                                      tooltip: 'Delete User',
+                                      onClick: (event, rowData) => alert("You want to delete " + rowData.name),
+                                      disabled: rowData.birthYear < 2000
+                                    })
+                                  ]}
+                                    options={{
+                                      actionsColumnIndex: -1,
+                                      exportButton: true,    
+                                    }}                           
+                            />
                       </div>
                       }
                       </div>
-                      <div className="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                     </div>
                     {/* /tables*/}
                   </div>

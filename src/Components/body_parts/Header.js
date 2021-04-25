@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useStateValue } from '../StateProvider';
 import { Collapse } from 'react-bootstrap';
+import packageJson from './../../../package.json';
 
 
 toast.configure();
@@ -24,19 +25,16 @@ const Header = () => {
     const [user, setUser] = useState();
     const [openmenu, setOpen] = useState(null);
 
-
     useEffect(() => {
         if(user_token){
             try {
                 async function load() {
-                 const response = await axios.get('http://intavola.softminion.com/api/profile?token='+user_token);
+                 const response = await axios.get(`${packageJson.api_url}/api/profile?token=`+user_token);
                     const data = await response;
                     setUser(data) 
                 }
                 load()  
-                
-            } catch (error) {
-            }
+            } catch (error) {}
         }
     },[]);
 
@@ -60,7 +58,7 @@ const Header = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                });
+            });
             // the user is logged out
             localStorage.removeItem('token');
             localStorage.removeItem('user');
@@ -90,7 +88,7 @@ const Header = () => {
                         ?
                             <li><Signin_model_form /></li>
                         :
-                            <li aria-haspopup="true" onClick={handleClick}><Link className="login">Login</Link></li>
+                            <li aria-haspopup="true" onClick={handleClick}><a className="login">Login</a></li>
                         }
                             <Menu
                                 id="fade-menu"
@@ -99,17 +97,15 @@ const Header = () => {
                                 open={open}
                                 onClose={handleClose}
                                 TransitionComponent={Fade}
-                                style={{marginTop:'5%'}}
+                                style={{marginTop:'40px', zIndex:'99999'}}
                             >
                                 
                                 <MenuItem className="">
                                     <Link to={user_type === "1" ? '/user_profile' : user_type === "2" ? '/housewife_profile' : ""}>My account</Link>
-                                </MenuItem>
-                                
+                                </MenuItem>   
                                 <MenuItem className="" onClick={logOut}>Logout</MenuItem>
                             </Menu>
-
-                        <li><Link to="/" className="wishlist_bt_top" title="Your wishlist">Preferiti</Link></li>
+                        <li><Link to="/favorite_lists" className="wishlist_bt_top" title="Your wishlist">Preferiti</Link></li>
                     </ul>
 
                     {/* /top_menu */}

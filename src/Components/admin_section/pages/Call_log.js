@@ -4,9 +4,10 @@ import Admin_Footer from '../body_parts/Footer'
 import { withRouter } from 'react-router'
 import axios from "axios";
 import PropagateLoader from "react-spinners/PropagateLoader"
-import { format } from "date-fns";
-import { FormText } from 'react-bootstrap';
 import {Link} from 'react-router-dom'
+import MaterialTable from 'material-table';
+import * as moment from 'moment'
+import packageJson from './../../../../package.json';
 
 
 const Call_log = () => {
@@ -18,7 +19,7 @@ const token = localStorage.getItem("token");
   useEffect(() => {
     try {
         async function load() {
-          const response = await axios.get('http://intavola.softminion.com/api/housewife/call-log?token='+token);
+          const response = await axios.get(`${packageJson.api_url}/api/housewife/call-log?token=`+token);
           const data = await response;
           setCall(data.data.logs) 
           setLoading(false)             
@@ -30,6 +31,39 @@ const token = localStorage.getItem("token");
     }
 
   },[]);
+
+  const columns = 
+      [
+          { title: 'Name', field: 'user_name' },
+          { title: 'Phone', field: 'user_phone' },
+          { title: 'Date', field: 'created_at',
+            render: rowData =>{
+              const date = moment(rowData.created_at).format('LL')
+              return(
+                date
+              )
+            } 
+          
+          },
+          { title: 'Time', field: 'created_at',
+            render: rowData =>{
+              const date = moment(rowData.created_at).format('LT')
+              return(
+                date
+              )
+            } 
+          
+          },
+          { title: 'Status', field: 'status',
+          render: rowData => {
+              return(
+                rowData.status == 1 ? <i className="approved">Active</i> :
+              <i className="cancel">Inactive</i> 
+              )
+            }
+        }
+      ]
+
 
 
     return (
@@ -46,52 +80,33 @@ const token = localStorage.getItem("token");
                 </ol>
                 {/* Example DataTables Card*/}
                 <div className="card mb-3">
-                  <div className="card-header">
-                    <i className="fa fa-table" /> Received calls</div>
                   <div className="card-body">
                     {loading? 
                         <div className="loading-spiner">
-                          <div className="col-sm-12 col-md-4 col-xl-3">
                             <PropagateLoader  color="#f74f07" loading={loading} size={15} />
-                          </div>
                         </div>
                      : 
                       <div className="table-responsive">
-                      <table className="table table-bordered" id="dataTable" width="100%" cellSpacing={0}>
-                        <thead>
-                          <tr>
-                            <th>User Name</th>
-                            <th>Phone</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Status</th>
-                          </tr>
-                        </thead>
-                        <tfoot>
-                          <tr>
-                            <th>User name</th>
-                            <th>Telefono</th>
-                            <th>Date</th>
-                            <th>Orario</th>
-                            <th>Status</th>
-                          </tr>
-                        </tfoot>
-                        <tbody>
-                          {call ? call.map((call_list) =>( 
-                            <tr>
-                              <td>{call_list.user_name}</td>
-                              <td>{call_list.user_phone}</td>
-                              <td>{call_list.created_at}</td>
-                              <td>11:35</td>
-                              <td><i className="approved">Delivered</i></td>
-                            </tr>
-                          )):"" }
-                        </tbody>
-                      </table>
-                    </div>
+                        <MaterialTable
+                              title="Call logs"
+                              columns={columns}
+                              data={call}
+                                actions={[
+                                    rowData => ({
+                                      icon: 'delete',
+                                      tooltip: 'Delete call',
+                                      onClick: (event, rowData) => alert("You want to delete " + rowData.name),
+                                    })
+                                  ]}
+                                    options={{
+                                      actionsColumnIndex: -1,
+                                      exportButton: true, 
+                                    }}                           
+                            />
+                      </div>
                       }
                   </div>
-                  <div className="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                
                 </div>
                 {/* /tables*/}
               </div>

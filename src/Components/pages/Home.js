@@ -4,6 +4,7 @@ import Searchbox from './Searchbox';
 import PuffLoader from "react-spinners/PuffLoader"
 import Carousel from 'react-bootstrap/Carousel'
 import Slider from "react-slick";
+import packageJson from './../../../package.json';
 
 
 
@@ -19,7 +20,7 @@ const Home = () => {
 
   useEffect(() => {
       try {
-        fetch("http://intavola.softminion.com/api/index")
+        fetch(`${packageJson.api_url}/api/index`)
         .then((response)=> response.json())
         .then((data)=> setConFood(data.country_foods))
       } catch (error) {}  
@@ -27,7 +28,7 @@ const Home = () => {
 
   useEffect(() => {     
       try {
-        fetch("http://intavola.softminion.com/api/housewifes")
+        fetch(`${packageJson.api_url}/api/housewifes`)
         .then((response)=> response.json())
         .then((data)=> setHousewife(data.housewives))     
       } catch (error) {}
@@ -202,7 +203,7 @@ const Home = () => {
                       <Link onClick={removeHwsID} to="/housewife_list">Mostra tutto</Link>
                     </div>
                       <Slider {...setting}>
-                      {housewife?housewife.slice(0,3).map((single_housewife, index)=> 
+                      {housewife? housewife.slice(0,3).map((single_housewife, index)=> 
                         <div className="item" key={index}>
                           <div className="strip col-12">
                             <figure>
@@ -220,7 +221,7 @@ const Home = () => {
                                 <span className="take yes">{single_housewife.housewife_type==1? "Withdrawal" : single_housewife.housewife_type==2 ? "Home" :"Both" }</span> <span className="deliv no"> </span>
                               </li>
                               <li>
-                                <div className="score"><strong>8.9</strong></div>
+                                <div className="score"><strong>{single_housewife.rating_avg ? single_housewife.rating_avg:"0.00" }</strong></div>
                               </li>
                             </ul>
                           </div>

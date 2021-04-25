@@ -5,6 +5,9 @@ import * as yup from 'yup'
 import axios from 'axios';
 import {useCombobox} from "downshift"
 import { Link, useParams,useHistory } from 'react-router-dom';
+import packageJson from './../../../package.json';
+
+
 
 const HuseWifeDetailsSearch = ({btn_class,name }) => {
     const [inputItems , setInputItems] = useState([]);
@@ -12,7 +15,7 @@ const HuseWifeDetailsSearch = ({btn_class,name }) => {
     const [singleHousewife, setSingleHousewife] = useState("") 
 
     useEffect(() => {
-        fetch("http://intavola.softminion.com/api/housewife")
+        fetch(`${packageJson.api_url}/api/housewife`)
         .then((response)=> response.json())
         .then((data)=> setHousewives(data.housewives))
     }, [])
@@ -38,9 +41,15 @@ const HuseWifeDetailsSearch = ({btn_class,name }) => {
         resolver:yupResolver(schema),
     }); 
 
+    const [searchHousewife, setHousewife] = useState();
     const onSubmit = (event) =>{
-        const data = event.currentTarget.dataset.id        
-        sessionStorage.setItem("ctfood",JSON.stringify(data))
+        const data = event.currentTarget.dataset.id
+        try {
+          fetch(`${packageJson.api_url}/api/search/`+data)
+          .then((response)=> response.json())
+          .then((data)=> 
+          setHousewife(data.housewives))
+        } catch (error) {} 
     } 
 
     return (
@@ -65,7 +74,7 @@ const HuseWifeDetailsSearch = ({btn_class,name }) => {
                         onClick={()=> setSingleHousewife(item)}
                     > 
                     <li style={highlightedtIndex === index ? {className:"search_list"}: {}}>
-                        <Link to={"/housewife_list"} onClick={onSubmit} data-id={item.name}>{item.name}</Link>
+                        <Link onClick={onSubmit} data-id={item.name}>{item.name}</Link>
                     </li>
                     
                     </span>

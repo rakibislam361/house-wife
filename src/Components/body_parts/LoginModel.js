@@ -13,6 +13,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import { useStateValue } from '../StateProvider';
 import PuffLoader from "react-spinners/PuffLoader"
+import packageJson from './../../../package.json';
 
 
 
@@ -76,7 +77,7 @@ export default function TransitionsModal(props) {
       };
 
     loader()
-    const response = axios.post('http://intavola.softminion.com/api/auth/login', data)
+    const response = axios.post(`${packageJson.api_url}/api/auth/login`, data)
       .then(response =>{
             toast.success(response.data.message,{
             position: "bottom-left",
@@ -131,7 +132,7 @@ export default function TransitionsModal(props) {
  
   const onRegistration = (data) =>{
     loader()
-    const response = axios.post('http://intavola.softminion.com/api/auth/register', data)
+    const response = axios.post(`${packageJson.api_url}/api/auth/register`, data)
       .then(response =>{
           toast.success(response.data.message,{
           position: "bottom-left",
@@ -199,7 +200,7 @@ export default function TransitionsModal(props) {
 
   return (
     <div >
-      <Link className="btn_1 gradient full-width mb_5" onClick={handleOpen}>{props.name}</Link>
+      <a className="btn_1 gradient full-width mb_5" onClick={handleOpen}>{props.name}</a>
       <Modal
         aria-labelledby="modal_header"
         aria-describedby="sign-in-dialog"

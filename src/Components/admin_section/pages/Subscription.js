@@ -4,21 +4,20 @@ import Admin_Footer from '../body_parts/Footer'
 import { withRouter } from 'react-router'
 import MaterialTable from 'material-table'
 import {Link} from 'react-router-dom'
+import packageJson from './../../../../package.json';
 
 const Subscription = () => {
 
 const [data, setData] = useState([]);
-
 const columns = 
     [
-        { title: 'Name', field: 'name' },
-        { title: 'Surname', field: 'surname' },
-        { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-        {
-        title: 'Birth Place',
-        field: 'birthCity',
-        lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-        },
+        { title: 'Type', field: '' },
+        { title: 'Euro', field: '' },
+        { title: 'Date', field: ''},
+        { title: 'Deadline', field: ''},
+        { title: 'Status', field: ''},
+        { title: 'Payment', field: ''},
+       
     ]
 
     
@@ -34,69 +33,30 @@ const columns =
                             </li>
                             <li className="breadcrumb-item active">Subscription</li>
                         </ol>
-                        {/* Example DataTables Card*/}
+
                         <div className="card mb-3">
-                            <div className="card-header">
-                            <i className="fa fa-table" /> Inscriptions</div>
                             <div className="card-body">
-                            <div className="table-responsive">
-                                <table className="table table-bordered" id="dataTable" width="100%" cellSpacing={0}>
-                                <thead>
-                                    <tr>
-                                    <th>Type</th>
-                                    <th>Euro</th>
-                                    <th>Date</th>
-                                    <th>Deadline</th>
-                                    <th>Status</th>
-                                    <th>Payment</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                    <th>Tipo</th>
-                                    <th>Euro</th>
-                                    <th>Date</th>
-                                    <th>Scadenza</th>
-                                    <th>Status</th>
-                                    <th>Pagamento</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    <tr>
-                                    <td>1 Mese</td>
-                                    <td>€ 2</td>
-                                    <td>17/02/2021</td>
-                                    <td>17/03/2021</td>
-                                    <td><i className="approved">Active</i></td>
-                                    <td><a href="#"><strong>PayPal</strong></a></td>
-                                    </tr>
-                                    <tr>
-                                    <td>6 Mese</td>
-                                    <td>€ 12</td>
-                                    <td>17/03/2021</td>
-                                    <td>17/08/2021</td>
-                                    <td><i className="pending">Pending</i></td>
-                                    <td><a href="#"><strong>To Pay</strong></a></td>
-                                    </tr>
-                                </tbody>
-                                </table>
+                                <div className="table-responsive">
+                                    <MaterialTable
+                                        title="Subscription details"
+                                        columns={columns}
+                                        data={data}
+                                        actions={[
+                                          
+                                            rowData => ({
+                                            icon: 'delete',
+                                            tooltip: 'Delete subscription',
+                                            onClick: (event, rowData) => alert("You want to delete " + rowData.name),
+                                            disabled: rowData.birthYear < 2000
+                                            })
+                                        ]}
+                                        options={{
+                                            actionsColumnIndex: -1,
+                                            exportButton: true,    
+                                        }}                            
+                                    />
+                                </div>
                             </div>
-                            </div>
-                            <div className="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-                        </div>
-                        <div className="card mb-3">
-                            <div className="card-header">
-                            <i className="fa fa-table" /> Inscriptions</div>
-                            <div className="card-body">
-                            <div className="table-responsive">
-                                 <MaterialTable
-                                    title="Basic Filtering Preview"
-                                    columns={columns}
-                                    data={data}        
-                                />
-                            </div>
-                            </div>
-                            <div className="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                         </div>
                         
                         {/* /tables*/}

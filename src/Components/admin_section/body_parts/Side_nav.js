@@ -5,6 +5,8 @@ import { useStateValue } from '../../StateProvider';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Collapse } from 'react-bootstrap';
+import packageJson from './../../../../package.json';
+
 
 toast.configure();
 const Side_nav = () => {
@@ -15,7 +17,7 @@ const [open, setOpen] = useState(true);
 
 const logOut = () => {
     if(token){
-    const response = axios.post('http://intavola.softminion.com/api/auth/logout?token='+token)
+    const response = axios.post(`${packageJson.api_url}/api/auth/logout?token=`+token)
 
      .then(response=>{
         toast.success(response.data.message,{
@@ -119,7 +121,7 @@ const logOut = () => {
                     </ul>
                     <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
-                    <Link onClick={logOut} className="nav-link"><i className="fa fa-fw fa-sign-out"></i>Logout</Link>
+                    <a onClick={logOut} className="nav-link"><i className="fa fa-fw fa-sign-out"></i>Logout</a>
                     </li>
                 </ul>
             </div>

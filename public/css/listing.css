@@ -480,8 +480,8 @@ a.address:hover {
 }
 
 .rangeslider {
-  background: #e6e6e6;
-  position: relative;
+  background: #c71d1e !important;
+  position: relative !important;
 }
 
 .rangeslider--horizontal {

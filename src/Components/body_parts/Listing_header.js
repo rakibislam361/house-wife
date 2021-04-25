@@ -9,6 +9,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useStateValue } from '../StateProvider';
 import { Collapse } from 'react-bootstrap';
+import packageJson from './../../../package.json';
+
 
 
 toast.configure();
@@ -31,7 +33,7 @@ const Listing_header = () => {
 
   const logOut = () => {
     try {      
-        const response = axios.post('http://intavola.softminion.com/api/auth/logout?token='+user_token)
+        const response = axios.post(`${packageJson.api_url}/api/auth/logout?token=`+user_token)
         .then(response=>{
             toast.success(response.data.message,{
                 position: "bottom-left",
@@ -51,10 +53,7 @@ const Listing_header = () => {
             setAnchorEl(null);
         })
         .catch();     
-    } catch (error) {
-        
-    
-    }
+    } catch (error) {}
 
 }
     return (
@@ -63,9 +62,9 @@ const Listing_header = () => {
         
          <div className="container">
           <div id="logo">
-            <Link to="/">
+            <a>
               <img src="img/logo.png" width={131} height={60} alt="" className="logo_sticky" />
-            </Link>
+            </a>
           </div>
           <div className="layer" />{/* Opacity Mask Menu Mobile */}
           <ul id="top_menu">
@@ -73,7 +72,7 @@ const Listing_header = () => {
                ?
                    <li><Signin_model_form /></li>
                :
-                   <li aria-haspopup="true" onClick={handleClick}><Link className="login">Login</Link></li>
+                   <li aria-haspopup="true" onClick={handleClick}><a className="login">Login</a></li>
                }
                   
                    <Menu
@@ -88,13 +87,13 @@ const Listing_header = () => {
                             
                       
                        <MenuItem>
-                            <Link to={user_type === 1 ? '/user_profile' : user_type === 2 ? '/housewife_profile' : ""}>My account</Link>
+                            <Link to={user_type === 1 ? '/user_profile' : '/housewife_profile' }>My account</Link>
                         </MenuItem>
                     
                        <MenuItem onClick={logOut}>Logout</MenuItem>
                    </Menu>
 
-               <li><Link to="/" className="wishlist_bt_top" title="Your wishlist">Preferiti</Link></li>
+               <li><Link to="/favorite_lists" className="wishlist_bt_top" title="Your wishlist">Preferiti</Link></li>
            </ul>
           {/* /top_menu */}
 
@@ -111,9 +110,9 @@ const Listing_header = () => {
                             <a className="open_close" onClick={() => setOpen(null)}>
                                 <i className="icon_close" /><span>Menu</span>
                             </a>
-                            <Link to="/">
+                            <a>
                                 <img src="../img/logo_mobile.png" width={153} height={70} alt=""/>
-                            </Link>
+                            </a>
                         </div>
                         <ul>
                             <li><Link onClick={() => setOpen(null)} to="/">Home</Link></li>

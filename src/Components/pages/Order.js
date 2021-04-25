@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { Link,Redirect,useHistory } from 'react-router-dom';
 import LoginModel from '../body_parts/LoginModel'
+import packageJson from './../../../package.json';
 
 
 const Order = () => {
@@ -47,7 +48,7 @@ const Order = () => {
         loader();
         var config = {
           method: "POST",
-          url: "http://intavola.softminion.com/api/package/order",
+          url: `${packageJson.api_url}/api/package/order`,
           data: data,
           headers: {
             Authorization: `Basic ${token}`,

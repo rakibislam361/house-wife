@@ -6,6 +6,9 @@ import axios from 'axios';
 import PuffLoader from "react-spinners/PuffLoader"
 import PropagateLoader from "react-spinners/PropagateLoader"
 import {useLocation} from 'react-router-dom'
+import packageJson from './../../../package.json';
+
+
 
 const Housewife_details = () => {
   const [number, setNumber ] = useState()
@@ -17,6 +20,7 @@ const Housewife_details = () => {
   const location = useLocation()
   const [housewife_name, setHousewifeName] = useState(); 
   const [housewifeData, setHousewifeData] = useState();
+  const [HousewifeRating, setHousewifeRating] = useState();
   
   let menu_image = ['menu_item_large_1.jpg',
   'location_11.jpg','location_12.jpg','location_list_1.jpg','location_list_2.jpg','location_list_3.jpg','location_list_4.jpg'
@@ -34,18 +38,17 @@ const Housewife_details = () => {
   useEffect(() => {
     try {
           async function load () {
-          const response = await axios.get('http://intavola.softminion.com/api/housewife/show/'+housewife_id);
+          const response = await axios.get(`${packageJson.api_url}/api/housewife/show/`+housewife_id);
           const data = await response; 
           setHousewifeData(data.data)    
           setNumber(data.data.housewife.phone)
           setHousewifeName(data.data.housewife)
+          setHousewifeRating(data.data.housewife)
           setFoods(data.data.foods)  
           setLoading(false)             
       }
-      load()  
-      
-    } catch (error) {
-    }
+      load()        
+    } catch (error) {}
 
   },[]);
   
@@ -59,7 +62,7 @@ const Housewife_details = () => {
     loader();
     var config = {
       method: "get",
-      url: "http://intavola.softminion.com/api/user/call-log/"+housewife_id+"?token="+token,
+      url: `${packageJson.api_url}/api/user/call-log/`+housewife_id+"?token="+token,
     };
     axios(config)
       .then((response) => {
@@ -74,15 +77,14 @@ const Housewife_details = () => {
 
   return (
       <main data-spy="scroll" data-target="#secondary_nav" data-offset="75">
-        {!housewife_name ?
+        {!housewife_name && housewifeData ?
           <div className="row">
             <div className="col-12"> 
                 <div className="loading-spiner">
                   <PuffLoader  color="#f74f07" loading={loading} size={160} />
               </div> 
             </div> 
-          </div>
-                
+          </div>          
         :
           <>
             <div className="hero_in detail_page background-image" style={{backgroundImage : "url(img/hero_general.jpg)"}}>
@@ -92,10 +94,10 @@ const Housewife_details = () => {
                     <div className="row">
                       <div className="col-xl-4 col-lg-5 col-md-6">
                         <div className="head">
-                          <div className="score"><span>VOTAZIONE<em>4 Recensioni</em></span><strong>{housewifeData.rating_avg}</strong></div>
+                          <div className="score"><span>VOTAZIONE<em>{HousewifeRating ? HousewifeRating.length :""} Recensioni</em></span><strong>{HousewifeRating ? housewifeData.rating_avg: ""}</strong></div>
                         </div>
-                        <h1>{housewife_name.name}</h1>
-                        {housewife_name.name}- <a href="#" target="blank">Ottenere indicazioni</a>
+                        <h1>{housewife_name ? housewife_name.name: ""}</h1>
+                        {housewife_name ? housewife_name.name : ""}- <a href="#" target="blank">Ottenere indicazioni</a>
                       </div>
                       <div className="col-xl-8 col-lg-7 col-md-6">
                         
@@ -105,7 +107,17 @@ const Housewife_details = () => {
                             <a href="img/hero_general_1.jpg" title="Photo title" data-effect="mfp-zoom-in" />
                             <a href="img/hero_general_2.jpg" title="Photo title" data-effect="mfp-zoom-in" />
                           </span>
-                          <a href="#0" className="btn_hero wishlist"><i className="icon_heart" />Preferiti</a>
+                          {token
+                          ? 
+                            <a className="btn_hero wishlist" style={{color:'white'}}><i className="icon_heart" />Preferiti</a>                        
+                          :
+                            <a className="btn_hero wishlist" style={{color:'white', height: '35px', marginTop:'20px'}}><i className="icon_heart" />
+                            
+                            </a>                        
+                            
+                                                    
+                            
+                          }
                         </div>
 
                       </div>
@@ -120,8 +132,7 @@ const Housewife_details = () => {
             <nav className={scroll ? "secondary_nav sticky_horizontal is_stuck_nav" :"secondary_nav sticky_horizontal" }>
               <div className="container">
                 <ul id="secondary_nav">
-                  {foods? foods.map((food, index) =><li key={index}><a className="list-group-item list-group-item-action" href={`${location.pathname}#section-${index}`}>{food.title_en}</a></li>): ""} 
-            
+                  {foods? foods.map((food, index) =>food.foods.length > 0 ?<li key={index}><a className="list-group-item list-group-item-action" href={`${location.pathname}#section-${index}`}>{food.title_en}</a></li>:""): ""} 
                   <li><a className="list-group-item list-group-item-action" href={"#section-5"}><i className="icon_chat_alt" />Recensioni</a></li>
                 </ul>
               </div>
@@ -132,7 +143,8 @@ const Housewife_details = () => {
               <div className="container margin_detail">
                 <div className="row">
                   <div className="col-lg-8 list_menu">
-                      {foods? foods.map((food, index) => 
+                      {foods ? foods.map((food, index) =>
+                        food.foods.length > 0 ? 
                         <section id={`section-${index}`} key={index}>
                           <h4>{food.title_en}</h4>
                           <div className="table_wrapper">
@@ -146,8 +158,7 @@ const Housewife_details = () => {
                               </thead>
                               <tbody>
                                 {foods ? food.foods.map((item, index)=> 
-                                <tr key={index}>
-                                  
+                                <tr key={index}>                    
                                   <td className="d-md-flex align-items-center">
                                     <figure>
                                       <a href="" title="Photo title" data-effect="mfp-zoom-in"><img src={`img/${menu_image[index]}`} data-src={`img/${menu_image[index]}`} alt="thumb" className="lazy" /></a>
@@ -157,7 +168,6 @@ const Housewife_details = () => {
                                       <p>{item.description_en}</p>
                                     </div>
                                   </td>
-
                                   <td>
                                     <strong />
                                   </td>
@@ -165,14 +175,14 @@ const Housewife_details = () => {
                                     <a href="#0" />
                                   </td>
                                 </tr>
-                                 ) : ""}
+                                 )  : ""}
                             </tbody>
                             </table>
                           </div>
                         </section>
+                        : ""
                       )
-                      :""}
-                      {foods? <section><h4>No foods item available</h4></section>:"" }
+                      : ""}
                   </div>
 
                   <div className="col-lg-4" id="sidebar_fixed">
@@ -207,7 +217,7 @@ const Housewife_details = () => {
                         <div className="btn_1_mobile"><br />
                           {token
                           ? 
-                            <Link to="" onClick={showNumber} className="btn_1 gradient full-width mb_5">Show this number</Link>                        
+                            <a onClick={showNumber} className="btn_1 gradient full-width mb_5" style={{color:'white'}}>Show this number</a>                        
                           :
                             <LoginModel name="Sign in now!" secondButton="REGISTRATI COME UTENTE" user_type={1} />
                           }
@@ -221,13 +231,13 @@ const Housewife_details = () => {
                     <div className="btn_reserve_fixed">
                        {token
                           ? 
-                            <Contact_model number={number}/>                     
+                            <Contact_model number={number} />                     
                           :
                             <LoginModel name="CONTACT NOW" secondButton="REGISTRATI COME UTENTE" user_type={1} />
                           }
                       </div>
                   </div>
-                </div>Y
+                </div>
 
                 {/* /row */}
               </div>
@@ -242,9 +252,9 @@ const Housewife_details = () => {
                     <div className="row add_bottom_30 d-flex align-items-center reviews">
                       <div className="col-md-3">
                         <div id="review_summary">
-                          <strong>{housewifeData.rating_avg}</strong>
+                          <strong>{housewifeData ? housewifeData.rating_avg:""}</strong>
                           <em>VOTO</em>
-                          <small>Basato su 4 recensioni </small>
+                          <small>Basato su {HousewifeRating ? HousewifeRating.length: ""} recensioni </small>
                         </div>
                       </div>
                       <div className="col-md-9 reviews_sum_details">
@@ -254,20 +264,20 @@ const Housewife_details = () => {
                             <div className="row">
                               <div className="col-xl-10 col-lg-9 col-9">
                                 <div className="progress">
-                                  <div className="progress-bar" role="progressbar" style={{width: '90%'}} aria-valuenow={90} aria-valuemin={0} aria-valuemax={100} />
+                                  <div className="progress-bar" role="progressbar" style={{width: `${housewifeData ? housewifeData.quality_rating_avg*10: ""}%`}} aria-valuenow={90} aria-valuemin={0} aria-valuemax={100} />
                                 </div>
                               </div>
-                              <div className="col-xl-2 col-lg-3 col-3"><strong>9.0</strong></div>
+                              <div className="col-xl-2 col-lg-3 col-3"><strong>{housewifeData ? housewifeData.quality_rating_avg: ""}</strong></div>
                             </div>
                             {/* /row */}
                             <h6>Servizio</h6>
                             <div className="row">
                               <div className="col-xl-10 col-lg-9 col-9">
                                 <div className="progress">
-                                  <div className="progress-bar" role="progressbar" style={{width: '95%'}} aria-valuenow={95} aria-valuemin={0} aria-valuemax={100} />
+                                  <div className="progress-bar" role="progressbar" style={{width: `${housewifeData ? housewifeData.service_rating_avg*10:""}%`}} aria-valuenow={95} aria-valuemin={0} aria-valuemax={100} />
                                 </div>
                               </div>
-                              <div className="col-xl-2 col-lg-3 col-3"><strong>9.5</strong></div>
+                              <div className="col-xl-2 col-lg-3 col-3"><strong>{housewifeData ? housewifeData.service_rating_avg:""}</strong></div>
                             </div>
                             {/* /row */}
                           </div>
@@ -276,20 +286,20 @@ const Housewife_details = () => {
                             <div className="row">
                               <div className="col-xl-10 col-lg-9 col-9">
                                 <div className="progress">
-                                  <div className="progress-bar" role="progressbar" style={{width: '60%'}} aria-valuenow={60} aria-valuemin={0} aria-valuemax={100} />
+                                  <div className="progress-bar" role="progressbar" style={{width: `${housewifeData ? housewifeData.punctuality_rating_avg*10:""}%`}} aria-valuenow={60} aria-valuemin={0} aria-valuemax={100} />
                                 </div>
                               </div>
-                              <div className="col-xl-2 col-lg-3 col-3"><strong>6.0</strong></div>
+                              <div className="col-xl-2 col-lg-3 col-3"><strong>{housewifeData ? housewifeData.punctuality_rating_avg:""}</strong></div>
                             </div>
                             {/* /row */}
                             <h6>Prezzo</h6>
                             <div className="row">
                               <div className="col-xl-10 col-lg-9 col-9">
                                 <div className="progress">
-                                  <div className="progress-bar" role="progressbar" style={{width: '60%'}} aria-valuenow={60} aria-valuemin={0} aria-valuemax={100} />
+                                  <div className="progress-bar" role="progressbar" style={{width: `${housewifeData ? housewifeData.price_rating_avg*10:""}%`}} aria-valuenow={60} aria-valuemin={0} aria-valuemax={100} />
                                 </div>
                               </div>
-                              <div className="col-xl-2 col-lg-3 col-3"><strong>6.0</strong></div>
+                              <div className="col-xl-2 col-lg-3 col-3"><strong>{housewifeData? housewifeData.price_rating_avg:""}</strong></div>
                             </div>
                             {/* /row */}
                           </div>

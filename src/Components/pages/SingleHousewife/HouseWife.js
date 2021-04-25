@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from "react-router-dom"
 
-const HouseWife = ({id, name, city, housewife_type, img}) => {
+const HouseWife = ({id, name, city, ratings, housewife_type, img}) => {
    
   const openCard = (event) => {
     sessionStorage.setItem('housewife_id',event.currentTarget.dataset.id)   
@@ -23,7 +23,7 @@ const HouseWife = ({id, name, city, housewife_type, img}) => {
             <ul>
                 <li><span className="take yes">{housewife_type===1? "Withdrawal" : housewife_type===2 ? "Home" :"Both" }</span> <span className="deliv no"> </span></li>
                 <li>
-                <div className="score"><strong>8.5</strong></div>
+                <div className="score"><strong>{ratings ? ratings : "0.00"}</strong></div>
                 </li>
             </ul>
             </div>

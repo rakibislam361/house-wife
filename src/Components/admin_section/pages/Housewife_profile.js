@@ -11,6 +11,9 @@ import Side_nav from '../body_parts/Side_nav'
 import Admin_Footer from '../body_parts/Footer'
 import PropagateLoader from "react-spinners/PropagateLoader"
 import {Link} from "react-router-dom"
+import packageJson from './../../../../package.json';
+
+
 
 toast.configure();
 const Housewife_profile = () => {
@@ -22,7 +25,7 @@ const Housewife_profile = () => {
       useEffect(() => {
         try {
             async function load() {
-              const response = await axios.get('http://intavola.softminion.com/api/profile?token='+token);
+              const response = await axios.get(`${packageJson.api_url}/api/profile?token=`+token);
               const data = await response;
               setUser(data) 
               setLoading(false)             
@@ -92,7 +95,7 @@ const Housewife_profile = () => {
         loader();
         var config = {
           method: "POST",
-          url: "http://intavola.softminion.com/api/profile/update",
+          url: `${packageJson.api_url}/api/profile/update`,
           data: data,
           headers: {
             Authorization: `Basic ${token}`,
@@ -328,7 +331,7 @@ const Housewife_profile = () => {
                                       <option defaultValue="DEFAULT" disabled> Select country</option>
                                       {user ? user.data.countries.map(country=>{
                                         return(
-                                          <option selected defaultValue={country.id}>{country.name}</option>
+                                          <option key={country.id} value={country.id}>{country.name}</option>
                                         )
                                       }) : ""}
 

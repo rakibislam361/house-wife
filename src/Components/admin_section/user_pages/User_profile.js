@@ -10,6 +10,7 @@ import { useDropzone } from "react-dropzone";
 import User_side_nav from '../body_parts/User_side_nav';
 import Admin_Footer from '../body_parts/Footer'
 import PropagateLoader from "react-spinners/PropagateLoader"
+import packageJson from './../../../../package.json';
 
 
 
@@ -23,7 +24,7 @@ const [loading, setLoading] = useState(true);
   useEffect(() => {
       try {
           async function load() {
-            const response = await axios.get('http://intavola.softminion.com/api/profile?token='+token);
+            const response = await axios.get(`${packageJson.api_url}/api/profile?token=`+token);
             const data = await response;
             setUser(data) 
             setLoading(false)             
@@ -80,7 +81,7 @@ const [loading, setLoading] = useState(true);
     loader();
     var config = {
       method: "POST",
-      url: "http://intavola.softminion.com/api/profile/update",
+      url: `${packageJson.api_url}/api/profile/update`,
       data: data,
       headers: {
         Authorization: `Basic ${token}`,

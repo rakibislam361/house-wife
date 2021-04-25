@@ -10,6 +10,7 @@ import Admin_Footer from '../body_parts/Footer'
 import { withRouter } from 'react-router'
 import PropagateLoader from "react-spinners/PropagateLoader"
 import {Link} from 'react-router-dom'
+import packageJson from './../../../../package.json';
 
 
 const Add_food = () => {
@@ -23,7 +24,7 @@ const Add_food = () => {
     useEffect(() => {
       try {
           async function load() {
-            const response = await axios.get('http://intavola.softminion.com/api/profile?token='+token);
+            const response = await axios.get(`${packageJson.api_url}/api/profile?token=`+token);
             const data = await response;
             setUser(data)              
         }
@@ -35,7 +36,7 @@ const Add_food = () => {
     useEffect(() => {
         try {
           async function load() {
-            const response = await axios.get('http://intavola.softminion.com/api/housewife/food/country-food');
+            const response = await axios.get(`${packageJson.api_url}/api/housewife/food/country-food`);
             const data = await response;
             setCountryfood(data.data.country_foods)              
         }
@@ -48,7 +49,7 @@ const Add_food = () => {
      useEffect(() => {
         try {
         async function load() {
-            const response = await axios.get('http://intavola.softminion.com/api/housewife/food/category');
+            const response = await axios.get(`${packageJson.api_url}/api/housewife/food/category`);
             const data = await response;
             setFoodcategory(data.data.categories) 
             setLoading(false)             
@@ -93,23 +94,23 @@ const Add_food = () => {
     loader();
  
     var formdata = new FormData();
-    formdata.append('title_en', data.title_en);
-    formdata.append('country_food_id', data.country_food_id);
-    formdata.append('description_en', data.description_en);
-    formdata.append('status', data.status);
-    formdata.append('category_id', data.category_id); 
-    formdata.append('image', image, image.name);
+        formdata.append('title_en', data.title_en);
+        formdata.append('country_food_id', data.country_food_id);
+        formdata.append('description_en', data.description_en);
+        formdata.append('status', data.status);
+        formdata.append('category_id', data.category_id); 
+        formdata.append('image', image, image.name);
 
     var config = {
       method: "POST",
-      url: "http://intavola.softminion.com/api/housewife/food",
+      url: `${packageJson.api_url}/api/housewife/food`,
       data: formdata,
       headers: {
         Authorization: `Basic ${token}`,
         'content-type': 'multipart/form-data',
       },
     };
-console.log(formdata)
+
     axios(config)
       .then((response) => {
         toast.success(response.data.message, {
@@ -144,14 +145,15 @@ console.log(formdata)
             <Side_nav />
                 <div className="content-wrapper">
                 {loading ? 
-                        <div className="row">
-                            <div className="loading-spiner">
-                                <div className="col-sm-12 col-md-4 col-xl-3">
-                                <PropagateLoader  color="#f74f07" loading={loading} size={15} />
-                                </div>
+                    <div className="row">
+                        <div className="loading-spiner">
+                            <div className="col-sm-12 col-md-4 col-xl-3">
+                            <PropagateLoader  color="#f74f07" loading={loading} size={15} />
                             </div>
                         </div>
+                    </div>
                  : contryfood && foodcategory ?
+
                     <div className="container-fluid">
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item">

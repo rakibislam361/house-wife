@@ -5,17 +5,19 @@ import { withRouter } from 'react-router'
 import PropagateLoader from "react-spinners/PropagateLoader"
 import axios from "axios";
 import MaterialTable from 'material-table'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
+import packageJson from './../../../../package.json';
+import { render } from '@testing-library/react'
 
 
 const Menu_list = () => {
     const token = localStorage.getItem("token");
     const [loading, setLoading] = useState(true);
-
+    const history = useHistory()
     useEffect(() => {
       try {
           async function load() {
-            const response = await axios.get('http://intavola.softminion.com/api/housewife/food-menu?token='+token);
+            const response = await axios.get(`${packageJson.api_url}/api/housewife/food-menu?token=`+token);
             const data = await response;
             setData(data.data.menuItems)
             setLoading(false)             
@@ -28,9 +30,8 @@ const Menu_list = () => {
 const [data, setData] = useState();
 const columns = 
     [
-        { title: 'Name', field: 'title_en' },
-        { title: 'Name', field: 'title_it' },
-        { title: 'Description', field: 'description_en' },
+        { title: 'Name (english)', field: 'title_en' },
+        { title: 'Name (italy)', field: 'title_it' },
         { title: 'Status', field: 'status',
         render: rowData => {
             return(
@@ -69,14 +70,19 @@ const columns =
                                 actions={[
                                     {
                                       icon: 'edit',
-                                      tooltip: 'Edit User',
-                                      onClick: (event, rowData) => alert("You saved " + rowData.name)
+                                      tooltip: 'Edit menu',
+                                      onClick: (event, rowData) =>{
+                                          sessionStorage.setItem('menu_id', rowData.id)
+                                        return(
+                                          history.push('/edit_menu')
+                                        )
+                                      }
+                                                                                
                                     },
                                     rowData => ({
                                       icon: 'delete',
                                       tooltip: 'Delete User',
                                       onClick: (event, rowData) => alert("You want to delete " + rowData.name),
-                                      disabled: rowData.birthYear < 2000
                                     })
                                   ]}
                                     options={{

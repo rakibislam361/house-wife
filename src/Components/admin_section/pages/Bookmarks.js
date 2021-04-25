@@ -3,6 +3,9 @@ import Side_nav from '../body_parts/Side_nav'
 import Admin_Footer from '../body_parts/Footer'
 import { withRouter } from 'react-router'
 import {Link} from 'react-router-dom'
+import packageJson from './../../../../package.json';
+
+
 
 const Bookmarks = () => {
     return (

@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'; 
 import PropagateLoader from "react-spinners/PropagateLoader"
 import LoginModel from '../body_parts/LoginModel'
+import packageJson from './../../../package.json';
 
 
 
@@ -20,7 +21,7 @@ const Leave_review = () => {
   useEffect(() => {
     try {
           async function load() {
-          const response = await axios.get('http://intavola.softminion.com/api/housewife/show/'+housewife_id);
+          const response = await axios.get(`${packageJson.api_url}/api/housewife/show/`+housewife_id);
           const data = await response;     
           setHousewifeName(data.data.housewife)
           setLoading(false)             
@@ -56,7 +57,7 @@ const Leave_review = () => {
     loader();
     var config = {
         method: 'post',
-        url: 'http://intavola.softminion.com/api/housewife/provide_ratings?token='+token,
+        url: `${packageJson.api_url}/api/housewife/provide_ratings?token=`+token,
         data: data
     };
      axios(config)
@@ -139,6 +140,7 @@ const Leave_review = () => {
                     </div>
                     </form>
                   }
+                    <span><Link to="/housewife_details"> 🡨 Back to the page. </Link></span>
                   </div>
               </div>
               {/* /row */}
