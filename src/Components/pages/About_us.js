@@ -97,8 +97,8 @@ const loader = () =>{
         <div className="container margin_30_20">			
           <div className="main_title center">
             <span><em /></span>
-            <h2>In Tavola Food App</h2>
-            <p>Basta qualche semplice passaggio per mettersi in contatto.</p>
+            <h2>Recensioni abbinate</h2>
+            <p>Scegli il piatto che preferisci e mettiti in contatto.</p>
           </div>
           <div className="row justify-content-center align-items-center add_bottom_15">
             <div className="col-lg-6">

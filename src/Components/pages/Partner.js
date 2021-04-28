@@ -15,10 +15,14 @@ import packageJson from './../../../package.json';
 
 toast.configure();
 const Partner = (props) => {
+  
+  const data = localStorage.getItem('settings')
+  const data_pars= JSON.parse(data)
 
   const [packages, setPackage] = useState();
   const user_type = localStorage.getItem('user');
   
+
   const schema = yup.object().shape({
     name: yup.string().required(),
     email: yup.string().required().email(),
@@ -167,21 +171,21 @@ const Partner = (props) => {
                 <Link className="box_topic" to="#0">
                   <span><i className="icon_globe-2" /></span>
                   <h3>Aumenta la visibilità</h3>
-                  <p>Affidati a strumenti di marketing efficaci per ricevere più ordini.</p>
+                  <p>Potrai guadagnare senza commissioni cucinando quello che vuoi.</p>
                 </Link>
               </div>
               <div className="col-lg-4 col-md-6">
                 <Link className="box_topic" to="#0">
                   <i className="icon_search-2" />
                   <h3>Espandi la tua clientela</h3>
-                  <p>Attrai nuovi clienti in zona e falli tornare a ordinare.</p>
+                  <p>Scegli tu cosa cucinare e quando cucinare.</p>
                 </Link>
               </div>
               <div className="col-lg-4 col-md-6">
                 <Link className="box_topic" to="#0">
                   <i className="icon_lifesaver" />
                   <h3>Approfitta dei nostri servizi</h3>
-                  <p>Abbiamo gli strumenti di crescita, assistenza e risparmio giusti.</p>
+                  <p>Ti offriamo assistenza telefonica, anche tramite chat e mail.</p>
                 </Link>
               </div>
             </div>
@@ -194,11 +198,12 @@ const Partner = (props) => {
             <div className="main_title center">
               <span><em /></span>
               <h2>I nostri piani tariffari</h2>
-              <p>Potrai iscriverti semplicemente dalla nostra piattaforma o telefonicamente contattando il seguente numero :  +39 XXX XXX.XX.XX</p>
+              <p>Potrai iscriverti semplicemente dalla nostra piattaforma o telefonicamente contattando il seguente numero :  {data_pars? data_pars.contact : ""}</p>
             </div>
             <div className="row plans">
-              {packages? packages.map((single_package)=>
+              {packages? packages.map((single_package, index)=>
                 <MembershipPlan
+                  index={index}
                   id={single_package.id}
                   month={single_package.title_en}
                   title={single_package.title_en}
@@ -240,7 +245,8 @@ const Partner = (props) => {
             <div className="col-lg-5">
               <div className="text-center add_bottom_15">
                 <h4>MODULO DI REGISTRAZIONE</h4>
-                <p>Sfrutta i dati a disposizione per far crescere il tuo business. Monitora le richieste, controlla i tuoi progressi e attira nuovi clienti.</p>
+                <p style={{textAlign:'center'}}>Compila il modulo e verrai contattato dal nostro staff che ti spiegherà il servizio offerto da In tavola food app.
+                  Oppure iscriviti online e accedi direttamente alla tua pagina personale.</p>
               </div>
               <div id="message-register" />
                   {loading ?

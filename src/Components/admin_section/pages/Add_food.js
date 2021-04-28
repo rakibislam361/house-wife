@@ -15,23 +15,10 @@ import packageJson from './../../../../package.json';
 
 const Add_food = () => {
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState();
     const token = localStorage.getItem("token");
     const [contryfood, setCountryfood] = useState([]);
     const [foodcategory, setFoodcategory] = useState([]);
 
-
-    useEffect(() => {
-      try {
-          async function load() {
-            const response = await axios.get(`${packageJson.api_url}/api/profile?token=`+token);
-            const data = await response;
-            setUser(data)              
-        }
-        load()    
-      } catch (error) {}
-  
-    },[]);
     
     useEffect(() => {
         try {
@@ -80,7 +67,7 @@ const Add_food = () => {
         resolver: yupResolver(schema),
     });
     
-    const [image, setImage] =useState([])
+    const [image, setImage] = useState([])
     const handleChange = (e) => {
         if (e.target.name === "image") {
             setImage(
@@ -234,18 +221,17 @@ const Add_food = () => {
                                 </div>
                                 {/* /row*/}
                                 <div className="row">
-                                <div className="col-md-12">
+                                <div className="col-md-6 col-sm-12">
                                     <div className="form-group">
                                         <label>Photos*</label>               
-                                        <div className="form-group">
-                                            <input accept="image/*"
-                                                type="file" 
-                                                name="image" 
-                                                multiple 
-                                                ref={register} 
-                                                onChange={handleChange}
-                                            />  
-                                        </div>
+                                        <input accept="image/*"
+                                            type="file"
+                                            className="form-control" 
+                                            name="image" 
+                                            multiple 
+                                            ref={register} 
+                                            onChange={handleChange}
+                                        />                                        
                                     </div>
                                 </div>
                                 </div>
@@ -264,9 +250,9 @@ const Add_food = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {/* /row*/}
+                                <p><button type="submit" className="btn_1 medium mt-3">Save</button></p>
+
                             </div>
-                            <p><button type="submit" className="btn_1 medium">Save</button></p>
                         </form>
          
                     </div>        

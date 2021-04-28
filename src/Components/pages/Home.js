@@ -2,7 +2,6 @@ import React,{useState, useEffect} from 'react'
 import { Link } from "react-router-dom";
 import Searchbox from './Searchbox';
 import PuffLoader from "react-spinners/PuffLoader"
-import Carousel from 'react-bootstrap/Carousel'
 import Slider from "react-slick";
 import packageJson from './../../../package.json';
 
@@ -13,6 +12,11 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
   const [housewife, setHousewife] = useState([]);
+
+  const data = localStorage.getItem('settings')
+  const data_pars= JSON.parse(data)
+
+  const top_banner = data_pars.top_banner;
 
   const handleSelect = (selectedIndex, e) => {
       setIndex(selectedIndex);
@@ -34,9 +38,6 @@ const Home = () => {
       } catch (error) {}
   }, [])
     
-  let images =['bergamaschi.jpg', 'emiliani.png', 'liguri.jpg', 'napoletani.jpg',
-  'piemontesi.jpg', 'romani.jpg', 'siciliani.jpg','umbri.jpg','milanesi.jpg'];
-  
   let HouseWife_image = ['menu_item_large_1.jpg',
      'menu_item_large_4.jpg','location_3.jpg','location_4.jpg'
      ,'location_7.jpg','location_8.jpg','location_9.jpg','location_10.jpg',
@@ -57,7 +58,7 @@ const Home = () => {
       dots: true,
       autoplay: true,
       speed:1500,
-      autoplaySpeed: 2500,
+      autoplaySpeed: 10000,
       slidesToShow: 5,
       slidesToScroll: 1,
       responsive: [
@@ -66,7 +67,7 @@ const Home = () => {
           settings: {
             slidesToShow: 3,
             speed:1500,
-            autoplaySpeed: 3000,
+            autoplaySpeed: 10000,
             slidesToScroll: 1,
             infinite: true,
             dots: true
@@ -78,7 +79,7 @@ const Home = () => {
             slidesToShow: 2,
             slidesToScroll: 2,
             speed:1500,
-            autoplaySpeed: 2500,
+            autoplaySpeed: 10000,
           }
         },
         {
@@ -87,7 +88,7 @@ const Home = () => {
             slidesToShow: 2,
             slidesToScroll: 1,
             speed:1500,
-            autoplaySpeed: 2500,
+            autoplaySpeed: 10000,
           }
         }
     
@@ -129,7 +130,8 @@ const Home = () => {
   };
     return (
         <main> 
-            <div className="hero_single version_2">
+          
+            <div className="hero_single version_2" style={top_banner ? {background: `#faf3cc url(${data_pars.top_banner}) center center no-repeat`} : ""}>
               <div className="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)">
                 <div className="container">
                   <div className="row justify-content-lg-start justify-content-md-center">
@@ -151,7 +153,7 @@ const Home = () => {
                     <div className="main_title center">
                       <span><em /></span>
                       <h2>Tutto ciò che offre In Tavola The Food App</h2>
-                      <p>Scegli il tuo piatto preferito, contatta direttamente l'utente e gustati la tua ricetta homemade!</p>
+                      <p>Scegli il tuo piatto preferito, contatta direttamente la casalinga e gustati la tua ricetta homemade!</p>
                     </div>
                     <div className="loading-spiner">
                         <PuffLoader  color="#f74f07" loading={loading} size={160} />
@@ -165,7 +167,7 @@ const Home = () => {
                     <div className="main_title center">
                       <span><em /></span>
                       <h2>Tutto ciò che offre In Tavola The Food App</h2>
-                      <p>Scegli il tuo piatto preferito, contatta direttamente l'utente e gustati la tua ricetta homemade!</p>
+                      <p>Scegli il tuo piatto preferito, contatta direttamente la casalinga e gustati la tua ricetta homemade!</p>
                     </div>
 
                     <Slider {...settings}>
@@ -176,10 +178,10 @@ const Home = () => {
                                   <Link onClick={openCard} data-id={food.id} to="/housewife_list">
                                     <figure>
                                       <span>{index}</span>
-                                      <img src={`img/piatti/${images[index]}`} data-src={`img/piatti/${images[index]}`} alt="" className="owl-lazy" />
+                                      <img src={food.cover} data-src={food.cover} alt="" className="owl-lazy" />
                                       <div className="info">
                                         <small>Piatti</small>
-                                        <h3>{food.country_en}</h3>
+                                        <h3 className="mobile-view">{food.country_en}</h3>
                                       </div>
                                     </figure>
                                   </Link>
@@ -198,7 +200,7 @@ const Home = () => {
                   <div className="container margin_60 display-flex">
                     <div className="main_title">
                       <span><em /></span>
-                      <h2>Casalinghe consigliate vicini a te</h2>
+                      <h2>Casalinghe consigliate vicine a te</h2>
                       <p>Servizio Made in housewife...</p>
                       <Link onClick={removeHwsID} to="/housewife_list">Mostra tutto</Link>
                     </div>
@@ -208,7 +210,7 @@ const Home = () => {
                           <div className="strip col-12">
                             <figure>
                                 <img src={`img/${HouseWife_image[index]}`} data-src={`img/${HouseWife_image[index]}`} alt="" className="owl-lazy" />
-                              <Link onClick={setID} data-id={single_housewife.id} to="/housewife_details" className="strip_info">
+                              <Link to={`/housewife_details/${single_housewife.id}`} className="strip_info">
                                 <small>{single_housewife.city}</small>
                                 <div className="item_title">
                                   <h3>{single_housewife.name}</h3>
@@ -218,7 +220,7 @@ const Home = () => {
                             </figure>
                             <ul>
                               <li>
-                                <span className="take yes">{single_housewife.housewife_type==1? "Withdrawal" : single_housewife.housewife_type==2 ? "Home" :"Both" }</span> <span className="deliv no"> </span>
+                                <span className="">{single_housewife.housewife_type==1? "Ritiro a domicilio" : single_housewife.housewife_type==2 ? " Mangia in casa" :"Entrambe" }</span> 
                               </li>
                               <li>
                                 <div className="score"><strong>{single_housewife.rating_avg ? single_housewife.rating_avg:"0.00" }</strong></div>

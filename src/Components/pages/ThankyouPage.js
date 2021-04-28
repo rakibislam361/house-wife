@@ -15,7 +15,7 @@ const ThankyouPage = () => {
                     </div>
                     <div className="row justify-content-center">
                         <div className="row  margin_60_20">
-                        <span> back to <Link to="/partner"><bold>Home page</bold></Link></span>
+                        <span> back to <Link to="/"><bold>Home page</bold></Link></span>
                     </div> 
                     </div> 
                 </div> 

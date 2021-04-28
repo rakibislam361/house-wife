@@ -62,9 +62,9 @@ const Listing_header = () => {
         
          <div className="container">
           <div id="logo">
-            <a>
+            <Link to="/" > 
               <img src="img/logo.png" width={131} height={60} alt="" className="logo_sticky" />
-            </a>
+            </Link>
           </div>
           <div className="layer" />{/* Opacity Mask Menu Mobile */}
           <ul id="top_menu">
@@ -87,7 +87,7 @@ const Listing_header = () => {
                             
                       
                        <MenuItem>
-                            <Link to={user_type === 1 ? '/user_profile' : '/housewife_profile' }>My account</Link>
+                            <Link to={user_type === "1" ? '/user_profile' : user_type === "2" ? '/housewife_profile' : ""}>My account</Link>
                         </MenuItem>
                     
                        <MenuItem onClick={logOut}>Logout</MenuItem>
@@ -118,7 +118,7 @@ const Listing_header = () => {
                             <li><Link onClick={() => setOpen(null)} to="/">Home</Link></li>
                             <li><Link onClick={() => setOpen(null)} to="/about">Come Ordinare ?</Link></li>
                             <li><Link onClick={() => setOpen(null)} to="/partner">Diventa Casalinga</Link></li>
-                            <li><Link onClick={() => setOpen(null)} to="/contact_us">Contact</Link></li>
+                            <li><Link onClick={() => setOpen(null)} to="/contact_us">Contatti</Link></li>
                         </ul>
                    </nav>    
                 </Collapse>

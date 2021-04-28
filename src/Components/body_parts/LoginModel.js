@@ -89,30 +89,32 @@ export default function TransitionsModal(props) {
             progress: undefined,
           });
           
-          if (response) {
+          if (response.data.message) {
             {response ? setLoading(false) : setLoading(true)}
               // the user just logged in / the user was logged in
               localStorage.setItem('token', response.data.token);
+              localStorage.setItem('id', response.data.user.id);
               localStorage.setItem('user', response.data.user_type);
               handleClose()
               dispatch({
                 type: "SET_USER",
                 user:  response.data.user.id,
               });
+          }else{
+             toast.error(response.data.error,{
+              position: "bottom-left",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setLoading(false)
           }
       })
       .catch(error => {
-          toast.error(error.message,{
-            position: "bottom-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setLoading(false)
-
+         
       });   
      }
   }
@@ -200,7 +202,7 @@ export default function TransitionsModal(props) {
 
   return (
     <div >
-      <a className="btn_1 gradient full-width mb_5" onClick={handleOpen}>{props.name}</a>
+      <a style={{color: 'white'}} className="btn_1 gradient full-width mb_5" onClick={handleOpen}>{props.name}</a>
       <Modal
         aria-labelledby="modal_header"
         aria-describedby="sign-in-dialog"

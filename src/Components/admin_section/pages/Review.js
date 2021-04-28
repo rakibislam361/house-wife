@@ -1,20 +1,57 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import Side_nav from '../body_parts/Side_nav'
 import Admin_Footer from '../body_parts/Footer'
 import { withRouter } from 'react-router'
 import {Link} from 'react-router-dom'
 import MaterialTable from 'material-table'
+import {api_url} from './../../../../package.json';
+import PropagateLoader from "react-spinners/PropagateLoader"
+import * as moment from 'moment'
+
 
 const Review = () => {
+   const token = localStorage.getItem("token");
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+    try {
+        fetch(`${api_url}/api/getRatings?token=${token}`)
+        .then((response)=> response.json())
+        .then((data)=>setData(data.ratings), setLoading(false))     
+        } catch (error) {}
+
+    },[]);
 
 const columns = 
-    [
-        {field: '' },
-        {field: '' },
-        {field: ''},    
-        {field: ''},    
+    [   
+        {field: 'image',
+            render: rowData =>{
+                const name = rowData.user_name
+                const image = rowData.image
+                return(
+                    <div style={{display: 'flex'}}>    
+                        <img className="review_image" src="img/Sample_User_Icon.png" alt="" />
+                        <h4 style={{color: '#333', marginTop: '5px', marginLeft: '20px'}}>{name}<small></small></h4>
+                    </div>
+                )
+            }
+        }, 
+       
+        {field: 'created_at',
+            render: rowData =>{
+                const raatting = rowData.rating_avg    
+                const date = moment(rowData.created_at).format('LL')
+            return(
+                <>
+                    <span className="ratting_date">{date}</span>                
+                    <span className="rating"><strong>Rate: {raatting}</strong></span>
+                </>
+                )
+            }  
+        },    
     ]
+
 
 
     return (
@@ -29,15 +66,21 @@ const columns =
                         </li>
                         <li className="breadcrumb-item active">Reviews</li>
                     </ol>
-                        <div className="box_general">
+                       {!data? 
+                            <div className="loading-spiner">
+                                <PropagateLoader  color="#f74f07" loading={loading} size={15} />
+                            </div>
+                        :
                             <MaterialTable
-                                title="Subscription details"
-                               
+                                title="Reviews List"
+                                columns={columns}
+                                data={data}
                                 options={{
-                                    actionsColumnIndex: -1,  
+                                    actionsColumnIndex: -1,
+                                    tableLayout: "fixed"  
                                 }}                            
                             />
-                        </div>
+                        }
                     </div>
                     {/* /container-fluid*/}
                 </div>   

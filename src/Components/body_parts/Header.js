@@ -16,10 +16,13 @@ toast.configure();
 const Header = () => {
     const histry = useHistory(); 
     const [{header}, dispatch] = useStateValue();
-    
     const user_token = localStorage.getItem('token');
     const user_type = localStorage.getItem('user');
 
+    const data = localStorage.getItem('settings')
+    const data_pars = JSON.parse(data)
+    const logo = data_pars.header_logo
+ 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [user, setUser] = useState();
@@ -48,7 +51,7 @@ const Header = () => {
 
     const logOut = () => {
         if(user){
-        const response = axios.post('http://intavola.softminion.com/api/auth/logout?token='+user_token)
+          const response = axios.post(`${packageJson.api_url}/api/auth/logout?token=`+user_token)
         .then(response=>{
             toast.success(response.data.message,{
                 position: "bottom-left",
@@ -77,7 +80,7 @@ const Header = () => {
                 <div className="container" >
                     <div id="logo">
                         <Link to="/">
-                            <img src="img/logo_menu.png" width="175" height="80" alt="" className="logo_normal"/>
+                            <img src={logo ? logo : ""} width="175" height="80" alt="" className="logo_normal"/>
 	                        <img src="img/logo.png" width="131" height="60" alt="" className="logo_sticky"/>
                         </Link>
                     </div>
@@ -129,7 +132,7 @@ const Header = () => {
                                 <li><Link onClick={()=>setOpen(null)} to="/">Home</Link></li>
                                 <li><Link onClick={()=>setOpen(null)} to="/about">Come Ordinare ?</Link></li>
                                 <li><Link onClick={()=>setOpen(null)} to="/partner">Diventa Casalinga</Link></li>
-                                <li><Link onClick={()=>setOpen(null)} to="/contact_us">Contact</Link></li>
+                                <li><Link onClick={()=>setOpen(null)} to="/contact_us">Contatti</Link></li>
                             </ul>
                         </nav>    
                     </Collapse>       

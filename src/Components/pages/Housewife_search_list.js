@@ -19,10 +19,6 @@ const Housewife_search_list = (props) => {
     const [loading, setLoading] = useState(true);
     const contry_food_id = sessionStorage.getItem("ctfood")
 
-    let images =['bergamaschi.jpg', 'emiliani.png', 'liguri.jpg', 'napoletani.jpg',
-  'piemontesi.jpg', 'romani.jpg', 'siciliani.jpg','umbri.jpg','milanesi.jpg'];
-  
-
     let HouseWife_image = ['menu_item_large_1.jpg',
      'menu_item_large_4.jpg','location_3.jpg','location_4.jpg'
      ,'location_7.jpg','location_8.jpg','location_9.jpg','location_10.jpg',
@@ -271,7 +267,7 @@ const Housewife_search_list = (props) => {
                             {confood?confood.map((food, index)=> 
                               <div key={food.id} className="item col-md-10">
                                 <figure>
-                                  <img src={`img/piatti/${images[index]}`} data-src={`img/piatti/${images[index]}`} alt="" className="owl-lazy" />
+                                  <img src={food.cover} data-src={food.cover} alt="" className="owl-lazy" />
                                   <Link onClick={openCard} data-id={food.id} to="/housewife_search_list"><h3>{food.country_en}</h3></Link>
                                 </figure>
                               </div>
@@ -304,7 +300,7 @@ const Housewife_search_list = (props) => {
                             }
                         </div>
                         {/* /row */}
-                        <div className="pagination_fg">
+                        {/* <div className="pagination_fg">
                         <Link to="#">«</Link>
                         <Link to="#" className="active">1</Link>
                         <Link to="#">2</Link>
@@ -312,7 +308,7 @@ const Housewife_search_list = (props) => {
                         <Link to="#">4</Link>
                         <Link to="#">5</Link>
                         <Link to="#">»</Link>
-                        </div>
+                        </div> */}
                     </div>
                     {/* /col */}
                     </div>		

@@ -21,7 +21,7 @@ const HouseWife = ({id, name, city, ratings, housewife_type, img}) => {
                 </Link>
             </figure>
             <ul>
-                <li><span className="take yes">{housewife_type===1? "Withdrawal" : housewife_type===2 ? "Home" :"Both" }</span> <span className="deliv no"> </span></li>
+                <li><span className="">{housewife_type===1? "Ritiro a domicilio" : housewife_type===2 ? "Mangia in casa" :"Entrambe" }</span></li>
                 <li>
                 <div className="score"><strong>{ratings ? ratings : "0.00"}</strong></div>
                 </li>

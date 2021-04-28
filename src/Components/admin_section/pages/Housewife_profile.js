@@ -32,9 +32,7 @@ const Housewife_profile = () => {
           }
           load()  
           
-        } catch (error) {
-          console.log(error);
-        }
+        } catch (error) {}
     
       },[]);
       
@@ -46,7 +44,6 @@ const Housewife_profile = () => {
       }
       
       const [files, setFiles] = useState([]);
-    
       
       const schema = yup.object().shape({
         name: yup.string().required(),
@@ -78,7 +75,10 @@ const Housewife_profile = () => {
         },
       });
 
-  
+      const imageUpload = ()=>{
+        
+      }
+
       const images = files.map((file) => (
         <div key={file.name}>
           <div>
@@ -159,41 +159,42 @@ const Housewife_profile = () => {
                             </div>
                         </div>
                       </div>
-                 : user 
-                 ? <form method="post" onSubmit={handleSubmit(onSubmit)}>
+                 : user ?
                         <div className="row">
                           <div className="col-md-4">
                             <div className="form-group">
                               <label>Your cover photo</label>
                             </div>
-                            <div className="dropzone">
-                              <Controller
-                                name="image"
-                                ref={register}
-                                control={control}
-                                render={({ onChange }) => (
-                                  <div {...getRootProps()}>
-                                    <input {...getInputProps({ onChange })} />
-                                    <div className="dz-dropzone">
-                                      <label
-                                        className={
-                                          images.length > 0
-                                            ? "dropzone-image"
-                                            : "dropzone-label"
-                                        }
-                                      >
-                                        {images.length > 0
-                                          ? images
-                                          : "Drop files here to upload"}
-                                      </label>
+                              <form onSubmit={imageUpload}> 
+                                <div className="dropzone">
+                                <Controller
+                                  name="image"
+                                  ref={register}
+                                  control={control}
+                                  render={({ onChange }) => (
+                                    <div {...getRootProps()}>
+                                      <input {...getInputProps({ onChange })} />
+                                      <div className="dz-dropzone">
+                                        <label
+                                          className={
+                                            images.length > 0
+                                              ? "dropzone-image"
+                                              : "dropzone-label"
+                                          }
+                                        >
+                                          {images.length > 0
+                                            ? images
+                                            : "Drop files here to upload"}
+                                        </label>
+                                      </div>
                                     </div>
-                                  </div>
-                                )}
-                              />
-                            </div>
+                                  )}
+                                />
+                              </div>    
+                            </form> 
                           </div>
-                          <div className="col-md-8 add_top_30">
-                            
+                            <form method="post" onSubmit={handleSubmit(onSubmit)}>
+                            <div className="col-md-12 add_top_30">
                             <div className="row">
                               <div className="col-md-12">
                                 <div className="form-group">
@@ -471,8 +472,8 @@ const Housewife_profile = () => {
                               </div>
                             </div>
                           </div>
+                           </form>
                         </div>
-                      </form>
                  : <div className="row">
                       <div className="loading-spiner">
                         <div className="col-sm-12 col-md-4 col-xl-3">
@@ -489,7 +490,7 @@ const Housewife_profile = () => {
 
                 {/* /box_general*/}
                 <div className="row">
-                  <div className="col-md-6">
+                  <div className="col-md-8">
                     <div className="box_general padding_bottom">
                       <div className="header_box version_2">
                         <h2>
@@ -508,43 +509,6 @@ const Housewife_profile = () => {
                       <div className="form-group">
                         <label>Confirm new password</label>
                         <input className="form-control" type="password" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="box_general padding_bottom">
-                      <div className="header_box version_2">
-                        <h2>
-                          <i className="fa fa-envelope" />
-                          Change email
-                        </h2>
-                      </div>
-                      <div className="form-group">
-                        <label>Old email</label>
-                        <input
-                          className="form-control"
-                          name="old_email"
-                          id="old_email"
-                          type="email"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>New email</label>
-                        <input
-                          className="form-control"
-                          name="new_email"
-                          id="new_email"
-                          type="email"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Confirm new email</label>
-                        <input
-                          className="form-control"
-                          name="confirm_new_email"
-                          id="confirm_new_email"
-                          type="email"
-                        />
                       </div>
                     </div>
                   </div>

@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '330px',
     width:'330px',
     margin: '40px auto',
-    marginTop:'2%',
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
@@ -49,59 +48,53 @@ export default function TransitionsModal() {
 
   const schema = yup.object().shape({
       email: yup.string().required().email(),
-      password: yup.string().required(),
+      password: yup.string().required().min(6),
   });
 
   const { register, handleSubmit, errors, reset } = useForm({  
     resolver:yupResolver(schema),
    }); 
     
-  const onSubmit = (data) =>{
-    loader()
-    const response = axios.post(`${packageJson.api_url}/api/auth/login`, data)
-      .then(response =>{
-            toast.success(response.data.message,{
-            position: "bottom-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-            reset();
-          if (response) {
-             {response ? setLoading(false) : setLoading(true)}
-              // the user just logged in / the user was logged in
-              localStorage.setItem('token', response.data.token);
-              localStorage.setItem('user', response.data.user_type);
-              
-              {response?.data.user_type === 1 ?  histry.push('/user_dashboard') :  histry.push('/housewife_profile')}
-              
-              dispatch({
-              type: "SET_USER",
-              user:  response.data.user.id,
-              });
-          } else {
+   const onSubmit = (data) =>{
+      loader();
+      const response = axios.post(`${packageJson.api_url}/api/auth/login`, data)
+        .then(response =>{
+             toast.success(response.data.message,{
+              position: "bottom-left",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+                  
+            if (response.data.message) {
+                  {response ? setLoading(false) : setLoading(true)}    
+                  localStorage.setItem('token', response.data.token);
+                  localStorage.setItem('id', response.data.user.id);
+                  localStorage.setItem('user', response.data.user_type);
+                  {response?.data.user.type === 1 ?  histry.push('/user_dashboard') :  histry.push('/housewife_dashboard')}
           
-          }
-      })
-      .catch(error => {
-          toast.error(error.error,{
-            position: "bottom-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setLoading(false)
+            } else {
+                  toast.error(response.data.error,{
+                  position: "bottom-left",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+                setLoading(false)
 
-      });
+            }
+        })
+        .catch(error => {
+        
+        });
 
-  } 
-
+    } 
 
  
   const classes = useStyles();

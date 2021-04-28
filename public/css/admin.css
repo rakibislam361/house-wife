@@ -1161,11 +1161,30 @@ label.fix_spacing {
   -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+
+.review_image{
+  width: 70px;
+  height: auto;
+  border-radius: 50%;
+}
+
 .list_general > ul h4 {
   font-size: 21px;
   font-size: 1.3125rem;
 }
 .list_general > ul span {
+  float: right;
+  font-style: italic;
+  color: #adb5bd;
+}
+
+.rating {
+  float: right;
+  font-style: italic;
+  color: #adb5bd;
+}
+
+.ratting_date {
   float: right;
   font-style: italic;
   color: #adb5bd;

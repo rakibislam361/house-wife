@@ -26,16 +26,22 @@ const User_bookmarks = () => {
       } catch (error) {}
   
     },[]);
-  
+
+
 const columns = 
     [
         { title: 'Cover', 
           field: 'image',
-           render: rowData => <img src="img/item_1.jpg" width={80} height={80} alt="" />
+           render: rowData => {
+             const image = rowData.image
+             return(
+               <img className="review_image" src={image !== null ? image : "img/download.png"} width={80} height={80} alt="" />
+             )
+           } 
+           
         },
         { title: 'Name', field: 'name' },
-        { title: 'Address', field: 'address' },
-
+    
     ]
 
 
@@ -59,11 +65,6 @@ const columns =
                           columns={columns}
                           data={data}
                             actions={[
-                                {
-                                  icon: 'edit',
-                                  tooltip: 'Edit User',
-                                  onClick: (event, rowData) => alert("You saved " + rowData.name)
-                                },
                                 rowData => ({
                                   icon: 'delete',
                                   tooltip: 'Delete User',

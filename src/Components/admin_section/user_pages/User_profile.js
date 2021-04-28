@@ -20,24 +20,24 @@ const User_profile = () => {
 const token = localStorage.getItem("token");
 const [user, setUser] = useState();
 const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
+const [updateProfile, setUpdateProfile ] = useState();
+ 
+useEffect(() => {
       try {
-          async function load() {
+            async function load() {
             const response = await axios.get(`${packageJson.api_url}/api/profile?token=`+token);
             const data = await response;
             setUser(data) 
             setLoading(false)             
-        }
+          }
         load()  
-      } catch (error) {
-      }
+      } catch (error) {}
       
-    },[user]);
+    },[updateProfile]);
 
     const loader =() =>{
-      if(!loading){
-        setLoading(true)
+      if(loading){
+        setLoading(false)
       }    
     }
 
@@ -65,6 +65,7 @@ const [loading, setLoading] = useState(true);
     },
   });
 
+
   const images = files.map((file) => (
     <div key={file.name}>
       <div>
@@ -77,8 +78,61 @@ const [loading, setLoading] = useState(true);
     resolver: yupResolver(schema),
   });
 
+  const [img, setImg] = useState()
+  
+  const submit = (e) =>{
+    e.preventDefault()
+    if(files !== "") {
+       files.map((file) =>
+         setImg(file)
+       )
+           
+    } 
+    
+    var formdata = new FormData();
+    formdata.append('image[]', img);
+    console.log(formdata)
+
+    loader();
+    setUpdateProfile("value")
+    var config = {
+      method: "POST",
+      url: `${packageJson.api_url}/api/profile/update`,
+      data: img,
+      headers: {
+        Authorization: `Basic ${token}`,
+      },
+    };
+    axios(config)
+      .then((response) => {
+        toast.success(response.data.message, {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        {response ? setLoading(false) : setLoading(true)}
+      })
+      .catch((error) => {
+        toast.error(error.message, {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setLoading(false)
+      });
+  }
+
   const onSubmit = (data) => {
     loader();
+    setUpdateProfile("value")
     var config = {
       method: "POST",
       url: `${packageJson.api_url}/api/profile/update`,
@@ -98,7 +152,6 @@ const [loading, setLoading] = useState(true);
           draggable: true,
           progress: undefined,
         });
-       
         {response ? setLoading(false) : setLoading(true)}
       })
       .catch((error) => {
@@ -134,45 +187,50 @@ const [loading, setLoading] = useState(true);
               <div className="header_box version_2">
                 <h2><i className="fa fa-user" />Profile details</h2>
               </div>
-               {loading ? 
+               {!user || loading ? 
                   <div className="row">
-                          <div className="loading-spiner">
-                            <div className="col-sm-12 col-md-4 col-xl-3">
-                              <PropagateLoader  color="#f74f07" loading={loading} size={15} />
-                            </div>
-                        </div>
+                        <div className="loading-spiner">
+                          <div className="col-sm-12 col-md-4 col-xl-3">
+                            <PropagateLoader  color="#f74f07" loading={loading} size={15} />
+                          </div>
                       </div>
-                 : user 
-                 ?  <div className="row">
+                    </div>
+                 : 
+                   <div className="row">
                     <div className="col-md-4">
-                      <div className="form-group">
-                          <label>Your cover photo</label>
-                        </div>
-                        <div className="dropzone">
-                          <Controller
-                            name="profile_image"
-                            control={control}
-                            render={({ onChange }) => (
-                              <div {...getRootProps()}>
-                                <input {...getInputProps({ onChange })} />
-                                <div className="dz-dropzone">
-                                  <label
-                                    onChange={onChange}
-                                    className={
-                                      images.length > 0
-                                        ? "dropzone-image"
-                                        : "dropzone-label"
-                                    }
-                                  >
-                                    {images.length > 0
-                                      ? images
-                                      : "Drop files here to upload"}
-                                  </label>
-                                </div>
-                              </div>
-                            )}
-                          />
-                        </div>
+                        <form onSubmit={submit}>
+                            <div className="form-group">
+                              <label>Your cover photo</label>
+                            </div>
+                            <div className="dropzone">
+                              <Controller
+                                name="profile_image"
+                                control={control}
+                                render={({ onChange }) => (
+                                  <div {...getRootProps()}>
+                                    <input {...getInputProps({ onChange })} />
+                                    <div className="dz-dropzone">
+                                      <label
+                                        onChange={onChange}
+                                        className={
+                                          images.length > 0
+                                            ? "dropzone-image"
+                                            : "dropzone-label"
+                                        }
+                                      >
+                                        {images.length > 0
+                                          ? images
+                                          : "Drop files here to upload"}
+                                      </label>
+                                    </div>
+                                  </div>
+                                )}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <button type="submit" className="form-control btn btn-light">Upoload Image</button>
+                          </div>
+                        </form>
                       </div>
                       
                     <div className="col-md-8 add_top_30">
@@ -232,10 +290,10 @@ const [loading, setLoading] = useState(true);
                                     id="country_id"
                                     ref={register}
                                   >
-                                    <option value="DEFAULT" disabled> Select country</option>
+                                    <option defaultValue="DEFAULT" disabled> Select country</option>
                                     {user ? user.data.countries.map(country=>{
                                       return(
-                                        <option selected Value={country.id}>{country.name}</option>
+                                        <option selected value={country.id}>{country.name}</option>
                                       )
                                     }) : ""}
 
@@ -250,13 +308,6 @@ const [loading, setLoading] = useState(true);
                       {/* /row*/}
                       </form>
                       {/* /row*/}
-                    </div>
-                  </div>
-                 : <div className="row">
-                      <div className="loading-spiner">
-                        <div className="col-sm-12 col-md-4 col-xl-3">
-                          <PropagateLoader  color="#f74f07" loading={loading} size={15} />
-                        </div>
                     </div>
                   </div>
                 }
@@ -280,25 +331,6 @@ const [loading, setLoading] = useState(true);
                   <div className="form-group">
                     <label>Confirm new password</label>
                     <input className="form-control" type="password" />
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="box_general padding_bottom">
-                  <div className="header_box version_2">
-                    <h2><i className="fa fa-envelope" />Change email</h2>
-                  </div>
-                  <div className="form-group">
-                    <label>Old email</label>
-                    <input className="form-control" name="old_email" id="old_email" type="email" />
-                  </div>
-                  <div className="form-group">
-                    <label>New email</label>
-                    <input className="form-control" name="new_email" id="new_email" type="email" />
-                  </div>
-                  <div className="form-group">
-                    <label>Confirm new email</label>
-                    <input className="form-control" name="confirm_new_email" id="confirm_new_email" type="email" />
                   </div>
                 </div>
               </div>

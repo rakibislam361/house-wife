@@ -56,7 +56,7 @@ const histry = useHistory();
                     <ul className="navbar-nav navbar-sidenav" id="exampleAccordion">
                             <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                             <Link className="nav-link" to="/user_dashboard">
-                                <i className="fa fa-fw fa-dashboard" />
+                                <i className="fa fa-id-card" />
                                 <span className="nav-link-text">Dashboard</span>
                             </Link>
                             </li>
@@ -94,7 +94,7 @@ const histry = useHistory();
                             </ul>
                             <ul className="navbar-nav ml-auto">
                                 <li className="nav-item">
-                                    <a onClick={logOut} className="nav-link"><i className="fa fa-fw fa-sign-out"></i>Logout</a>
+                                    <a onClick={logOut} className="nav-link"> <i className="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
                                 </li>
                             </ul>
              

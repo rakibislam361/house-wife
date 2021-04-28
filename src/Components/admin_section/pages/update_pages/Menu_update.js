@@ -5,42 +5,38 @@ import axios from "axios";
 import Side_nav from '../../body_parts/Side_nav';
 import Admin_Footer from '../../body_parts/Footer'
 import PropagateLoader from "react-spinners/PropagateLoader"
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import packageJson from './../../../../../package.json';
 
 
 
 toast.configure();
 const Menu_update = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const token = localStorage.getItem("token");  
     const [title_en, setTitle_en] = useState();
     const [title_it, setTitle_it] = useState();
     const housewife_id = localStorage.getItem("id");
-    const [menu_id, setMenuid] = sessionStorage.getItem("menu_id")
+    const menu_id = sessionStorage.getItem("menu_id")
     const [data, setData] = useState();
+    const history = useHistory()
     
     useEffect(() => {
-      try {
-          async function load() {
-            const response = await axios.get(`${packageJson.api_url}/api/housewife/food-menu/${menu_id}/edit`);
-            const data = await response;
-            setData(data.data.menuItems)
-            setLoading(false)             
-        }
-        load()  
+    try {
+        fetch(`${packageJson.api_url}/api/housewife/food-menu/${menu_id}/edit?token=${token}`)
+        .then((response)=> response.json())
+        .then((data)=>setData(data.menu), setLoading(false))     
       } catch (error) {}
-  
+
     },[]);
 
-console.log(data)
-    const loader =() =>{
+const loader =() =>{
       if(!loading){
           setLoading(true)
       }      
     }
 
-  const addMenu = (e) =>{
+  const updateMenu = (e) =>{
     e.preventDefault()
   
     if(title_en ){
@@ -49,11 +45,11 @@ console.log(data)
         title_en : title_en,
         title_it : title_it
       };
- 
-    loader();
+
+      loader();
     var config = {
         method: 'post',
-        url: `${packageJson.api_url}/api/housewife/food-menu/${menu_id}/edit/?token=${token}`,
+        url: `${packageJson.api_url}/api/housewife/food-menu/${menu_id}?token=${token}`,
         data: data
     };
 
@@ -71,6 +67,7 @@ console.log(data)
         setTitle_it(null);
         setTitle_en(null)
          {response ? setLoading(false) : setLoading(true)}
+        history.push('/menu_list')
       })
       .catch((error) => {
         toast.error(error.message, {
@@ -93,7 +90,7 @@ console.log(data)
     return (
           <body className="fixed-nav sticky-footer" id="page-top">
             <Side_nav />
-                {loading ? 
+                {!data ? 
                     <div className="row">
                         <div className="loading-spiner">
                             <div className="col-sm-12 col-md-4 col-xl-3">
@@ -109,7 +106,7 @@ console.log(data)
                                 </li>
                                 <li className="breadcrumb-item active">Update Menu</li>
                             </ol>
-                        <form onSubmit={addMenu}> 
+                        <form onSubmit={updateMenu}> 
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="box_general padding_bottom">
@@ -127,6 +124,7 @@ console.log(data)
                                             name="title_it" 
                                             className="form-control"
                                             type="text"
+                                            defaultValue={data.title_it}
                                             required
                                             onChange={(e)=>setTitle_it(e.target.value)} 
                                             />
@@ -139,6 +137,7 @@ console.log(data)
                                                 name="title_en" 
                                                 className="form-control" 
                                                 type="text"
+                                                defaultValue={data.title_en}
                                                 required
                                                 onChange={(e)=>setTitle_en(e.target.value)} 
                                                  />

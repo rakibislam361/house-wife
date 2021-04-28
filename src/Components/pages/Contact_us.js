@@ -1,8 +1,17 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import { Link } from "react-router-dom"
+import packageJson from './../../../package.json';
+import PuffLoader from "react-spinners/PuffLoader"
 
 
 const Contact_us = () => {
+
+  const [loading, setLoading] = useState(false);
+
+  const data = localStorage.getItem('settings')
+  const data_pars= JSON.parse(data)
+
+ 
     return (
       <main>
         <div className="hero_single inner_pages background-image" style={{backgroundImage : "url(img/access_bg.jpg)"}} >
@@ -20,6 +29,11 @@ const Contact_us = () => {
           <div className="wave gray hero" />
         </div>
         {/* /hero_single */}
+      {loading? 
+          <div className="loading-spiner">
+              <PuffLoader  color="#f74f07" loading={loading} size={160} />
+          </div>
+      :
         <div className="bg_gray">
           <div className="container margin_60_40">
             <div className="row justify-content-center">
@@ -27,7 +41,8 @@ const Contact_us = () => {
                 <div className="box_contacts" style={{height:"40vh"}}>
                   <i className="icon_phone" />
                   <h2>Centro assistenza</h2>
-                  <Link to="#0">+39 XXX.XXX.XX.XX</Link>   <Link to="#0">info@intavolafoodapp.com</Link>
+                  <Link to="#0">{data_pars.contact}</Link> 
+                   <br/><Link to="#0">info@intavolafoodapp.com</Link>
                   <small>LUN - SAB 9:00-19:99</small>
                 </div>
               </div>
@@ -36,6 +51,7 @@ const Contact_us = () => {
           </div>
           {/* /container */}
         </div>
+      }
         {/* /bg_gray */}
         <div className="container margin_60_20">
           <div className="row justify-content-center">

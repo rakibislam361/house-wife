@@ -1,6 +1,5 @@
 
 export const initialState = {
-  user: null,
   buynow: [],
   header: "false",
 };
@@ -9,12 +8,6 @@ export const getTotalPrice = (buynow) =>
 
 const reducer = (state, action) => {
   switch (action.type) {
-      case "SET_USER":
-        localStorage.setItem("id", JSON.stringify(action.user));
-        return{
-          ...state,user:action.user   
-        }
-      
       case "ADD_TO_BUY":
         sessionStorage.setItem("membership", JSON.stringify(action.item));
         return {

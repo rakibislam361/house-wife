@@ -34,17 +34,20 @@ import Add_menu from './Components/admin_section/pages/Add_menu';
 import Food_list from './Components/admin_section/pages/Food_list';
 import Favorie_list from './Components/pages/Favorite_list';
 import Menu_update from './Components/admin_section/pages/update_pages/Menu_update';
-import Update_food from './Components/admin_section/pages/update_pages/Update_food';
-
+import Food_update from './Components/admin_section/pages/update_pages/Food_update';
+import packageJson from'./../package.json'
 
 
 const App = () => {    
 
 const [{user, data}, dispatch] = useStateValue();
+const settings = localStorage.getItem('settings')
 
 const [isAuth, setIsAuth] = useState();
 const user_type = localStorage.getItem('user');
 const user_token = localStorage.getItem('token');
+const [settingsdata, setData ] = useState()
+
 
 useEffect(() => {
     try {
@@ -59,102 +62,142 @@ useEffect(() => {
      
 }, [isAuth]);
 
+useEffect(() => {     
+      try {
+        if (localStorage.getItem('settings') !== "")
+        
+        {
+            fetch(`${packageJson.api_url}/api/settings`)
+            .then((response)=> response.json())
+            .then((data)=>{
+                
+                let data_settings = data.settings
+                var settingsData = []
+                
+                if(data_settings && data_settings.length > 0){
+                    data_settings.map((value, index) => {
+                        if(value.type == "image"){
+                            settingsData[value.meta_name] = value.image_path;
+                        }else{
+                            settingsData[value.meta_name] = value.meta_value;
+                        }
+                    })
+                    
+                    localStorage.setItem('settings', JSON.stringify(Object.assign({}, settingsData)));
+                }
+                setData("val")
+            }) 
+
+        }
+      
+      } catch (error) {}
+  }, [settingsdata])
 
 
 
     return (
         <Router>
-            <div className="App">
-                <Switch>
-                   
-                    {/* user section route */}
-                    <ProtectedRoute isAuth={isAuth} path="/user_dashboard" component={User_dashboard} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/user_profile" component={User_profile} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/user_bookmark" component={User_bookmarks} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/user_call_log" component={User_call_log} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/user_reviews" component={User_review} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/user_subscription" component={User_subscription} /> 
+            {settings !== null
+            ?
+                <div className="App">
+                    <Switch>
                     
-                    {/* housewife section route */}
-                    <ProtectedRoute isAuth={isAuth} path="/housewife_dashboard" component={Housewife_dashboard} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/housewife_profile" component={Housewife_profile} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/add_food" component={Add_food} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/add_menu" component={Add_menu} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/menu_list" component={Menu_list} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/food_list" component={Food_list} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/subscription" component={Subscription} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/call_log" component={Call_log} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/reviews" component={Review} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/edit_menu" component={Menu_update} /> 
-                    <ProtectedRoute isAuth={isAuth} path="/edit_food" component={Update_food} /> 
-      
-                    {/* Home page rowte */}
-                     <Route path="/about">
-                        <Header />
-                        <About_us />
-                        <Footer />
-                    </Route>
-                    <Route path="/partner">
-                        <Header />
-                        <Partner />
-                        <Footer />
-                    </Route>
-                    <Route path="/contact_us">
-                        <Header />
-                        <Contact_us />
-                        <Footer />
-                    </Route>
-                    <Route path="/leave_review">
-                        <Listing_header />
-                        <Leave_review />
-                        <Footer />
-                    </Route>
-                    
-                    <Route path="/login">
-                        <Login />
-                        <Footer />
-                    </Route>
-                    <Route path="/housewife_list">
-                        <Listing_header />
-                        <Listing_research />
-                        <Footer />
-                    </Route>
-                    <Route path="/housewife_search_list">
-                        <Listing_header />
-                        <Housewife_search_list />
-                        <Footer />
-                    </Route>
-                    <Route path="/housewife_details">
-                        <Listing_header />
-                        <Housewife_details />
-                        <Footer />
-                    </Route>
-                    <Route path="/favorite_lists">
-                        <Listing_header />
-                        <Favorie_list />
-                        <Footer />
-                    </Route>
-                    <Route path="/order">
-                        <Listing_header />
-                        <Order />
-                        <Footer />
-                    </Route>
-                     <Route path="/thankyou_page">
-                        <ThankyouPage />
-                        <Footer />
-                    </Route>
-                    <Route path="/">
-                        <Header />
-                        <Home />
-                        <Footer />
-                    </Route>
-                     
-                    <div id="toTop"></div>
-                </Switch>                 
-            </div>
-       </Router>
-
+                        {/* user section route */}
+                        <ProtectedRoute isAuth={isAuth} path="/user_dashboard" component={User_dashboard} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/user_profile" component={User_profile} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/user_bookmark" component={User_bookmarks} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/user_call_log" component={User_call_log} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/user_reviews" component={User_review} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/user_subscription" component={User_subscription} /> 
+                        
+                        {/* housewife section route */}
+                        <ProtectedRoute isAuth={isAuth} path="/housewife_dashboard" component={Housewife_dashboard} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/housewife_profile" component={Housewife_profile} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/add_food" component={Add_food} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/add_menu" component={Add_menu} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/menu_list" component={Menu_list} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/food_list" component={Food_list} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/subscription" component={Subscription} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/call_log" component={Call_log} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/reviews" component={Review} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/edit_menu" component={Menu_update} /> 
+                        <ProtectedRoute isAuth={isAuth} path="/edit_food" component={Food_update} /> 
         
+                        {/* Home page rowte */}
+                        <Route path="/about">
+                            <Header />
+                            <About_us />
+                            <Footer />
+                        </Route>
+                        <Route path="/partner">
+                            <Header />
+                            <Partner />
+                            <Footer />
+                        </Route>
+                        <Route path="/contact_us">
+                            <Header />
+                            <Contact_us />
+                            <Footer />
+                        </Route>
+                        <Route path="/leave_review">
+                            <Listing_header />
+                            <Leave_review />
+                            <Footer />
+                        </Route>
+                        
+                        <Route path="/login">
+                            <Login />
+                            <Footer />
+                        </Route>
+                        <Route path="/housewife_list">
+                            <Listing_header />
+                            <Listing_research />
+                            <Footer />
+                        </Route>
+                        <Route path="/housewife_search_list">
+                            <Listing_header />
+                            <Housewife_search_list />
+                            <Footer />
+                        </Route>
+                        <Route path="/housewife_details">
+                            <Listing_header />
+                            <Housewife_details />
+                            <Footer />
+                        </Route>
+                        
+                        <Route path="/housewife_details/:housewife_id" >
+                            <Listing_header />
+                            <Housewife_details />
+                            <Footer />
+                        </Route>
+
+                        <Route path="/favorite_lists">
+                            <Listing_header />
+                            <Favorie_list />
+                            <Footer />
+                        </Route>
+                        <Route path="/order">
+                            <Listing_header />
+                            <Order />
+                            <Footer />
+                        </Route>
+                        <Route path="/thankyou_page">
+                            <ThankyouPage />
+                            <Footer />
+                        </Route>
+                        <Route path="/">
+                            <Header />
+                            <Home />
+                            <Footer />
+                        </Route>
+                        
+                        <div id="toTop"></div>
+                    </Switch>                 
+                </div>
+            :
+                ""    
+            }
+       </Router>     
     )
 }
 

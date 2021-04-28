@@ -60,10 +60,9 @@ const logOut = () => {
               
            <div className="collapse navbar-collapse" id="navbarResponsive" style={open===true ?{display: 'none'} : {display:'block'}}>
                     <ul className="navbar-nav navbar-sidenav" id="exampleAccordion">
-                        
                         <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <Link className="nav-link" to="/housewife_dashboard">
-                            <i className="fa fa-fw fa-dashboard" />
+                            <i className="fa fa-address-card" />
                             <span className="nav-link-text">Dashboard</span>
                         </Link>
                         </li>
@@ -107,7 +106,7 @@ const logOut = () => {
                         </li>
                         <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Subscription">
                         <Link className="nav-link" to="/subscription">
-                            <i className="fa fa-fw fa-money" />
+                            <i className="fa fa-money" />
                             <span className="nav-link-text">Subscription</span>
                         </Link>
                         </li>
@@ -121,7 +120,7 @@ const logOut = () => {
                     </ul>
                     <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
-                    <a onClick={logOut} className="nav-link"><i className="fa fa-fw fa-sign-out"></i>Logout</a>
+                    <a onClick={logOut} className="nav-link"><i className="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
                     </li>
                 </ul>
             </div>

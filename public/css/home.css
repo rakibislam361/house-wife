@@ -148,9 +148,9 @@
   margin: 0;
 }
 @media (max-width: 767px) {
-  .item_version_2 a .info h3 {
-    font-size: 16px;
-    font-size: 0rem;
+  .item_version_2 a .info h3 .mobile-view {
+    font-size: 16px ;
+    font-size: 0rem !important;
   }
 }
 

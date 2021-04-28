@@ -1,23 +1,58 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import Side_nav from '../body_parts/Side_nav'
 import Admin_Footer from '../body_parts/Footer'
 import { withRouter } from 'react-router'
 import MaterialTable from 'material-table'
 import {Link} from 'react-router-dom'
 import packageJson from './../../../../package.json';
+import * as moment from 'moment'
+import axios from "axios";
+
+
 
 const Subscription = () => {
+    const token = localStorage.getItem("token");
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-const [data, setData] = useState([]);
+  useEffect(() => {
+      try {
+          async function load() {
+            const response = await axios.get(`${packageJson.api_url}/api/package/order?token=`+token);
+            const data = await response;
+            setData(data.data.package)
+            setLoading(false)             
+        }
+        load()  
+      } catch (error) {}
+  
+    },[]);
+
+
+console.log(data)
+
 const columns = 
     [
-        { title: 'Type', field: '' },
-        { title: 'Euro', field: '' },
-        { title: 'Date', field: ''},
+        { title: 'Type', field: 'title_it' },
+        { title: 'Euro', field: 'price' },
+        { title: 'Date', field: 'created_at',
+            render: rowData =>{
+              const date = moment(rowData.created_at).format('LL')
+              return(
+                date
+              )
+            }   
+        },
         { title: 'Deadline', field: ''},
-        { title: 'Status', field: ''},
-        { title: 'Payment', field: ''},
-       
+        { title: 'Status', field: 'status',
+            render: rowData => {
+                return(
+                rowData.status == 1 ? <i className="approved">Active</i> :
+                <i className="cancel">Inactive</i> 
+                )
+            }
+        },
+        { title: 'Payment', field: 'payment_method'},  
     ]
 
     
@@ -37,24 +72,24 @@ const columns =
                         <div className="card mb-3">
                             <div className="card-body">
                                 <div className="table-responsive">
-                                    <MaterialTable
-                                        title="Subscription details"
-                                        columns={columns}
-                                        data={data}
-                                        actions={[
-                                          
-                                            rowData => ({
-                                            icon: 'delete',
-                                            tooltip: 'Delete subscription',
-                                            onClick: (event, rowData) => alert("You want to delete " + rowData.name),
-                                            disabled: rowData.birthYear < 2000
-                                            })
-                                        ]}
-                                        options={{
-                                            actionsColumnIndex: -1,
-                                            exportButton: true,    
-                                        }}                            
-                                    />
+                                      <MaterialTable
+                                            title="Menu List"
+                                            columns={columns}
+                                            data={data}
+                                                actions={[
+                                                    {
+                                                    icon: 'edit',
+                                                    tooltip: 'Edit menu',
+                                                    onClick: (event, rowData) =>{
+                                                        
+                                                    }                                          
+                                                    },
+                                                
+                                                ]}
+                                                options={{
+                                                actionsColumnIndex: -1,    
+                                            }}                           
+                                        />
                                 </div>
                             </div>
                         </div>

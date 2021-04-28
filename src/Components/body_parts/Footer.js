@@ -10,6 +10,12 @@ const Footer = () => {
     const [example, setExample] = useState(false);
     const user_type = localStorage.getItem('user');
     
+    const data = localStorage.getItem('settings')
+    const data_pars= JSON.parse(data)
+    const facebook_data = data_pars.facebook
+    const instagram_data = data_pars.instagram
+    const youtube = data_pars.youtybe
+
     return (
         <>    
             <footer>
@@ -93,9 +99,9 @@ const Footer = () => {
                                 <div className="followus">
                                 <h6>Follow Us</h6>
                                 <u style={{ display: 'flex', margin: '0 0 25px 0', padding: '0', listStyle: 'none'}}> 
-                                    <li style={{ display: 'inlineBlock', margin: '0 10px 0 0'}}><Link to="#0"><img style={{ width: '30px', height: '30px'}} src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="img/facebook_icon.svg" alt="" className="lazy" /></Link></li>
-                                    <li style={{ display: 'inlineBlock', margin: '0 10px 0 0'}}><Link to="#0"><img style={{ width: '30px', height: '30px'}} src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="img/instagram_icon.svg" alt="" className="lazy" /></Link></li>
-                                    <li style={{ display: 'inlineBlock', margin: '0 10px 0 0'}}><Link to="#0"><img style={{ width: '30px', height: '30px'}} src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="img/youtube_icon.svg" alt="" className="lazy" /></Link></li>
+                                    <li style={{ display: 'inlineBlock', margin: '0 10px 0 0'}}><Link to={ facebook_data ? facebook_data :"" }><img style={{ width: '30px', height: '30px'}} src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="img/facebook_icon.svg" alt="" className="lazy" /></Link></li>
+                                    <li style={{ display: 'inlineBlock', margin: '0 10px 0 0'}}><Link to={instagram_data ? instagram_data : ""}><img style={{ width: '30px', height: '30px'}} src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="img/instagram_icon.svg" alt="" className="lazy" /></Link></li>
+                                    <li style={{ display: 'inlineBlock', margin: '0 10px 0 0'}}><Link to={youtube ? youtube : ""}><img style={{ width: '30px', height: '30px'}} src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="img/youtube_icon.svg" alt="" className="lazy" /></Link></li>
                                 </u>
                             </div>
                             </div>

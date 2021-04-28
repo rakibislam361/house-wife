@@ -1,27 +1,26 @@
 import React,{useState,useEffect} from 'react'
-import { Link } from "react-router-dom";
+import { Route, Link, useParams, useHistory, useLocation } from "react-router-dom";
 import LoginModel from '../body_parts/LoginModel'
 import Contact_model from '../body_parts/Contact_model'
 import axios from 'axios';
 import PuffLoader from "react-spinners/PuffLoader"
 import PropagateLoader from "react-spinners/PropagateLoader"
-import {useLocation} from 'react-router-dom'
 import packageJson from './../../../package.json';
 
 
+const Housewife_details = (props) => {
 
-const Housewife_details = () => {
   const [number, setNumber ] = useState()
   const token = localStorage.getItem("token");
-  const [loading, setLoading] = useState(true);
-  const housewife_id = sessionStorage.getItem('housewife_id')
+  const [loading, setLoading] = useState(false);
   const [numberDisplay, setNumberDisplay] = useState(false)
   const [foods, setFoods] = useState();
   const location = useLocation()
   const [housewife_name, setHousewifeName] = useState(); 
   const [housewifeData, setHousewifeData] = useState();
   const [HousewifeRating, setHousewifeRating] = useState();
-  
+  let id = window.location.pathname.split('/')[2];
+
   let menu_image = ['menu_item_large_1.jpg',
   'location_11.jpg','location_12.jpg','location_list_1.jpg','location_list_2.jpg','location_list_3.jpg','location_list_4.jpg'
   ]
@@ -37,8 +36,9 @@ const Housewife_details = () => {
 
   useEffect(() => {
     try {
+     
           async function load () {
-          const response = await axios.get(`${packageJson.api_url}/api/housewife/show/`+housewife_id);
+          const response = await axios.get(`${packageJson.api_url}/api/housewife/show/`+id);
           const data = await response; 
           setHousewifeData(data.data)    
           setNumber(data.data.housewife.phone)
@@ -58,11 +58,12 @@ const Housewife_details = () => {
       }    
   }
 
+
   const showNumber =() =>{
     loader();
     var config = {
       method: "get",
-      url: `${packageJson.api_url}/api/user/call-log/`+housewife_id+"?token="+token,
+      url: `${packageJson.api_url}/api/user/call-log/`+id+"?token="+token,
     };
     axios(config)
       .then((response) => {
@@ -88,7 +89,7 @@ const Housewife_details = () => {
         :
           <>
             <div className="hero_in detail_page background-image" style={{backgroundImage : "url(img/hero_general.jpg)"}}>
-              <div className="wrapper opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+              <div className="wrapper opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)">
                 <div className="container">
                   <div className="main_info">
                     <div className="row">
@@ -112,11 +113,8 @@ const Housewife_details = () => {
                             <a className="btn_hero wishlist" style={{color:'white'}}><i className="icon_heart" />Preferiti</a>                        
                           :
                             <a className="btn_hero wishlist" style={{color:'white', height: '35px', marginTop:'20px'}}><i className="icon_heart" />
-                            
-                            </a>                        
-                            
-                                                    
-                            
+                            </a>                                                  
+      
                           }
                         </div>
 
@@ -207,7 +205,7 @@ const Housewife_details = () => {
                         <div className="btn_1_mobile">
                           {!numberDisplay
                             ?
-                              <a href="#" className="btn_1 gradient full-width mb_5">+39 XXX.XXX.XX.XX</a>
+                              <h4 style={{textAlign: 'center'}}>+39 XXX.XXX.XX.XX</h4>
                             :
                               <h3 style={{textAlign: 'center'}}>{number}</h3>
                           }

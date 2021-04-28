@@ -1,6 +1,7 @@
 {
   "name": "house-wife",
-  "api_url": "http://localhost/intavola",
+  "homepage": "http://intavolafoodapp.com/",
+  "api_url": "http://app.intavolafoodapp.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -89,11 +89,6 @@ const User_call_log = () => {
                               columns={columns}
                               data={call}
                                 actions={[
-                                    {
-                                      icon: 'edit',
-                                      tooltip: 'Edit User',
-                                      onClick: (event, rowData) => alert("You saved " + rowData.name)
-                                    },
                                     rowData => ({
                                       icon: 'delete',
                                       tooltip: 'Delete User',

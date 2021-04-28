@@ -14,6 +14,9 @@ const Menu_list = () => {
     const token = localStorage.getItem("token");
     const [loading, setLoading] = useState(true);
     const history = useHistory()
+    const [data, setData] = useState();
+    const [deletItem, setDeleteitem] = useState()
+
     useEffect(() => {
       try {
           async function load() {
@@ -25,9 +28,8 @@ const Menu_list = () => {
         load()  
       } catch (error) {}
   
-    },[]);
+    },[deletItem]);
 
-const [data, setData] = useState();
 const columns = 
     [
         { title: 'Name (english)', field: 'title_en' },
@@ -41,8 +43,6 @@ const columns =
           }
       }
     ]
-
-
 
 
     return (
@@ -82,7 +82,21 @@ const columns =
                                     rowData => ({
                                       icon: 'delete',
                                       tooltip: 'Delete User',
-                                      onClick: (event, rowData) => alert("You want to delete " + rowData.name),
+                                      onClick: (event, rowData) =>{
+                                        var config = {
+                                            method: 'post',
+                                            url: `${packageJson.api_url}/api/housewife/food-menu/delete/${rowData.id}?token=${token}`,
+                                            data: data
+                                          };
+
+                                        axios(config)
+                                          .then((response) =>{
+                                            setDeleteitem('val')
+                                          })
+
+                                          .catch((error) => {
+                                          });
+                                      },
                                     })
                                   ]}
                                     options={{

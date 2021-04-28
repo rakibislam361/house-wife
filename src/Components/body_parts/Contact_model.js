@@ -39,7 +39,8 @@ toast.configure();
 export default function TransitionsModal(props) {
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
-  const housewife_id = sessionStorage.getItem('housewife_id')
+  const housewife_id = window.location.pathname.split('/')[2]
+  
   const token = localStorage.getItem("token");
   const [open, setOpen] = React.useState(false);
   const [numberDisplay, setNumberDisplay] = useState(false)
@@ -129,7 +130,7 @@ export default function TransitionsModal(props) {
                         <div className="btn_1_mobile">
                            {!numberDisplay
                             ?
-                              <a href="#" className="btn_1 gradient full-width mb_5">+39 XXX.XXX.XX.XX</a>
+                              <h3 style={{textAlign: 'center'}}>+39 XXX.XXX.XX.XX</h3>
                             :
                               <h3 style={{textAlign: 'center'}}>{props.number}</h3>
                             }

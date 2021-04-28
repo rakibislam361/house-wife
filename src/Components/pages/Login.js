@@ -46,20 +46,26 @@ const Login = () => {
               draggable: true,
               progress: undefined,
             });
-           
-            if (response) {
-                {response ? setLoading(false) : setLoading(true)}
-                // the user just logged in / the user was logged in
-                localStorage.setItem('token', response.data.token);
-                localStorage.setItem('user', response.data.user_type);
-
-                {response?.data.user.type === 1 ?  histry.push('/user_dashboard') :  histry.push('/housewife_dashboard')}
-                dispatch({
-                    type: "SET_USER",
-                    user: response.data.id,
-                });
+          
+            if (response.data.message) {
+                  {response ? setLoading(false) : setLoading(true)}    
+                  localStorage.setItem('token', response.data.token);
+                  localStorage.setItem('id', response.data.user.id);
+                  localStorage.setItem('user', response.data.user_type);
+                  {response?.data.user.type === 1 ?  histry.push('/user_dashboard') :  histry.push('/housewife_dashboard')}
+          
             } else {
-               
+                  toast.error(response.data.error,{
+                  position: "bottom-left",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+                setLoading(false)
+
             }
         })
         .catch(error => {
