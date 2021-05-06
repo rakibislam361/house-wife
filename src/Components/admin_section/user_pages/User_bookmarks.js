@@ -33,7 +33,7 @@ const columns =
         { title: 'Cover', 
           field: 'image',
            render: rowData => {
-             const image = rowData.image
+             const image = rowData.image_url
              return(
                <img className="review_image" src={image !== null ? image : "img/download.png"} width={80} height={80} alt="" />
              )

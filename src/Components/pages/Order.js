@@ -167,7 +167,7 @@ const Order = () => {
                                     <div className="box_order">
                                         <div className="head">
                                         <h3>Order Summary</h3>
-                                        <div>{buynow.month}</div>
+                                        <div>{buynow.month} Mesi</div>
                                         </div>
                                         {/* /head */}
                                         <div className="main">

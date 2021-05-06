@@ -156,7 +156,7 @@ const Home = () => {
                 <div className="container">
                   <div className="row justify-content-lg-start justify-content-md-center">
                     <div className="col-xl-7 col-lg-8">
-                      <h1 style={{color: 'red!importnt' }}>In Tavola The Food App</h1>
+                      <h1 style={{color: 'red!importnt' }}>In Tavola Food App</h1>
                       <p>La cucina casalinga dove e quando vuoi</p>  
                           <form onSubmit={handleSubmit(onSubmit)}> 
                               <div className="row no-gutters custom-search-input">
@@ -189,7 +189,7 @@ const Home = () => {
                   <div className="container margin_60">
                     <div className="main_title center">
                       <span><em /></span>
-                      <h2>Tutto ciò che offre In Tavola The Food App</h2>
+                      <h2>Tutto ciò che offre In Tavola Food App</h2>
                       <p>Scegli il tuo piatto preferito, contatta direttamente la casalinga e gustati la tua ricetta homemade!</p>
                     </div>
                     <div className="loading-spiner">
@@ -203,7 +203,7 @@ const Home = () => {
                   <div className="container margin_60">
                     <div className="main_title center">
                       <span><em /></span>
-                      <h2>Tutto ciò che offre In Tavola The Food App</h2>
+                      <h2>Tutto ciò che offre In Tavola Food App</h2>
                       <p>Scegli il tuo piatto preferito, contatta direttamente la casalinga e gustati la tua ricetta homemade!</p>
                     </div>
 
@@ -238,7 +238,7 @@ const Home = () => {
                     <div className="main_title">
                       <span><em /></span>
                       <h2>Casalinghe consigliate vicine a te</h2>
-                      <p>Servizio Made in housewife...</p>
+                      <p>Servizio Fatto in casa</p>
                       <Link onClick={removeHwsID} to="/housewife_list">Mostra tutto</Link>
                     </div>
                       <Slider {...setting}>
@@ -257,7 +257,7 @@ const Home = () => {
                             </figure>
                             <ul>
                               <li>
-                                <span className="">{single_housewife.housewife_type==1? "Ritiro a domicilio" : single_housewife.housewife_type==2 ? " Mangia in casa" :"Entrambe" }</span> 
+                                <span className="">{single_housewife.housewife_type==1? "Ritiro a domicilio" : single_housewife.housewife_type==2 ? " In tavola da me" :" Ritiro a dmicilio, In tavola da me..." }</span> 
                               </li>
                               <li>
                                 <div className="score"><strong>{single_housewife.rating_avg ? single_housewife.rating_avg:"0.00" }</strong></div>

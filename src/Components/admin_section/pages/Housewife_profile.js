@@ -157,14 +157,14 @@ const Housewife_profile = () => {
                   <li className="breadcrumb-item">
                     <Link to="/housewife_dashboard">Dashboard</Link>
                   </li>
-                  <li className="breadcrumb-item active">Profile</li>
+                  <li className="breadcrumb-item active">Profilo</li>
                 </ol>
 
                 <div className="box_general padding_bottom">
                   <div className="header_box version_2">
                     <h2>
                       <i className="fa fa-user" />
-                      Profile details
+                      Profilo details
                     </h2>
                   </div>
             
@@ -188,8 +188,8 @@ const Housewife_profile = () => {
                                 </div>
                               </form> 
                           </div>
-                          
-                          <form method="post" onSubmit={handleSubmit(onSubmit)}>
+                          <div className="col-md-8"> 
+                              <form method="post" onSubmit={handleSubmit(onSubmit)}>
                             <div className="col-md-12 add_top_30">
                             <div className="row">
                               <div className="col-md-12">
@@ -370,7 +370,7 @@ const Housewife_profile = () => {
                                     <span className="checkmark" />
                                   </label>
                                   <label className="container_radio">
-                                    Ritiro a domicilio 
+                                    Ritiro a dmicilio, In tavola da me  
                                     <input
                                       type="radio"
                                       name="housewife_type"
@@ -470,6 +470,7 @@ const Housewife_profile = () => {
                             </div>
                           </div>
                            </form>
+                            </div>
                         </div>
                  : <div className="row">
                       <div className="loading-spiner">
@@ -485,7 +486,7 @@ const Housewife_profile = () => {
                 </div>
 
                 {/* /box_general*/}
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-md-6">
                     <div className="box_general padding_bottom">
                       <div className="header_box version_2">
@@ -512,6 +513,7 @@ const Housewife_profile = () => {
                     
                   </div>
                 </div>
+                 */}
                 {/* /row*/}
   
               </div>

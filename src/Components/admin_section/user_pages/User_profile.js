@@ -263,7 +263,7 @@ const User_profile = () => {
             </div>
             
             {/* /box_general*/}
-             <div className="row">
+             {/* <div className="row">
                   <div className="col-md-6">
                     <div className="box_general padding_bottom">
                       <div className="header_box version_2">
@@ -288,7 +288,7 @@ const User_profile = () => {
 
                     </div>
                   </div>
-                </div>
+                </div> */}
 
             {/* /row*/}
           </div>

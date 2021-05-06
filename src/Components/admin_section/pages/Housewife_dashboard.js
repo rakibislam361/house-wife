@@ -46,7 +46,7 @@ const [loading, setLoading] = useState(true);
                           <i className="fa fa-fw fa-cutlery" />
                         </div>
                         <div className="mr-5">
-                          <h5>{dashboard.foods} Food!</h5>
+                          <h5>Lista menu food</h5>
                         </div>
                       </div>
                       <Link
@@ -88,7 +88,7 @@ const [loading, setLoading] = useState(true);
                           <i className="fa fa-fw fa-phone" />
                         </div>
                         <div className="mr-5">
-                          <h5>{dashboard.call_logs} Call Log!</h5>
+                          <h5>Call Log!</h5>
                         </div>
                       </div>
                       <Link
@@ -109,7 +109,7 @@ const [loading, setLoading] = useState(true);
                           <i className="fa fa-fw fa-star" />
                         </div>
                         <div className="mr-5">
-                          <h5>{dashboard.ratings} New Reviews!</h5>
+                          <h5>Recensioni</h5>
                         </div>
                       </div>
                       <Link

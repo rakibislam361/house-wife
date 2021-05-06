@@ -51,8 +51,11 @@ const columns =
         { title: 'Status', field: 'status',
             render: rowData => {
                 return(
-                rowData.status == 1 ? <i className="approved">Active</i> :
-                <i className="cancel">Inactive</i> 
+                rowData.status == 1 ? 
+                    <i className="pending">Pending</i> : 
+                rowData.status == 2 ?
+                    <i className="approved">Approved</i> :
+                    <i className="cancel">Cancelled</i>
                 )
             }
         },
@@ -69,14 +72,14 @@ const columns =
                             <li className="breadcrumb-item">
                                 <Link to="/housewife_dashboard">Dashboard</Link>
                             </li>
-                            <li className="breadcrumb-item active">Subscription</li>
+                            <li className="breadcrumb-item active">Iscrizione</li>
                         </ol>
 
                         <div className="card mb-3">
                             <div className="card-body">
                                 <div className="table-responsive">
                                       <MaterialTable
-                                            title="Subscription details"
+                                            title="Iscrizione details"
                                             columns={columns}
                                             data={data}
                                             actions={[

@@ -58,7 +58,7 @@ const token = localStorage.getItem("token");
           render: rowData => {
               return(
                 rowData.status == 1 ? <i className="approved">Active</i> :
-              <i className="cancel">Inactive</i> 
+                <i className="cancel">Inactive</i> 
               )
             }
         }

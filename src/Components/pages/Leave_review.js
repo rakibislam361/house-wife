@@ -130,7 +130,7 @@ const Leave_review = () => {
                           <input ref={register} type="hidden" name="user_id" value={user_id} />
                         </div>
                       </div>
-                        <div className="col-md-3 add_bottom_25">
+                        <div className="col-md-4 add_bottom_25">
                           {!token?
                             <LoginModel classname={"btn_1 gradient full-width mb_5"} name={"SUBMIT"} secondButton="REGISTRATI COME UTENTE" user_type={1} />
                             :

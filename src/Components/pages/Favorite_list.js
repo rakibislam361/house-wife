@@ -30,10 +30,10 @@ const columns =
         { title: 'Immagine di copertina', field: 'image',
            render: rowData =>{ 
             const Housewife_name = rowData.name;  
-            const Housewife_image = rowData.image;  
+            const Housewife_image = rowData.image_url;  
             return(
               <>
-                <img src={Housewife_image} width={100} height={80} alt="" />
+                <img src={Housewife_image ? Housewife_image : "img/600px-No_image_available.svg.png"} width={100} height={80} alt="" />
                 <span style={{marginLeft:'10%', fontSize: '25px'}}>{Housewife_name}</span>
               </>
             )

@@ -48,7 +48,7 @@ const [dashboard, setDashboad] = useState()
                         <i className="fa fa-fw fa-phone" />
                       </div>
                       <div className="mr-5">
-                        <h5>{dashboard.call_logs} Call Log!</h5>
+                        <h5>Call Log!</h5>
                       </div>
                     </div>
                     <Link to="/user_call_log" style={{color:'white'}} className="card-footer text-white clearfix small z-1" href="call-log.html">
@@ -66,7 +66,7 @@ const [dashboard, setDashboad] = useState()
                         <i className="fa fa-fw fa-star" />
                       </div>
                       <div className="mr-5">
-                        <h5>{dashboard.ratings} New Reviews!</h5>
+                        <h5> Recensioni</h5>
                       </div>
                     </div>
                     <Link to="/user_reviews" style={{color:'white'}} className="card-footer text-white clearfix small z-1" href="reviews.html">
@@ -84,7 +84,7 @@ const [dashboard, setDashboad] = useState()
                         <i className="fa fa-fw fa-heart" />
                       </div>
                       <div className="mr-5">
-                        <h5>{dashboard.bookmarks} New Bookmarks!</h5>
+                        <h5> New Bookmarks!</h5>
                       </div>
                     </div>
                     <Link to="/user_reviews" style={{color:'white'}} className="card-footer text-white clearfix small z-1">

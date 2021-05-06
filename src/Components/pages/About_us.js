@@ -134,7 +134,7 @@ const About_us = () => {
         <div className="container margin_30_20">			
           <div className="main_title center">
             <span><em /></span>
-            <h2>Recensioni abbinate</h2>
+            <h2>Facile da usare</h2>
             <p>Scegli il piatto che preferisci e mettiti in contatto.</p>
           </div>
           <div className="row justify-content-center align-items-center add_bottom_15">

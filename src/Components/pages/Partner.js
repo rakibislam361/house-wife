@@ -154,7 +154,7 @@ useEffect(() => {
         <div className="container margin_30_20">			
           <div className="main_title center">
             <span><em /></span>
-            <h2>In Tavola The Food App</h2>
+            <h2>In Tavola Food App</h2>
             <p>{data_parse ?data_parse.page_title_text : ""}</p>
           </div>
           <div className="row justify-content-center align-items-center add_bottom_15">

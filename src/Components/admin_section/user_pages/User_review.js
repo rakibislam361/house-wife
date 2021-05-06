@@ -28,7 +28,7 @@ const columns =
         {field: 'image',
             render: rowData =>{
                 const name = rowData.housewife_name
-                const image = rowData.image_path
+                const image = rowData.user_image
                 return(
                     <div style={{display: 'flex'}}>    
                         <img className="review_image" src={image ? image : "img/Sample_User_Icon.png"} alt="" />
@@ -62,7 +62,7 @@ const columns =
                             <li className="breadcrumb-item">
                             <a href="#">Dashboard</a>
                             </li>
-                            <li className="breadcrumb-item active">Reviews</li>
+                            <li className="breadcrumb-item active">Recensioni</li>
                         </ol>
 
                         {!data? 
@@ -71,7 +71,7 @@ const columns =
                             </div>
                         :
                             <MaterialTable
-                                title="Reviews List"
+                                title="Recensioni Lista"
                                 columns={columns}
                                 data={data}
                                 options={{

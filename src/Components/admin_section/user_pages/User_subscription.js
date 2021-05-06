@@ -27,14 +27,14 @@ const User_subscription = () => {
                     <li className="breadcrumb-item">
                     <a href="#">Dashboard</a>
                     </li>
-                    <li className="breadcrumb-item active">Subscription</li>
+                    <li className="breadcrumb-item active">Iscrizione</li>
                 </ol>
                 {/* Example DataTables Card*/}
                 <div className="card mb-3">
                     <div className="card-body">
                         <div className="table-responsive">
                              <MaterialTable
-                                title="Subscription details"
+                                title="Iscrizione details"
                                 columns={columns}
                                 data={data}
                                 actions={[
