@@ -23,6 +23,9 @@ const Order = () => {
     const data = sessionStorage.getItem("membership")
     const buynow = JSON.parse(data)
     const histry = useHistory(); 
+    const contact_data = localStorage.getItem('contact')
+    const data_pars= JSON.parse(contact_data)
+    
 
     const loader = () =>{
         if(!loading){
@@ -105,94 +108,93 @@ const Order = () => {
                         </div> 
                     </div> 
                 </div> 
-                :
+                 :
                     <form method="post" onSubmit={handleSubmit(onSubmit)}>                   
-                    <div className="container margin_60_20">
-                        <div className="row justify-content-center">
-                            <div className="col-xl-6 col-lg-8 col-md-12">
-                                <div className="box_order_form">
-                                    <div className="head">
-                                        <div className="title">
-                                            <h3>Payment Method</h3>
+                        <div className="container margin_60_20">
+                            <div className="row justify-content-center">
+                                <div className="col-xl-6 col-lg-8 col-md-12">
+                                    <div className="box_order_form">
+                                        <div className="head">
+                                            <div className="title">
+                                                <h3>Metodo di pagamento</h3>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="main">
-                                        <div className="payment_select" id="paypal">
-                                            <label className="container_radio">Paypal
-                                                <input 
-                                                    type="radio"
-                                                    value={1}
-                                                    ref={register}
-                                                    id="payment_method_id" 
-                                                    name="payment_method_id"
-                                                    defaultChecked 
-                                                    name="payment_method_id" />
-                                                <span className="checkmark" />
-                                            </label>
-                                        </div>
-                                        <div className="payment_select">
-                                            <label className="container_radio">Bank transfer
-                                                <input 
-                                                    type="radio"
-                                                    value={2}
-                                                    ref={register}
-                                                    id="payment_method_id" 
-                                                    name="payment_method_id"/>
-                                                <span className="checkmark" />
+                                        <div className="main">
+                                            <div className="payment_select" id="paypal">
+                                                <label className="container_radio">Paypal
+                                                    <input 
+                                                        type="radio"
+                                                        value={1}
+                                                        ref={register}
+                                                        id="payment_method_id" 
+                                                        name="payment_method_id"
+                                                        defaultChecked 
+                                                        name="payment_method_id" />
+                                                    <span className="checkmark" />
                                                 </label>
-                                                <i className="icon_building" />
-                                        </div>
-                                        <div className="payment_select">
-                                            <label className="container_radio">Top up PostePay card at Post Office
-                                                <input 
-                                                    type="radio"
-                                                    value={2}
-                                                    ref={register}
-                                                    id="payment_method_id" 
-                                                    name="payment_method_id" 
-                                                    name="payment_method_id" />
-                                                <span className="checkmark" />
-                                                </label>
-                                                <i className="icon_creditcard" />
-                                                <input type="hidden" defaultValue={buynow.id} ref={register} name="package_id" />
-                                                <input type="hidden" defaultValue={user_id} ref={register} name="user_id" />
+                                            </div>
+                                            <div className="payment_select">
+                                                <label className="container_radio">Tramite bonifico bancario
+                                                    <input 
+                                                        type="radio"
+                                                        value={2}
+                                                        ref={register}
+                                                        id="payment_method_id" 
+                                                        name="payment_method_id"/>
+                                                    <span className="checkmark" />
+                                                    </label>
+                                                    <i className="icon_building" />
+                                            </div>
+                                            <div className="payment_select">
+                                                <label className="container_radio">Tramite Ricarica PostePay
+                                                    <input 
+                                                        type="radio"
+                                                        value={2}
+                                                        ref={register}
+                                                        id="payment_method_id" 
+                                                        name="payment_method_id" 
+                                                        name="payment_method_id" />
+                                                    <span className="checkmark" />
+                                                    </label>
+                                                    <i className="icon_creditcard" />
+                                                    <input type="hidden" defaultValue={buynow.id} ref={register} name="package_id" />
+                                                    <input type="hidden" defaultValue={user_id} ref={register} name="user_id" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="col-xl-4 col-lg-4 col-md-12">
-                                <div className="box_order">
-                                    <div className="head">
-                                    <h3>Order Summary</h3>
-                                    <div>{buynow.month} Subscription</div>
-                                    </div>
-                                    {/* /head */}
-                                    <div className="main">
-                                    <ul>
-                                        <li>Date<span>Today {currentDate}</span></li>
-                                        <li>Package <span> {buynow.title}</span></li>
-                                    </ul>
-                                    <hr />
-                                    <ul className="clearfix">
-                                        <li><a href="#0">{buynow.month} Month Subscription</a><span>{buynow.price}</span></li>
-                                    </ul>
-                                    <ul className="clearfix">
-                                        <li>Subtotal<span>€ {buynow.price}</span></li>
-                                        <li className="total">Total<span>€ {buynow.price}</span></li>
-                                    </ul>
-                                        {token 
-                                            ? <input type="submit" className="btn_1 gradient full-width mb_5" />
-                                            : <LoginModel name={"Order now"} secondButton="REGISTRATI COME CASALINGA" user_type={2} />
-                                        }
+                                <div className="col-xl-4 col-lg-4 col-md-12">
+                                    <div className="box_order">
+                                        <div className="head">
+                                        <h3>Order Summary</h3>
+                                        <div>{buynow.month}</div>
+                                        </div>
+                                        {/* /head */}
+                                        <div className="main">
+                                        <ul>
+                                            <li>Data<span>Today {currentDate}</span></li>
+                                            <li>Servizio <span> {buynow.title}</span></li>
+                                        </ul>
+                                        <hr />
+                                        <ul className="clearfix">
+                                            <li><a href="#0">{buynow.month} </a><span>{buynow.price}</span></li>
+                                        </ul>
+                                        <ul className="clearfix">
+                                            <li>Subtotal<span>€ {buynow.price}</span></li>
+                                            <li className="total">Totale<span>€ {buynow.price}</span></li>
+                                        </ul>
+                                            {token 
+                                                ? <input type="submit" className="btn_1 gradient full-width mb_5" />
+                                                : <LoginModel classname={"btn_1 gradient full-width mb_5"} name={"Conferma Ordine"} secondButton="REGISTRATI COME CASALINGA" user_type={2} />
+                                            }
 
-                                        <div className="text-center"><small>Or Call Us at <strong>+39 000 0000000</strong></small></div>
-                                    </div>
-                                </div>  
-                            </div>
-                        </div> 
-                    </div>
-                </form> 
-                
+                                            <div className="text-center"><small>Or Call Us at <strong>{data_pars ? data_pars.registration_number : ""}</strong></small></div>
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div> 
+                        </div>
+                    </form> 
                 }
             </main>
           

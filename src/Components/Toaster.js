@@ -1,26 +1,23 @@
-import React from 'react'
-import { toast,ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-toast.configure();
-const Toaster = () => {
-
-    return (
-        <>
-            <ToastContainer
-                position="bottom-left"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                />
-            <ToastContainer />
-        </>
-    )
-}
-
-export default Toaster
+const columns = 
+    [
+        { title: 'Type', field: 'title_it' },
+        { title: 'Euro', field: 'price' },
+        { title: 'Date', field: 'created_at',
+            render: rowData =>{
+              const date = moment(rowData.created_at).format('LL')
+              return(
+                date
+              )
+            }   
+        },
+        { title: 'Deadline', field: ''},
+        { title: 'Status', field: 'status',
+            render: rowData => {
+                return(
+                rowData.status == 1 ? <i className="approved">Active</i> :
+                <i className="cancel">Inactive</i> 
+                )
+            }
+        },
+        { title: 'Payment', field: 'payment_method'},  
+    ]

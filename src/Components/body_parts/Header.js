@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useStateValue } from '../StateProvider';
 import { Collapse } from 'react-bootstrap';
 import packageJson from './../../../package.json';
-
+import LoginModel from './LoginModel'
 
 toast.configure();
 const Header = () => {
@@ -22,6 +22,7 @@ const Header = () => {
     const data = localStorage.getItem('settings')
     const data_pars = JSON.parse(data)
     const logo = data_pars.header_logo
+    const scnd_logo = data_pars.header_logo_mirror
  
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -50,8 +51,12 @@ const Header = () => {
     };
 
     const logOut = () => {
-        if(user){
-          const response = axios.post(`${packageJson.api_url}/api/auth/logout?token=`+user_token)
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('id');
+        sessionStorage.removeItem("membership")
+
+        const response = axios.post(`${packageJson.api_url}/api/auth/logout?token=`+user_token)
         .then(response=>{
             toast.success(response.data.message,{
                 position: "bottom-left",
@@ -62,17 +67,11 @@ const Header = () => {
                 draggable: true,
                 progress: undefined,
             });
-            // the user is logged out
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('id');
-            sessionStorage.removeItem("membership")
             
             histry.push('/');
             setAnchorEl(null);
         })
         .catch();
-        }
     }
 
     return ( 
@@ -81,7 +80,7 @@ const Header = () => {
                     <div id="logo">
                         <Link to="/">
                             <img src={logo ? logo : ""} width="175" height="80" alt="" className="logo_normal"/>
-	                        <img src="img/logo.png" width="131" height="60" alt="" className="logo_sticky"/>
+	                        <img src={scnd_logo ? scnd_logo : ""} width="131" height="60" alt="" className="logo_sticky"/>
                         </Link>
                     </div>
                     
@@ -89,7 +88,7 @@ const Header = () => {
                     <ul id="top_menu">
                         {!user_token 
                         ?
-                            <li><Signin_model_form /></li>
+                            <li><Signin_model_form heared_redirect={true} classname={"login"} /></li>
                         :
                             <li aria-haspopup="true" onClick={handleClick}><a className="login">Login</a></li>
                         }
@@ -108,7 +107,14 @@ const Header = () => {
                                 </MenuItem>   
                                 <MenuItem className="" onClick={logOut}>Logout</MenuItem>
                             </Menu>
-                        <li><Link to="/favorite_lists" className="wishlist_bt_top" title="Your wishlist">Preferiti</Link></li>
+                         {user_type 
+                            ?
+                               <li><Link to="/favorite_lists" className="wishlist_bt_top" title="Your wishlist">Preferiti</Link></li>
+                            :
+                                <li><Signin_model_form classname={"wishlist_bt_top"}/></li>
+                                
+                            }
+                       
                     </ul>
 
                     {/* /top_menu */}

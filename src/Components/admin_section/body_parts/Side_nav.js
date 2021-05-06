@@ -4,47 +4,21 @@ import { Link, useHistory } from 'react-router-dom'
 import { useStateValue } from '../../StateProvider';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Collapse } from 'react-bootstrap';
-import packageJson from './../../../../package.json';
+import Logout_model from './Logout_model'
 
 
 toast.configure();
 const Side_nav = () => {
-const [{user}, dispatch] = useStateValue();
-const token = localStorage.getItem('token');
-const histry = useHistory(); 
-const [open, setOpen] = useState(true);
+    const [{user}, dispatch] = useStateValue();
+    const token = localStorage.getItem('token');
+    const histry = useHistory(); 
+    const [open, setOpen] = useState(true);
+    const data = localStorage.getItem('settings')
+    const data_pars = JSON.parse(data)
+    const logo = data_pars.header_logo_mirror
 
-const logOut = () => {
-    if(token){
-    const response = axios.post(`${packageJson.api_url}/api/auth/logout?token=`+token)
-
-     .then(response=>{
-        toast.success(response.data.message,{
-              position: "bottom-left",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-         // the user is logged out
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('id');
-        sessionStorage.removeItem("membership")
-
-        histry.push('/');
-     })
-     .catch();
-    }
-}
-
-    return (
-        <>                       
-            
-
+    
+    return (                     
         <nav className="navbar navbar-expand-lg navbar-dark bg-default fixed-top" id="mainNav">
                 <Link className="navbar-brand" to="/housewife_dashboard"><img src="img/logo_menu.png" alt="" width={98} height={40} /></Link>
                 
@@ -63,51 +37,51 @@ const logOut = () => {
                         <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <Link className="nav-link" to="/housewife_dashboard">
                             <i className="fa fa-address-card" />
-                            <span className="nav-link-text">Dashboard</span>
+                            <span className="nav-link-text" style={{paddingLeft:'3%'}}>Dashboard</span>
                         </Link>
                         </li>
                         <li className="nav-item" data-toggle="tooltip" data-placement="right" title="My profile">
                         <Link className="nav-link" to="/housewife_profile">
                             <i className="fa fa-fw fa-user" />
-                            <span className="nav-link-text">My Profile</span>
+                            <span className="nav-link-text" style={{paddingLeft:'3%'}}>Profilo</span>
                         </Link>
                         </li>
                         <li className="nav-item" data-toggle="tooltip" data-placement="right" title="My listings">
                         <a className="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMylistings" data-parent="#mylistings">
                             <i className="fa fa-fw fa-list" />
-                            <span className="nav-link-text">Menu List Food</span>
+                            <span className="nav-link-text" style={{paddingLeft:'3%'}}>Menu</span>
                         </a>
                         <ul className="sidenav-second-level collapse" id="collapseMylistings">
                             <li>
-                                <Link to="/add_food"><i className="fa fa-fw fa-plus-circle" /> Add Food</Link>
+                                <Link to="/add_food"><i className="fa fa-fw fa-plus-circle" /> Aggiungi Piatto</Link>
                             </li>
                              <li>
-                                <Link to="/food_list"><i className="fa fa-fw fa-edit" /> Food List</Link>
+                                <Link to="/food_list"><i className="fa fa-fw fa-edit" /> Elenco Piatti</Link>
                             </li>
                             <li>
-                                <Link to="/add_menu"><i className="fa fa-fw fa-plus-circle" /> Add Menu</Link>
+                                <Link to="/add_menu"><i className="fa fa-fw fa-plus-circle" /> Aggiungi Categoria</Link>
                             </li>
                             <li>
-                                <Link to="/menu_list"><i className="fa fa-fw fa-edit" /> Menu List</Link>
+                                <Link to="/menu_list"><i className="fa fa-fw fa-edit" /> Elenco Categorie</Link>
                             </li>
                         </ul>
                         </li>
                         <li className="nav-item" data-toggle="tooltip" data-placement="right" title="My profile">
                         <Link className="nav-link" to="/call_log">
                             <i className="fa fa-fw fa-phone" />
-                            <span className="nav-link-text">Call Log</span>
+                            <span className="nav-link-text" style={{paddingLeft:'3%'}}>Call Log</span>
                         </Link>
                         </li>
                         <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Reviews">
                         <Link className="nav-link" to="/reviews">
                             <i className="fa fa-fw fa-star" />
-                            <span className="nav-link-text">Reviews</span>
+                            <span className="nav-link-text" style={{paddingLeft:'3%'}}>Recensioni</span>
                         </Link>
                         </li>
                         <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Subscription">
                         <Link className="nav-link" to="/subscription">
-                            <i className="fa fa-money" />
-                            <span className="nav-link-text">Subscription</span>
+                            <i className="fa fa-inbox" aria-hidden="true" />
+                            <span className="nav-link-text" style={{paddingLeft:'3%'}}>Iscrizione</span>
                         </Link>
                         </li>
                     </ul>
@@ -120,15 +94,14 @@ const logOut = () => {
                     </ul>
                     <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
-                    <a onClick={logOut} className="nav-link"><i className="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
+                        <i class="fas fa-sign-out-alt">
+                            <Logout_model />
+                        </i>
                     </li>
                 </ul>
             </div>
 
             </nav>
-        
-
-        </>
     )
 }
 

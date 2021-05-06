@@ -27,21 +27,37 @@ const Favorie_list = () => {
 const [data, setData] = useState();
 const columns = 
     [
-        { title: 'Cover', 
-          field: 'image',
-           render: rowData => <img src="img/item_1.jpg" width={80} height={80} alt="" />
-        },
-        { title: 'Name', field: 'name' },
-        { title: 'Address', field: 'address' },
-
+        { title: 'Immagine di copertina', field: 'image',
+           render: rowData =>{ 
+            const Housewife_name = rowData.name;  
+            const Housewife_image = rowData.image;  
+            return(
+              <>
+                <img src={Housewife_image} width={100} height={80} alt="" />
+                <span style={{marginLeft:'10%', fontSize: '25px'}}>{Housewife_name}</span>
+              </>
+            )
+          }
+        }, 
+        {title: 'Link', field: 'id',
+        render: rowData =>{ 
+            const Housewife_id = rowData.id;  
+            return(
+              <>
+                <Link to={`/housewife_details/${Housewife_id}`} style={{fontSize: '15px'}}>Mostra housewife</Link>
+              </>
+            )
+          }
+      }
+       
     ]
 
 
   return (
       <main data-spy="scroll" data-target="#secondary_nav" data-offset="75">
           <>
-            <div className="hero_in detail_page background-image" style={{backgroundImage : "url(img/hero_general.jpg)"}}>
-              <div className="wrapper opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+            <div className="hero_in detail_page background-image" style={{backgroundImage : "url(img/slides/slide_home_1.jpg)"}}>
+              <div className="wrapper opacity-mask" style={{backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
               </div>
             </div>
             {/*/hero_in*/}
@@ -66,11 +82,7 @@ const columns =
                           columns={columns}
                           data={data}
                             actions={[
-                                {
-                                  icon: 'edit',
-                                  tooltip: 'Edit User',
-                                  onClick: (event, rowData) => alert("You saved " + rowData.name)
-                                },
+                            
                                 rowData => ({
                                   icon: 'delete',
                                   tooltip: 'Delete User',

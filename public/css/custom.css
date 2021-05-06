@@ -181,3 +181,12 @@ element.style {
     height: 21%;
 }
 
+.add-fav-btn {
+    cursor: pointer;
+    display: inline-block;
+    background-color: white;
+    text-decoration: none;
+    width: 110px;
+    border-radius: 2px;
+  
+}

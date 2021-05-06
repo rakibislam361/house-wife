@@ -56,10 +56,10 @@ const Add_food = () => {
     }
     const schema = yup.object().shape({
         title_en: yup.string().required("Food name is reuired"),
-        country_food_id: yup.string(),
+        country_food_id: yup.string().required("Select any option"),
         description_en: yup.string(),
         status: yup.string(),
-        category_id: yup.string(),   
+        category_id: yup.string().required(),   
    
     });
 
@@ -79,15 +79,18 @@ const Add_food = () => {
 
     const onSubmit = (data) => {
     loader();
- 
-    var formdata = new FormData();
+
+        var formdata = new FormData();
         formdata.append('title_en', data.title_en);
         formdata.append('country_food_id', data.country_food_id);
         formdata.append('description_en', data.description_en);
         formdata.append('status', data.status);
         formdata.append('category_id', data.category_id); 
-        formdata.append('image', image, image.name);
-
+        if(image == ""){ 
+        }else{
+            formdata.append('image', image, image.name) 
+        }
+    
     var config = {
       method: "POST",
       url: `${packageJson.api_url}/api/housewife/food`,
@@ -146,18 +149,25 @@ const Add_food = () => {
                             <li className="breadcrumb-item">
                                 <Link to="/housewife_dashboard">Dashboard</Link>
                             </li>
-                            <li className="breadcrumb-item active">Add Food</li>
+                            <li className="breadcrumb-item active"> Aggiungi Piatto</li>
                         </ol>
                
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <div className="box_general padding_bottom">
-                                <div className="header_box version_2">
-                                    <h2><i className="fa fa-file" />Add Food</h2>
-                                </div>
+                            <div className="box_general padding_bottom">      
+                                 <div className="header_box version_2">
+                                        <h2>
+                                        <i className="fa fa-file" />
+                                           Aggiungi Piatto
+                                        </h2>
+                                        <h2 style={{float:'right'}}>
+                                        <i className="fa fa-edit" />
+                                           <Link  to="/food_list">Elenco Piatti</Link>
+                                        </h2>
+                                    </div>
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
-                                        <label>Food Name*</label>
+                                        <label>Nome</label>
                                             <input type="text" 
                                             className="form-control"
                                             name="title_en"
@@ -175,29 +185,30 @@ const Add_food = () => {
                                 <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                    <label>Country Food*</label>
+                                    <label>Tipo di Piatto</label>
                                         <div className="styled-select">
                                             <select 
                                             ref={register}
                                             name="country_food_id"
                                             >  
-                                                <option selected defaultValue="DEFAULT" disabled>Select Country Food</option>                                            
+                                                <option defaultValue="DEFAULT" disabled>Select Country Food</option>                                            
                                                 {contryfood ? contryfood.map((contry) => (
-                                                    <option key={contry.id} value={contry.id}>{contry.country_en}</option>
+                                                    <option selected  key={contry.id} value={contry.id}>{contry.country_en}</option>
                                                 )): ""}
 
                                             </select>
                                         </div>
+            
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                    <label>Category*</label>
+                                    <label>Categoria</label>
                                         <div className="styled-select">
                                             <select name="category_id" ref={register}>
-                                                <option selected defaultValue="DEFAULT" disabled>Select Category</option>                                            
+                                                <option defaultValue="DEFAULT" disabled>Select Category</option>                                            
                                                 {foodcategory ? foodcategory.map((category) => (
-                                                    <option key={category.id} value={category.id}>{category.title_en}</option>
+                                                    <option selected key={category.id} value={category.id}>{category.title_en}</option>
                                                 )): ""}
                                             </select>
                                         </div>
@@ -208,7 +219,7 @@ const Add_food = () => {
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
-                                        <label>Description</label>
+                                        <label>Descrizione</label>
                                             <textarea  
                                                 className="form-control" 
                                                 rows="4" cols="50"
@@ -223,7 +234,7 @@ const Add_food = () => {
                                 <div className="row">
                                 <div className="col-md-6 col-sm-12">
                                     <div className="form-group">
-                                        <label>Photos*</label>               
+                                        <label>Immagine</label>               
                                         <input accept="image/*"
                                             type="file"
                                             className="form-control" 
@@ -243,14 +254,14 @@ const Add_food = () => {
                                         <label>Status*</label>
                                             <div className="styled-select">
                                                 <select name="status" ref={register}>
-                                                    <option Value={1}>Active</option>{/* Attivo */}
-                                                    <option Value={2}>Inactive</option>{/* Disattivo */}
+                                                    <option value={1}>Active</option>{/* Attivo */}
+                                                    <option value={2}>Inactive</option>{/* Disattivo */}
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <p><button type="submit" className="btn_1 medium mt-3">Save</button></p>
+                                <p><button type="submit" className="btn_1 medium mt-3">Salva</button></p>
 
                             </div>
                         </form>

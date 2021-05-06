@@ -100,8 +100,12 @@ const Add_menu = () => {
                                     <div className="box_general padding_bottom">
                                     <div className="header_box version_2">
                                         <h2>
-                                        <i className="fa fa-lock" />
+                                        <i className="fa fa-file" />
                                             Add menu
+                                        </h2>
+                                        <h2 style={{float:'right'}}>
+                                        <i className="fa fa-edit" />
+                                           <Link to="/menu_list">Elenco Categorie</Link>
                                         </h2>
                                     </div>
                                     <div className="row">

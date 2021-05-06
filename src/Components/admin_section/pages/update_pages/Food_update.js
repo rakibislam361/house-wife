@@ -9,17 +9,33 @@ import Side_nav from '../../body_parts/Side_nav'
 import Admin_Footer from '../../body_parts/Footer'
 import { withRouter } from 'react-router'
 import PropagateLoader from "react-spinners/PropagateLoader"
-import {Link} from 'react-router-dom'
+import {Link, useHistory } from 'react-router-dom'
 import packageJson from '../../../../../package.json';
 
 
 const Food_update = () => {
+    
     const [loading, setLoading] = useState(true);
     const token = localStorage.getItem("token");
     const [contryfood, setCountryfood] = useState([]);
     const [foodcategory, setFoodcategory] = useState([]);
+    const food = sessionStorage.getItem("food")
+    const [editFood, setFoodEdit] = useState()
+    const history = useHistory()
 
-    
+    useEffect(() => {
+        try {
+          async function load() {
+            const response = await axios.get(`${packageJson.api_url}/api/housewife/food/${food}/edit?token=${token}`);
+            const data = await response;
+            setFoodEdit(data.data.food)              
+        }
+        load() 
+
+        }catch (error) {}
+
+    }, [])
+
     useEffect(() => {
         try {
           async function load() {
@@ -28,8 +44,7 @@ const Food_update = () => {
             setCountryfood(data.data.country_foods)              
         }
         load() 
-        }catch (error) {
-      }
+        }catch (error) {}
 
     }, [])
 
@@ -47,13 +62,12 @@ const Food_update = () => {
 
     }, [])
     
-
     const loader =() =>{
       if(!loading){
           setLoading(true)
-      }
-      
+      }  
     }
+
     const schema = yup.object().shape({
         title_en: yup.string().required("Food name is reuired"),
         country_food_id: yup.string(),
@@ -67,7 +81,8 @@ const Food_update = () => {
         resolver: yupResolver(schema),
     });
     
-    const [image, setImage] =useState([])
+    const [image, setImage] = useState(null)
+    
     const handleChange = (e) => {
         if (e.target.name === "image") {
             setImage(
@@ -75,7 +90,6 @@ const Food_update = () => {
             );
         }
     };
-
 
     const onSubmit = (data) => {
     loader();
@@ -86,11 +100,13 @@ const Food_update = () => {
     formdata.append('description_en', data.description_en);
     formdata.append('status', data.status);
     formdata.append('category_id', data.category_id); 
-    formdata.append('image', image, image.name);
-
+    if(image == null){ 
+    }else{
+        formdata.append('image', image, image.name) 
+    }
     var config = {
       method: "POST",
-      url: `${packageJson.api_url}/api/housewife/food`,
+      url: `${packageJson.api_url}/api/housewife/food/update/${food}`,
       data: formdata,
       headers: {
         Authorization: `Basic ${token}`,
@@ -109,7 +125,12 @@ const Food_update = () => {
           draggable: true,
           progress: undefined,
         });
-         {response ? setLoading(false) : setLoading(true)}
+
+        if(response.data.message){
+            sessionStorage.setItem('food', null)
+            history.push('/food_list')
+            setLoading(false) 
+        }
       })
         
       .catch((error) => {
@@ -126,7 +147,6 @@ const Food_update = () => {
       });
     };
 
-
     return (
           <body className="fixed-nav sticky-footer" id="page-top">
             <Side_nav />
@@ -139,7 +159,7 @@ const Food_update = () => {
                                 </div>
                             </div>
                         </div>
-                 : contryfood && foodcategory ?
+                 : contryfood && foodcategory && editFood ?
 
                     <div className="container-fluid">
                         <ol className="breadcrumb">
@@ -161,6 +181,7 @@ const Food_update = () => {
                                             <input type="text" 
                                             className="form-control"
                                             name="title_en"
+                                            defaultValue={editFood.title_en}
                                             ref={register}
                                             placeholder="Name of the dish" />
                                             {errors.title_en && (
@@ -180,10 +201,9 @@ const Food_update = () => {
                                             <select 
                                             ref={register}
                                             name="country_food_id"
-                                            >  
-                                                <option selected defaultValue="DEFAULT" disabled>Select Country Food</option>                                            
+                                            >                                              
                                                 {contryfood ? contryfood.map((contry) => (
-                                                    <option key={contry.id} value={contry.id}>{contry.country_en}</option>
+                                                    <option selected={editFood.country_food_id ? true : false} key={contry.id} value={contry.id}>{contry.country_en}</option>
                                                 )): ""}
 
                                             </select>
@@ -192,12 +212,11 @@ const Food_update = () => {
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                    <label>Category*</label>
+                                    <label>Category* </label>
                                         <div className="styled-select">
                                             <select name="category_id" ref={register}>
-                                                <option selected defaultValue="DEFAULT" disabled>Select Category</option>                                            
                                                 {foodcategory ? foodcategory.map((category) => (
-                                                    <option key={category.id} value={category.id}>{category.title_en}</option>
+                                                    <option selected={editFood.category_id ? true : false} key={category.id} value={category.id}>{category.title_en}</option>
                                                 )): ""}
                                             </select>
                                         </div>
@@ -213,6 +232,7 @@ const Food_update = () => {
                                                 className="form-control" 
                                                 rows="4" cols="50"
                                                 name="description_en"
+                                                defaultValue={editFood.description_en}
                                                 ref={register}
                                                 >
                                             </textarea>
@@ -221,38 +241,44 @@ const Food_update = () => {
                                 </div>
                                 {/* /row*/}
                                 <div className="row">
-                                <div className="col-md-6 col-sm-12">
-                                    <div className="form-group">
-                                        <label>Photos*</label>               
-                                        <input accept="image/*"
-                                            type="file" 
-                                            name="image" 
-                                            className="form-control"
-                                            multiple 
-                                            ref={register} 
-                                            onChange={handleChange}
-                                        />  
-                                    </div>
-                                </div>
-                                </div>
-                                {/* /row*/}
-        
-                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="form-group">
+                                            <label>Food Image*</label>     
+                                        </div>
+                            
+                                            <div className="dropzone">
+                                                {image !== null ?  
+                                                    <img style={{minHeight: '180px', maxHeight: '180px', width:"100%"}} src={URL.createObjectURL(image)}/> 
+                                                :
+                                                <img style={{minHeight: '180px', maxHeight: '180px', width:"100%"}} src={editFood.image}/> 
+                                                }
+                                            </div>
+                                         
+                                            <div className="form-group">          
+                                                <input accept="image/*"
+                                                    type="file" 
+                                                    name="image" 
+                                                    className="form-control"
+                                                    multiple 
+                                                    ref={register} 
+                                                    onChange={handleChange}
+                                                />  
+                                            </div>
+                                        </div>
                                     <div className="col-md-6">
                                         <div className="form-group">
                                         <label>Status*</label>
                                             <div className="styled-select">
                                                 <select name="status" ref={register}>
-                                                    <option Value={1}>Active</option>{/* Attivo */}
-                                                    <option Value={2}>Inactive</option>{/* Disattivo */}
+                                                    <option selected={editFood.status==1 ? true : false} value={1}>Active</option>{/* Attivo */}
+                                                    <option selected={editFood.status==2 ? true : false} value={2}>Inactive</option>{/* Disattivo */}
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                {/* /row*/}
+                                 <p><button type="submit" className="col-md-12 btn_1 mt-3">Save</button></p>
                             </div>
-                            <p><button type="submit" className="btn_1 medium">Save</button></p>
                         </form>
          
                     </div>        

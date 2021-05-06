@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useStateValue } from '../StateProvider';
 import { Collapse } from 'react-bootstrap';
 import packageJson from './../../../package.json';
+import LoginModel from './LoginModel'
 
 
 
@@ -23,7 +24,11 @@ const Listing_header = () => {
     const [{header}, dispatch] = useStateValue();
     const [openmenu, setOpen] = useState(null);
 
-  const handleClick = (event) => {
+    const data = localStorage.getItem('settings')
+    const data_pars = JSON.parse(data)
+    const logo = data_pars.header_logo
+  
+    const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -32,6 +37,10 @@ const Listing_header = () => {
   };
 
   const logOut = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('user_info');
+        localStorage.removeItem('id');
     try {      
         const response = axios.post(`${packageJson.api_url}/api/auth/logout?token=`+user_token)
         .then(response=>{
@@ -44,11 +53,7 @@ const Listing_header = () => {
                 draggable: true,
                 progress: undefined,
                 });
-            // the user is logged out
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('user_info');
-            localStorage.removeItem('id');
+       
             histry.push('/');
             setAnchorEl(null);
         })
@@ -59,18 +64,17 @@ const Listing_header = () => {
     return (
 
         <header className="header_in clearfix">
-        
          <div className="container">
           <div id="logo">
             <Link to="/" > 
-              <img src="img/logo.png" width={131} height={60} alt="" className="logo_sticky" />
+              <img src={logo} width={131} height={60} alt="" className="logo_sticky" />
             </Link>
           </div>
           <div className="layer" />{/* Opacity Mask Menu Mobile */}
           <ul id="top_menu">
                { !user_token 
                ?
-                   <li><Signin_model_form /></li>
+                   <li><Signin_model_form classname={"login"} /></li>
                :
                    <li aria-haspopup="true" onClick={handleClick}><a className="login">Login</a></li>
                }
@@ -92,8 +96,14 @@ const Listing_header = () => {
                     
                        <MenuItem onClick={logOut}>Logout</MenuItem>
                    </Menu>
-
-               <li><Link to="/favorite_lists" className="wishlist_bt_top" title="Your wishlist">Preferiti</Link></li>
+                    
+                    {user_token 
+                        ?
+                            <li><Link to="/favorite_lists" className="wishlist_bt_top" title="Your wishlist">Preferiti</Link></li>
+                        :
+                            <li><Signin_model_form classname={"wishlist_bt_top"}/></li>
+                        }
+               
            </ul>
           {/* /top_menu */}
 

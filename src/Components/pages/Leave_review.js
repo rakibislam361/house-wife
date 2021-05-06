@@ -14,26 +14,9 @@ import packageJson from './../../../package.json';
 
 const Leave_review = () => {
   const token = localStorage.getItem("token");
-  const housewife_id = sessionStorage.getItem('housewife_id')
+  const housewife_id = window.location.pathname.split('/')[2];
   const user_id = localStorage.getItem("id");
-  const [housewife_name, setHousewifeName] = useState(); 
-  
-  useEffect(() => {
-    try {
-          async function load() {
-          const response = await axios.get(`${packageJson.api_url}/api/housewife/show/`+housewife_id);
-          const data = await response;     
-          setHousewifeName(data.data.housewife)
-          setLoading(false)             
-      }
-      load()  
-      
-    } catch (error) {
-    }
-
-  },[]);
-  
-  
+ 
   const schema = yup.object().shape({
     service: yup.string(),
     quality: yup.string(),
@@ -41,14 +24,17 @@ const Leave_review = () => {
     punctuality: yup.string(),
     user_id:yup.string().required(),
     housewife_id:yup.string()
-  
   });
+
+
   const [loading, setLoading] = useState(false);
+  
   const loader = () =>{
       if(!loading){
       setLoading(true)
       }    
   }
+
   const { register, handleSubmit, errors, reset } = useForm({  
     resolver:yupResolver(schema),
   }); 
@@ -96,51 +82,65 @@ const Leave_review = () => {
             <div className="container margin_60_20">
               <div className="row justify-content-center">
                 <div className="col-lg-8">
-                  {!housewife_name || loading 
+                  {loading
                     ? 
                       <div className="loading-spiner">
-                          <div className="col-sm-12 col-md-4 col-xl-3">
                           <PropagateLoader  color="#f74f07" loading={loading} size={15} />
-                          </div>
                       </div>                      
                     :
                       <form onSubmit={handleSubmit(onSubmit)}> 
                       <div className="box_general write_review">
-                      <h1 className="add_bottom_15">{housewife_name.name}</h1>
+                      <h1 className="add_bottom_15">
+                        </h1>
                       <label className="d-block add_bottom_15">Valutazione complessiva</label>
                       <div className="row">
                         <div className="col-md-3 add_bottom_25">
                           <div className="add_bottom_15">Qualità del cibo<strong className="food_quality_val" /></div>
                           <input 
-                          className="rangeslider" ref={register} type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="food_quality" name="quality" />
+                          className="rangeslider" 
+                          ref={register} 
+                          type="range" min={0} max={10} step={1} 
+                          defaultValue={0} data-orientation="horizontal" 
+                          id="food_quality" name="quality"
+                          
+                          />
                         </div>
                         <div className="col-md-3 add_bottom_25">
                           <div className="add_bottom_15">Servizio <strong className="service_val" /></div>
-                          <input className="rangeslider" ref={register} type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="service" name="service" />
+                          <input className="rangeslider" 
+                          ref={register} type="range" min={0}
+                           max={10} step={1} defaultValue={0} 
+                           data-orientation="horizontal" id="service" name="service" />
                         </div>
                         <div className="col-md-3 add_bottom_25">
                           <div className="add_bottom_15">Puntualità <strong className="location_val" /></div>
-                          <input className="rangeslider" ref={register} type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="location" name="punctuality" />
+                          <input className="rangeslider" 
+                          ref={register} type="range" min={0} 
+                          max={10} step={1} defaultValue={0} 
+                          data-orientation="horizontal" id="location" name="punctuality" />
                         </div>
                         <div className="col-md-3 add_bottom_25">
                           <div className="add_bottom_15">Prezzo <strong className="price_val" /></div>
-                          <input className="rangeslider" ref={register} type="range" min={0} max={10} step={1} defaultValue={0} data-orientation="horizontal" id="price" name="price" />
-                          <input className="rangeslider" ref={register} type="hidden" name="housewife_id" value={housewife_id} />
+                          <input className="rangeslider" 
+                          ref={register} type="range" min={0} max={10}
+                           step={1} defaultValue={0} data-orientation="horizontal"
+                            id="price" name="price" />
+                          <input className="rangeslider" ref={register}
+                           type="hidden" name="housewife_id" value={housewife_id} />
                           <input ref={register} type="hidden" name="user_id" value={user_id} />
                         </div>
                       </div>
                         <div className="col-md-3 add_bottom_25">
-                      {!token?
-                        <LoginModel name={"SUBMIT"} secondButton="REGISTRATI COME UTENTE" user_type={1} />
-                        :
-                        <button type="submit" className="btn_1">Invia recensione</button>
-                      }
-
+                          {!token?
+                            <LoginModel classname={"btn_1 gradient full-width mb_5"} name={"SUBMIT"} secondButton="REGISTRATI COME UTENTE" user_type={1} />
+                            :
+                            <button type="submit" className="btn_1">Invia recensione</button>
+                          }
                         </div>
                     </div>
                     </form>
-                  }
-                    <span><Link to="/housewife_details"> 🡨 Back to the page. </Link></span>
+                    }
+                    <span><Link to={`/housewife_details/${housewife_id}`}> 🡨 Back to the page. </Link></span>
                   </div>
               </div>
               {/* /row */}

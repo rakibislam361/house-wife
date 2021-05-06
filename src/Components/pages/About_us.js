@@ -1,4 +1,4 @@
-import React, {useState} from 'react' 
+import React, {useState,useEffect} from 'react' 
 import { Link, useHistory } from "react-router-dom"
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,68 +14,105 @@ import packageJson from './../../../package.json';
 
 toast.configure();
 const About_us = () => {
-  
+  const [loading, setLoading] = useState(false);
+  const HowToOrder = localStorage.getItem('about_us')
+  const about_settings = JSON.parse(HowToOrder)
+  const [settingsdata, setData ] = useState()
   const user_type = localStorage.getItem('user');
+  const histry = useHistory(); 
+
   const schema = yup.object().shape({
     name: yup.string().required(),
     email: yup.string().required().email(),
-    phone: yup.string().required(),
+    phone: yup.string().required().min(10),
     password: yup.string().required().min(6),
     type: yup.string(),
     password_confirmation: yup.string().required("confirm password is a required field").min(6) .oneOf([yup.ref('password'), null], 'Passwords does not match'),
 
   });
 
-const [loading, setLoading] = useState(false);
+  useEffect(() => {
+      try {
+          if (localStorage.getItem('about_us') !== ""){
+              fetch(`${packageJson.api_url}/api/settings/how-to-order`)
+              .then((response)=> response.json())
+              .then((data)=>{
+                  let how_to_order_order_data = data.how_to_order_settings
+                  let HowToOrderData = []
+                  if(how_to_order_order_data && how_to_order_order_data.length > 0){
+                      how_to_order_order_data.map((value)=>{
+                          if(value.type == "image"){
+                              HowToOrderData[value.meta_name] = value.image_path
+                          }else{
+                              HowToOrderData[value.meta_name] = value.meta_value
+                          }
+                      })
+                      localStorage.setItem('about_us', JSON.stringify(Object.assign({}, HowToOrderData)));
+                  }
+                  setData("val")
+              })
+          }
+      } catch (error) {}
+      
+  }, [settingsdata]);
 
-const loader = () =>{
-    if(!loading){
-    setLoading(true)
-    }    
-} 
+  const loader = () =>{
+      if(!loading){
+      setLoading(true)
+      }    
+  } 
 
-  const histry = useHistory(); 
+  const { register, handleSubmit, errors, reset } = useForm({  
+  resolver:yupResolver(schema),
+  }); 
 
-   const { register, handleSubmit, errors, reset } = useForm({  
-    resolver:yupResolver(schema),
-   }); 
+  const onSubmit = (data) =>{
+    loader();
+    const response = axios.post(`${packageJson.api_url}/api/auth/register`, data)
+    .then(response =>{
+      if(response.data.message){
+        var codeMessage = response.data.message;
+        toast.success(codeMessage,{
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            
+          });
+          histry.push('/login');
+          setLoading(false);
+          reset();
 
-    const onSubmit = (data) =>{
-      loader();
-      const response = axios.post(`${packageJson.api_url}/api/auth/register`, data)
-        .then(response =>{
-             toast.success(response.data.message,{
-              position: "bottom-left",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            }); histry.push('/login');
-            reset();
-          {response ? setLoading(false) : setLoading(true)}
+      }else{
+        let messageKey = Object.keys(response.data)[0];
+        let message = response.data;
+        var codeMessage = message[messageKey][0];
+        toast.error(codeMessage,{
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setLoading(false);
+      }  
+    })
+    
+    .catch(error => {
+      setLoading(false);
+    });
 
-        })
-        .catch(error => {
-            toast.error(error.message,{
-              position: "bottom-left",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          {error ? setLoading(false) : setLoading(true)}
-
-        });
-
-    }
+  } 
+   
     return (
       <main>
         <div className="hero_single inner_pages background-image" style={{backgroundImage : "url(img/access_bg.jpg)"}}>
-          <div className="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)">
+          <div className="opacity-mask" style={{backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
             <div className="container">
               <div className="row justify-content-center">
                 <div className="col-lg-10">
@@ -83,7 +120,7 @@ const loader = () =>{
                   <p>Trova la Casalinga, consulta il menu, e mettiti in contatto telefonicamente!</p>
                   {!user_type ? 
                     <div className="d-flex justify-content-center">
-                      <LoginModel name={"REGISTRATI ORA"} secondButton="REGISTRATI COME UTENTE" user_type={1} />
+                      <LoginModel classname={"btn_1 gradient full-width mb_5"} name={"REGISTRATI ORA"} secondButton="REGISTRATI COME UTENTE" user_type={1} />
                     </div>
                   : "" }
                 </div>
@@ -150,7 +187,8 @@ const loader = () =>{
             <div className="col-lg-5">
               <div className="text-center add_bottom_15">
                 <h4>MODULO DI REGISTRAZIONE</h4>
-                <p>Sfrutta i dati a disposizione per far crescere il tuo business. Monitora le richieste, controlla i tuoi progressi e attira nuovi clienti.</p>
+                <p>Registrati gratuitamente per accedere a In tavola food app. Dopo la registrazione potrai contattare
+                  tutte Ie casalinghe che vorrai, quando vorrai</p>
               </div>
               <div id="message-register" />
                   {loading ?
@@ -185,7 +223,7 @@ const loader = () =>{
                       placeholder="Email*" 
                       name="email" 
                       id="email_register"
-                      ref={register({ required: true })}/>
+                      ref={register}/>
                       {errors.email &&<span className="error_message">{errors.email.message}</span>}
                     </div>
                   </div>
@@ -214,7 +252,7 @@ const loader = () =>{
                       placeholder="Password*" 
                       name="password" 
                       id="password_register"
-                      ref={register({ required: true })} />
+                      ref={register} />
                       {errors.password && <span className="error_message">{errors.password.message}</span>}
                     </div>
                   </div>
@@ -228,7 +266,7 @@ const loader = () =>{
                       placeholder="Conferma Password*" 
                       name="password_confirmation" 
                       id="confir_password_register" 
-                      ref={register({ required: true })} />
+                      ref={register} />
                       {errors.password_confirmation && <span className="error_message">{errors.password_confirmation.message}</span>}
                       <input name="type" type="hidden" className="" defaultValue={1}  ref={register} />
                     </div>
@@ -239,7 +277,7 @@ const loader = () =>{
                 </div>
               </form>
             
-                  }</div>
+            }</div>
           </div>
         </div>
         : ""}

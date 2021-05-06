@@ -79,42 +79,46 @@ export default function TransitionsModal(props) {
     loader()
     const response = axios.post(`${packageJson.api_url}/api/auth/login`, data)
       .then(response =>{
-            toast.success(response.data.message,{
-            position: "bottom-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          
           if (response.data.message) {
-            {response ? setLoading(false) : setLoading(true)}
-              // the user just logged in / the user was logged in
+             toast.success(response.data.message,{
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+          
               localStorage.setItem('token', response.data.token);
               localStorage.setItem('id', response.data.user.id);
               localStorage.setItem('user', response.data.user_type);
+              
+              setLoading(false) 
               handleClose()
               dispatch({
                 type: "SET_USER",
                 user:  response.data.user.id,
               });
+              
           }else{
-             toast.error(response.data.error,{
-              position: "bottom-left",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+            let messageKey = Object.keys(response.data)[0];
+            let message = response.data;
+            var codeMessage = message[messageKey][0];
+            toast.error(codeMessage,{
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
             setLoading(false)
           }
       })
       .catch(error => {
-         
+            setLoading(false)
       });   
      }
   }
@@ -136,23 +140,41 @@ export default function TransitionsModal(props) {
     loader()
     const response = axios.post(`${packageJson.api_url}/api/auth/register`, data)
       .then(response =>{
-          toast.success(response.data.message,{
-          position: "bottom-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        reset();
-          {response ? setLoading(false) : setLoading(true)}
-          // the user just logged in / the user was logged in             
-          handleClose()
+          if(response.data.message){
+               toast.success(response.data.message,{
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+              reset();
+              setLoading(false)
+          }else{
+            let messageKey = Object.keys(response.data)[0];
+            let message = response.data;
+            var codeMessage = message[messageKey][0];
+            toast.error(codeMessage,{
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            setLoading(false)
+          }
+    
+        handleClose()
+          setLoading(false)
           dispatch({
             type: "SET_USER",
             user:  response.data.user.id,
           });
+         
       })
       .catch(error => {
       });
@@ -202,7 +224,8 @@ export default function TransitionsModal(props) {
 
   return (
     <div >
-      <a style={{color: 'white'}} className="btn_1 gradient full-width mb_5" onClick={handleOpen}>{props.name}</a>
+      <a style={{color: "white"}} className={props.classname} onClick={handleOpen}><i className={props.icon} /> {props.name}</a>
+      
       <Modal
         aria-labelledby="modal_header"
         aria-describedby="sign-in-dialog"
@@ -346,7 +369,7 @@ export default function TransitionsModal(props) {
 
                             </div> 
 
-                                <input name="type" type="hidden" defaultValue={props.user_type} ref={register} />
+                                <input name="type" type="hidden" value={props.user_type} ref={register} />
 
                                 <div className="clearfix ">
                                 <div className="checkboxes float-left">

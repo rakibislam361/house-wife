@@ -17,12 +17,53 @@ import packageJson from './../../../../package.json';
 toast.configure();
 const User_profile = () => {
 
-const token = localStorage.getItem("token");
-const [user, setUser] = useState();
-const [loading, setLoading] = useState(true);
-const [updateProfile, setUpdateProfile ] = useState();
- 
-useEffect(() => {
+  const token = localStorage.getItem("token");
+  const [user, setUser] = useState();
+  const [loading, setLoading] = useState(true);
+  const [updateProfile, setUpdateProfile ] = useState();
+  const [image, setImage] = useState()
+
+  const imageHandler = (event) => {
+    if (event.target.name === "image") {
+          setImage(
+                event.target.files[0],
+          );
+      }
+  }
+
+ const imageUpload = () =>{
+      const formData = new FormData();
+      formData.append("profile_image", image, image.name);
+
+      fetch(
+        `${packageJson.api_url}/api/profile/update`,
+        {
+          method: 'POST',
+          body: formData,
+           headers: {
+            Authorization: `Basic ${token}`,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          toast.success(result.message,{
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+
+        })
+        .catch((error) => {
+         
+        });
+
+    }
+  useEffect(() => {
       try {
             async function load() {
             const response = await axios.get(`${packageJson.api_url}/api/profile?token=`+token);
@@ -50,85 +91,9 @@ useEffect(() => {
 
   });
 
-
-  const [files, setFiles] = useState([]);
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*",
-    onDrop: (acceptedFiles) => {
-      setFiles(
-        acceptedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        )
-      );
-    },
-  });
-
-
-  const images = files.map((file) => (
-    <div key={file.name}>
-      <div>
-        <img className="dropzone-image" src={file.preview} alt="preview" />
-      </div>
-    </div>
-  ));
-
   const { register, handleSubmit, control, errors } = useForm({
     resolver: yupResolver(schema),
   });
-
-  const [img, setImg] = useState()
-  
-  const submit = (e) =>{
-    e.preventDefault()
-    if(files !== "") {
-       files.map((file) =>
-         setImg(file)
-       )
-           
-    } 
-    
-    var formdata = new FormData();
-    formdata.append('image[]', img);
-    console.log(formdata)
-
-    loader();
-    setUpdateProfile("value")
-    var config = {
-      method: "POST",
-      url: `${packageJson.api_url}/api/profile/update`,
-      data: img,
-      headers: {
-        Authorization: `Basic ${token}`,
-      },
-    };
-    axios(config)
-      .then((response) => {
-        toast.success(response.data.message, {
-          position: "bottom-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        {response ? setLoading(false) : setLoading(true)}
-      })
-      .catch((error) => {
-        toast.error(error.message, {
-          position: "bottom-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setLoading(false)
-      });
-  }
 
   const onSubmit = (data) => {
     loader();
@@ -197,44 +162,28 @@ useEffect(() => {
                     </div>
                  : 
                    <div className="row">
-                    <div className="col-md-4">
-                        <form onSubmit={submit}>
-                            <div className="form-group">
-                              <label>Your cover photo</label>
-                            </div>
-                            <div className="dropzone">
-                              <Controller
-                                name="profile_image"
-                                control={control}
-                                render={({ onChange }) => (
-                                  <div {...getRootProps()}>
-                                    <input {...getInputProps({ onChange })} />
-                                    <div className="dz-dropzone">
-                                      <label
-                                        onChange={onChange}
-                                        className={
-                                          images.length > 0
-                                            ? "dropzone-image"
-                                            : "dropzone-label"
-                                        }
-                                      >
-                                        {images.length > 0
-                                          ? images
-                                          : "Drop files here to upload"}
-                                      </label>
-                                    </div>
-                                  </div>
-                                )}
-                              />
-                            </div>
-                            <div className="form-group">
-                              <button type="submit" className="form-control btn btn-light">Upoload Image</button>
+                      <div className="col-md-4">
+                          <div className="form-group">
+                            <label>Your cover photo</label>
                           </div>
-                        </form>
-                      </div>
+                          {console.log(user.data.user.image_path)}
+                              <div className="dropzone">
+                                {image ? 
+                                <img style={{minHeight: '180px', maxHeight: '180px', width:"100%"}} src={URL.createObjectURL(image)}/> 
+                                :
+                                <img style={{minHeight: '180px', maxHeight: '180px', width:"100%"}} src={user.data.user.image_path}/> 
+                                }
+                              </div>
+                            <form>
+                              <div className="form-group">
+                                  <input className="form-control" defaultValue={image} type="file" name="image" onChange={imageHandler} multiple />    
+                                  <input type="button" onClick={imageUpload} className="form-control btn btn-light mt-2" value="Image Upload" />
+                              </div>
+                            </form> 
+                        </div>
                       
                     <div className="col-md-8 add_top_30">
-                      <form method="post" onSubmit={handleSubmit(onSubmit)}>
+                      <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="row">
                         <div className="col-md-12">
                           <div className="form-group">
@@ -314,29 +263,34 @@ useEffect(() => {
             </div>
             
             {/* /box_general*/}
-            <div className="row">
-              <div className="col-md-6">
-                <div className="box_general padding_bottom">
-                  <div className="header_box version_2">
-                    <h2><i className="fa fa-lock" />Change password</h2>
-                  </div>
-                  <div className="form-group">
-                    <label>Old password</label>
-                    <input className="form-control" type="password" />
-                  </div>
-                  <div className="form-group">
-                    <label>New password</label>
-                    <input className="form-control" type="password" />
-                  </div>
-                  <div className="form-group">
-                    <label>Confirm new password</label>
-                    <input className="form-control" type="password" />
+             <div className="row">
+                  <div className="col-md-6">
+                    <div className="box_general padding_bottom">
+                      <div className="header_box version_2">
+                        <h2>
+                          <i className="fa fa-lock" />
+                          Cambia password
+                        </h2>
+                      </div>
+                      <div className="form-group">
+                        <label>Vecchia password</label>
+                        <input className="form-control" type="password" />
+                      </div>
+                      <div className="form-group">
+                        <label>Nuova password</label>
+                        <input className="form-control" type="password" />
+                      </div>
+                      <div className="form-group">
+                        <label>Conferma nuova password</label>
+                        <input className="form-control" type="password" />
+                      </div>
+                        <p><a href="#0" className="btn_1 medium mt-2">Salva</a></p>
+
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+
             {/* /row*/}
-            <p><a href="#0" className="btn_1 medium">Save</a></p>
           </div>
           {/* /.container-fluid*/}
         </div>

@@ -20,7 +20,7 @@ const Subscription = () => {
           async function load() {
             const response = await axios.get(`${packageJson.api_url}/api/package/order?token=`+token);
             const data = await response;
-            setData(data.data.package)
+            setData(data.data.packages)
             setLoading(false)             
         }
         load()  
@@ -29,21 +29,25 @@ const Subscription = () => {
     },[]);
 
 
-console.log(data)
-
 const columns = 
     [
-        { title: 'Type', field: 'title_it' },
-        { title: 'Euro', field: 'price' },
-        { title: 'Date', field: 'created_at',
+        { title: 'Package', field: 'package_name' },
+        { title: 'Date', field: 'start_date',
             render: rowData =>{
-              const date = moment(rowData.created_at).format('LL')
+              const date = moment(rowData.start_date).format('LL')
               return(
                 date
               )
             }   
         },
-        { title: 'Deadline', field: ''},
+        { title: 'Deadline', field: 'end_date',
+             render: rowData =>{
+              const date = moment(rowData.end_date).format('LL')
+              return(
+                date
+              )
+            }     
+        },
         { title: 'Status', field: 'status',
             render: rowData => {
                 return(
@@ -54,7 +58,6 @@ const columns =
         },
         { title: 'Payment', field: 'payment_method'},  
     ]
-
     
     return (
             <body className="fixed-nav sticky-footer" id="page-top">
@@ -73,22 +76,25 @@ const columns =
                             <div className="card-body">
                                 <div className="table-responsive">
                                       <MaterialTable
-                                            title="Menu List"
+                                            title="Subscription details"
                                             columns={columns}
                                             data={data}
-                                                actions={[
-                                                    {
-                                                    icon: 'edit',
-                                                    tooltip: 'Edit menu',
-                                                    onClick: (event, rowData) =>{
-                                                        
-                                                    }                                          
-                                                    },
-                                                
-                                                ]}
+                                            actions={[
+                                                rowData => ({
+                                                icon: 'upgrade',
+                                                tooltip: 'Upgrade Plan',
+                                                onClick: (event, rowData) => alert("You want to delete " + rowData.name),
+                                                }),
+                                                rowData => ({
+                                                icon: 'info',
+                                                tooltip: 'package details',
+                                                onClick: (event, rowData) => alert("You want to delete " + rowData.name),
+                                                })
+                                            ]}
                                                 options={{
-                                                actionsColumnIndex: -1,    
-                                            }}                           
+                                                actionsColumnIndex: -1,
+                                               
+                                                }}                      
                                         />
                                 </div>
                             </div>

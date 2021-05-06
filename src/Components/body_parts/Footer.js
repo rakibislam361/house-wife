@@ -114,12 +114,12 @@ const Footer = () => {
                     <div className="col-lg-6">
                     <ul className="footer-selector clearfix">
                         <li>
-                        <div className="styled-select lang-selector">
+                        {/* <div className="styled-select lang-selector">
                             <select>
                                 <option defaultValue="Italiano" >Italiano</option>
                                 <option defaultValue="English" select="true">English</option>
                             </select>
-                        </div>
+                        </div> */}
                         </li>
                       </ul>
                     </div>

@@ -21,7 +21,7 @@ const MembershipPlan = ({index, id,month,title,price,profile_gallery, dsc }) => 
         <>
             <div className={index==1 ? "plan plan-tall col-md-4" : "plan col-md-4" }>
                 <div className="plan-title">
-                    <h3>{month}</h3>
+                    <h3>{month} Month</h3>
                     <p>{title}</p>
                 </div>
                 <p className="plan-price">€ {price}</p>

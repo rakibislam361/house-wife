@@ -1,34 +1,66 @@
 import React,{useState, useEffect} from 'react'
-import { Link } from "react-router-dom";
-import Searchbox from './Searchbox';
+import { Link, useHistory } from "react-router-dom";
 import PuffLoader from "react-spinners/PuffLoader"
 import Slider from "react-slick";
 import packageJson from './../../../package.json';
-
+import { useForm } from 'react-hook-form';
 
 
 const Home = () => {
+
   const [confood, setConFood] = useState();
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
   const [housewife, setHousewife] = useState([]);
-
   const data = localStorage.getItem('settings')
   const data_pars= JSON.parse(data)
-
   const top_banner = data_pars.top_banner;
+  const history = useHistory();
+  const { register, handleSubmit } = useForm(); 
+  const [settingsdata, setData ] = useState()
+  const contact = localStorage.getItem('contact')
+
+  const onSubmit = (data) =>{
+    const dataVal = data.item.toString()
+    history.push(`/housewife_list/${dataVal}`)       
+  }
 
   const handleSelect = (selectedIndex, e) => {
       setIndex(selectedIndex);
   };
 
   useEffect(() => {
-      try {
-        fetch(`${packageJson.api_url}/api/index`)
-        .then((response)=> response.json())
-        .then((data)=> setConFood(data.country_foods))
-      } catch (error) {}  
-    }, []) 
+    try {
+         if (localStorage.getItem('contact') !== ""){
+            fetch(`${packageJson.api_url}/api/settings/contact`)
+            .then((response)=> response.json())
+            .then((data)=>{
+                let contact_data = data.contact_settings
+                let contactData = []
+                if(contact_data && contact_data.length > 0){
+                    contact_data.map((value)=>{
+                        if(value.type == "image"){
+                            contactData[value.meta_name] = value.image_path
+                        }else{
+                            contactData[value.meta_name] = value.meta_value
+                        }
+                    })
+                    localStorage.setItem('contact', JSON.stringify(Object.assign({}, contactData)));
+                }
+                setData("val")
+            })
+        }
+    } catch (error) {}
+     
+  }, [settingsdata]);
+
+  useEffect(() => {
+    try {
+      fetch(`${packageJson.api_url}/api/index`)
+      .then((response)=> response.json())
+      .then((data)=> setConFood(data.country_foods))
+    } catch (error) {}  
+  }, []) 
 
   useEffect(() => {     
       try {
@@ -36,24 +68,12 @@ const Home = () => {
         .then((response)=> response.json())
         .then((data)=> setHousewife(data.housewives))     
       } catch (error) {}
-  }, [])
-    
-  let HouseWife_image = ['menu_item_large_1.jpg',
-     'menu_item_large_4.jpg','location_3.jpg','location_4.jpg'
-     ,'location_7.jpg','location_8.jpg','location_9.jpg','location_10.jpg',
-    'location_11.jpg','location_12.jpg','location_list_1.jpg','location_list_2.jpg','location_list_3.jpg','location_list_4.jpg']
-   
-  const openCard = (event) => {
-    sessionStorage.setItem('ctfood',event.currentTarget.dataset.id)   
-  }; 
+  }, [])  
 
-  const setID= (event) => {
-    sessionStorage.setItem('housewife_id',event.currentTarget.dataset.id)   
-  };
-   
   const removeHwsID =() =>{
     sessionStorage.removeItem('ctfood');   
   }
+
   const settings = {
       dots: true,
       autoplay: true,
@@ -93,9 +113,9 @@ const Home = () => {
         }
     
       ]
-    };
+  };
 
-    var setting = {
+  var setting = {
     dots: true,
     infinite: true,
     speed: 1500,
@@ -132,15 +152,32 @@ const Home = () => {
         <main> 
           
             <div className="hero_single version_2" style={top_banner ? {background: `#faf3cc url(${data_pars.top_banner}) center center no-repeat`} : ""}>
-              <div className="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)">
+              <div className="opacity-mask" style={{backgroundColor: 'rgba(0, 0, 0, 0.6)'}} >
                 <div className="container">
                   <div className="row justify-content-lg-start justify-content-md-center">
                     <div className="col-xl-7 col-lg-8">
                       <h1 style={{color: 'red!importnt' }}>In Tavola The Food App</h1>
-                      <p>La cucina casalinga dove e quando vuoi</p>
-                      
-                      <Searchbox btn_class="btn_1 gradient" name="Cerca" />
-
+                      <p>La cucina casalinga dove e quando vuoi</p>  
+                          <form onSubmit={handleSubmit(onSubmit)}> 
+                              <div className="row no-gutters custom-search-input">
+                                <div className="col-lg-10">
+                                    <div className="form-group">
+                                        <input
+                                        className="form-control no_border_r" 
+                                        type="text" 
+                                        id="autocomplete"
+                                        ref={register}
+                                        name="item"
+                                        placeholder="Cosa o dove vuoi mangiare?" 
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <div className="col-lg-2">
+                                    <button className="btn_1 gradient" type="submit">Cerca</button>
+                                </div>    
+                            </div>
+                          </form>
                     </div>
                   </div>
                 </div>
@@ -148,7 +185,7 @@ const Home = () => {
               <div className="wave hero" />
             </div>
               {!confood ? 
-                <div className="bg_gray">
+                <div className="">
                   <div className="container margin_60">
                     <div className="main_title center">
                       <span><em /></span>
@@ -162,7 +199,7 @@ const Home = () => {
                 </div>
               :
               <>   
-                <div className="bg_gray">
+                <div className="">
                   <div className="container margin_60">
                     <div className="main_title center">
                       <span><em /></span>
@@ -175,9 +212,9 @@ const Home = () => {
                             <div className="row" key={index}> 
                               <div className="col-12">   
                                 <div className="item_version_2">
-                                  <Link onClick={openCard} data-id={food.id} to="/housewife_list">
+                                  <Link data-id={food.id} to={`/housewife_list/${food.id}`}>
                                     <figure>
-                                      <span>{index}</span>
+                                      {/* <span>{index}</span> */}
                                       <img src={food.cover} data-src={food.cover} alt="" className="owl-lazy" />
                                       <div className="info">
                                         <small>Piatti</small>
@@ -195,7 +232,7 @@ const Home = () => {
                   </div>
                   {/* /container */}
                 </div>
-                {/* /bg_gray */}
+                {/* / */}
                 <div className="bg_gray">
                   <div className="container margin_60 display-flex">
                     <div className="main_title">
@@ -209,7 +246,7 @@ const Home = () => {
                         <div className="item" key={index}>
                           <div className="strip col-12">
                             <figure>
-                                <img src={`img/${HouseWife_image[index]}`} data-src={`img/${HouseWife_image[index]}`} alt="" className="owl-lazy" />
+                                <img src={single_housewife.image} data-src={single_housewife.image} alt="" className="owl-lazy" />
                               <Link to={`/housewife_details/${single_housewife.id}`} className="strip_info">
                                 <small>{single_housewife.city}</small>
                                 <div className="item_title">

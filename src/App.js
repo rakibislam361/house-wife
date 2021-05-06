@@ -27,7 +27,6 @@ import ProtectedRoute from './Components/ProtectedRoute'
 import User_subscription from './Components/admin_section/user_pages/User_subscription'
 import ThankyouPage from './Components/pages/ThankyouPage';
 import Listing_research from './Components/pages/Listing_research';
-import Housewife_search_list from './Components/pages/Housewife_search_list';
 import User_call_log from './Components/admin_section/user_pages/User_call_log';
 import User_bookmarks from './Components/admin_section/user_pages/User_bookmarks';
 import Add_menu from './Components/admin_section/pages/Add_menu';
@@ -56,11 +55,10 @@ useEffect(() => {
         }else{
             setIsAuth(true);
         }
-    } catch (error) {
-        
-    }
+    } catch (error) {}
      
 }, [isAuth]);
+
 
 useEffect(() => {     
       try {
@@ -97,7 +95,7 @@ useEffect(() => {
 
     return (
         <Router>
-            {settings !== null
+            {settings !== null 
             ?
                 <div className="App">
                     <Switch>
@@ -152,11 +150,6 @@ useEffect(() => {
                         <Route path="/housewife_list">
                             <Listing_header />
                             <Listing_research />
-                            <Footer />
-                        </Route>
-                        <Route path="/housewife_search_list">
-                            <Listing_header />
-                            <Housewife_search_list />
                             <Footer />
                         </Route>
                         <Route path="/housewife_details">

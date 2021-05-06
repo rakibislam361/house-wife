@@ -32,7 +32,7 @@ const columns =
                 return(
                     <div style={{display: 'flex'}}>    
                         <img className="review_image" src="img/Sample_User_Icon.png" alt="" />
-                        <h4 style={{color: '#333', marginTop: '5px', marginLeft: '20px'}}>{name}<small></small></h4>
+                        <h4 style={{color: '#333', marginTop: '15px', marginLeft: '50px'}}>{name}<small></small></h4>
                     </div>
                 )
             }

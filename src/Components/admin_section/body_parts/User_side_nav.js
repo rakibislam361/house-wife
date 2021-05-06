@@ -1,11 +1,9 @@
-import axios from 'axios';
 import React,{useState} from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useStateValue } from '../../StateProvider';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import packageJson from './../../../../package.json';
-
+import Logout_model from './Logout_model'
 
 toast.configure();
 const User_side_nav = () => {
@@ -13,42 +11,21 @@ const [{user}, dispatch] = useStateValue();
 const token = localStorage.getItem('token');
 const [open, setOpen] = useState(true);
 
-const histry = useHistory(); 
- const logOut = () => {
-    if(token){
-    const response = axios.post(`${packageJson.api_url}/api/auth/logout?token=`+token)
+const data = localStorage.getItem('settings')
+const data_pars = JSON.parse(data)
+const logo = data_pars.header_logo_mirror
 
-     .then(response=>{
-        toast.success(response.data.message,{
-              position: "bottom-left",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-         // the user is logged out
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('id');
-        sessionStorage.removeItem("membership")
-        histry.push('/');
-     })
-     .catch();
-    }
-}
     return (
         <>
              <nav className="navbar navbar-expand-lg navbar-dark bg-default fixed-top" id="mainNav">
                 <Link className="navbar-brand" to="/user_dashboard"><img src="img/logo_menu.png" alt="" width={98} height={40} /></Link>
                   <button 
-                 className="navbar-toggler navbar-toggler-right"  
-                 type="button" 
-                 onClick={() => setOpen(!open)}
-                 aria-controls="navbarResponsive"
-                 data-toggle="collapse" 
-                 aria-label="Toggle navigation">
+                    className="navbar-toggler navbar-toggler-right"  
+                    type="button" 
+                    onClick={() => setOpen(!open)}
+                    aria-controls="navbarResponsive"
+                    data-toggle="collapse" 
+                    aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon" />
                 </button> 
               
@@ -57,31 +34,31 @@ const histry = useHistory();
                             <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                             <Link className="nav-link" to="/user_dashboard">
                                 <i className="fa fa-id-card" />
-                                <span className="nav-link-text">Dashboard</span>
+                                <span className="nav-link-text" style={{paddingLeft:'3%'}}>Dashboard</span>
                             </Link>
                             </li>
                             <li className="nav-item" data-toggle="tooltip" data-placement="right" title="My profile">
                             <Link className="nav-link" to="/user_profile">
                                 <i className="fa fa-fw fa-user" />
-                                <span className="nav-link-text">My Profile</span>
+                                <span className="nav-link-text" style={{paddingLeft:'3%'}}>Profilo</span>
                             </Link>
                             </li>
                             <li className="nav-item" data-toggle="tooltip" data-placement="right" title="My profile">
                             <Link className="nav-link" to="/user_call_log">
                                 <i className="fa fa-fw fa-phone" />
-                                <span className="nav-link-text">Call Log</span>
+                                <span className="nav-link-text" style={{paddingLeft:'3%'}}>Call Log</span>
                             </Link>
                             </li>
                             <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Reviews">
                             <Link className="nav-link" to="/user_reviews">
                                 <i className="fa fa-fw fa-star" />
-                                <span className="nav-link-text">Reviews</span>
+                                <span className="nav-link-text" style={{paddingLeft:'3%'}}>Recensioni</span>
                             </Link>
                             </li>
                             <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Bookmarks">
                             <Link className="nav-link" to="/user_bookmark">
                                 <i className="fa fa-fw fa-heart" />
-                                <span className="nav-link-text">Bookmarks</span>
+                                <span className="nav-link-text" style={{paddingLeft:'3%'}}>Bookmarks</span>
                             </Link>
                             </li>
                             </ul>
@@ -94,7 +71,9 @@ const histry = useHistory();
                             </ul>
                             <ul className="navbar-nav ml-auto">
                                 <li className="nav-item">
-                                    <a onClick={logOut} className="nav-link"> <i className="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
+                                     <i className="fas fa-sign-out-alt">
+                                        <Logout_model />
+                                     </i>
                                 </li>
                             </ul>
              

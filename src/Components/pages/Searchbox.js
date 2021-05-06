@@ -7,6 +7,7 @@ import {useCombobox} from "downshift"
 import { Link, useParams,useHistory } from 'react-router-dom';
 
 const Searchbox = ({btn_class,name }) => {
+    
 //     const [inputItems , setInputItems] = useState([]);
 //     const [housewives, setHousewives] = useState([]);
 //     const [singleHousewife, setSingleHousewife] = useState("") 
@@ -32,7 +33,6 @@ const Searchbox = ({btn_class,name }) => {
     const schema = yup.object().shape({
         item: yup.string(),
     });
-
 
 
     const { register, handleSubmit, errors, reset } = useForm({  

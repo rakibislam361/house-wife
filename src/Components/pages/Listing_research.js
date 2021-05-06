@@ -1,34 +1,71 @@
 import React,{useState, useEffect} from 'react'
-import { Link, useParams } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import HouseWife from './SingleHousewife/HouseWife'
 import { Collapse } from 'react-bootstrap';
 import PuffLoader from "react-spinners/PuffLoader"
 import Slider from 'react-slick';
-import Searchbox from "./Searchbox"
-import HuseWifeDetailsSearch from "./HuseWifeDetailsSearch";
 import packageJson from './../../../package.json';
-
-
-
+import { useForm } from 'react-hook-form';
+import { makeStyles } from '@material-ui/core/styles';
+import Pagination from '@material-ui/lab/Pagination';
 
 const Listing_research = (props) => {
     const [categorie, setCategorie] = useState(false);
-    const [distanza, setDistanza] = useState(false);
-    const [valutazione, setValutazione] = useState(false);
     const [housewife, setHousewife] = useState([]);
     const data = sessionStorage.getItem("search_result")
     const search = JSON.parse(data) 
     const [confood, setConFood] = useState();
-    const contry_food_id = sessionStorage.getItem("ctfood")
     const [loading, setLoading] = useState(true);
+    const [changeConFood, setChangeCountryFood] = useState();
+    const [category, setCategory] = useState();
+    const [loadmore, setLoadmore] = useState(12);
+    const { register, handleSubmit, } = useForm(); 
+
+
+    const seaMore = () =>{
+      setLoadmore(loadmore + 12)
+     
+    }
+    let history = useHistory()
+    let contry_food_id = window.location.pathname.split('/')[2];
+
+    console.log(loadmore)
+
+    const loader = () => {
+      if(loading == false){
+        setLoading(true)
+      }
+    }
+
+    useEffect(()=>{
+        try {
+          fetch(`${packageJson.api_url}/api/housewife/food/category`)
+          .then((response)=> response.json())
+          .then((data)=> setCategory(data.categories))
+        } catch (error) {}
+    },[])  
     
+    const onSubmit = (data) =>{
+      const dataVal = data.item.toString()
+        loader()
+        try {
+          fetch(`${packageJson.api_url}/api/housewifes?search=${dataVal}`)
+          .then((response)=> response.json())
+          .then((data)=>{
+           setHousewife(data.housewives)
+           setLoading(false)
+          })
+        } catch (error) {}
+    }
 
-    let HouseWife_image = ['menu_item_large_1.jpg',
-     'menu_item_large_4.jpg','location_3.jpg','location_4.jpg'
-     ,'location_7.jpg','location_8.jpg','location_9.jpg','location_10.jpg',
-    'location_11.jpg','location_12.jpg','location_list_1.jpg','location_list_2.jpg','location_list_3.jpg','location_list_4.jpg'
-    ]
-
+    useEffect(()=>{
+        try {
+          fetch(`${packageJson.api_url}/api/housewife/food/country-food`)
+          .then((response)=> response.json())
+          .then((data)=> setConFood(data.country_foods))
+        } catch (error) {}
+    },[])
+   
     var settings = {
       dots: false,
       autoplay: true,
@@ -62,6 +99,7 @@ const Listing_research = (props) => {
           settings: {
             slidesToShow: 2,
             slidesToScroll: 1,
+             marginRight:10,
             speed:1500,
             autoplaySpeed: 10000,
           }
@@ -70,43 +108,67 @@ const Listing_research = (props) => {
       ]
     };
 
-    useEffect(() => {
+    const countryFood = (event) =>{
+      let food_id = event.currentTarget.dataset.id
+       loader()
         try {
-          fetch(`${packageJson.api_url}/api/index`)
+          fetch(`${packageJson.api_url}/api/housewifes?search=${food_id}`)
           .then((response)=> response.json())
-          .then((data)=> setConFood(data.country_foods))
-        } catch (error) {}  
-    }, []) 
-
-
-    const openCard = (event) => {
-      sessionStorage.setItem('ctfood',event.currentTarget.dataset.id)
-       try {
-          fetch(`${packageJson.api_url}/api/housewifes?country=`+contry_food_id)
-          .then((response)=> response.json())
-          .then((data)=> setHousewife(data.housewives))
-        } catch (error) {}   
-    }; 
-  
-    useEffect(() => {
-      if(contry_food_id){  
-          try {
-          fetch(`${packageJson.api_url}/api/housewifes?country=`+contry_food_id)
-          .then((response)=> response.json())
-          .then((data)=> setHousewife(data.housewives))
+          .then((data)=>{
+            setHousewife(data.housewives)
+            setLoading(false)
+          }) 
         } catch (error) {}
+
+      history.push(`/housewife_list/${food_id}`)
+     
+    } 
+
+    useEffect(() => {
+      if(contry_food_id){
+        loader()
+        try {
+          fetch(`${packageJson.api_url}/api/housewifes?search=${contry_food_id}`)
+          .then((response)=> response.json())
+          .then((data)=>{
+            setHousewife(data.housewives)
+            setLoading(false)
+          }) 
+        } catch (error) {}
+
       }else{
         try {
-          fetch(`${packageJson.api_url}/api/housewifes`)
+            fetch(`${packageJson.api_url}/api/housewifes`)
+            .then((response)=> response.json())
+            .then((data)=>{
+              setHousewife(data.housewives)
+              setLoading(false)
+            })
+          } catch (error) {}
+      }
+      
+    }, [changeConFood])
+   
+
+    const onsubmit = (data) => {   
+     loader()
+      let category = data.categories.toString()
+      let type = data.type
+      try {
+          fetch(`${packageJson.api_url}/api/housewifes?type=${type}&categories=${category}`)
           .then((response)=> response.json())
-          .then((data)=> setHousewife(data.housewives))
-        } catch (error) {}
-      } 
-    }, [])
-         
+          .then((data)=>{
+            setHousewife(data.housewives)
+            setLoading(false)
+            setLoadmore(12)
+          })
+        } catch (error) {} 
+    }
+
+
     return (
         <main>
-          {housewife && confood ?
+          {housewife !== "" && confood !== "" && category !== "" ?
             <>
                 <div className="page_header element_to_stick">
                       <div className="container">
@@ -115,52 +177,51 @@ const Listing_research = (props) => {
                               <h1>{housewife.length} casalinghe disponibili</h1>
                           </div>
                           <div className="col-xl-4 col-lg-5 col-md-5">
-                             <HuseWifeDetailsSearch search_result={props.searchHousewife} />
-
+                             <form onSubmit={handleSubmit(onSubmit)}> 
+                                <div className="search_bar_list">
+                                  <input type="text" ref={register} name="item" className="form-control" placeholder="Cosa vuoi mangiare ?" />
+                                  <button type="submit"><i className="icon_search" /></button>
+                                </div>
+                             </form>
                           </div>
                         </div>		       
                       </div>
                   </div>
-                {/* /page_header */}
-                <div className="collapse" id="collapseMap">
-                  <div id="map" className="map" />
-                </div>
-                {/* /Map */}
+            
                 <div className="container margin_30_20">			
                   <div className="row">
                     
-                    <aside className="col-lg-3" id="sidebar_fixed">
-                      <a className="btn_map d-flex align-items-center justify-content-center" data-toggle="collapse" to="#collapseMap" aria-expanded="false" aria-controls="collapseMap"><span className="btn_map_txt" data-text-swap="Nascondi Map" data-text-original="View on Map">Guarda su Map</span></a>
+                   <aside className="col-lg-3" id="sidebar_fixed">
+                     <form onSubmit={handleSubmit(onsubmit)}> 
+                
                       <div className="type_delivery">
                         <ul className="clearfix">
                           <li>
-                            <label className="container_radio">Both
-                              <input type="radio" name="type_d" defaultChecked="checked" />
+                            <label className="container_radio">Ritiro a domicilio, In tavola da me
+                              <input type="radio" value={3} ref={register} name="type" defaultChecked="checked" />
                               <span className="checkmark" />
                             </label>
                           </li>
                           <li>
-                            <label className="container_radio">Withdrawal
-                              <input type="radio" name="type_d" />
+                            <label className="container_radio">Ritiro a domicilio
+                              <input type="radio" value={1} ref={register} name="type" />
                               <span className="checkmark" />
                             </label>
                           </li>
                           <li>
-                            <label className="container_radio">At Home
-                              <input type="radio" name="type_d" />
+                            <label className="container_radio">In tavola da me
+                              <input type="radio" value={2} ref={register} name="type" />
                               <span className="checkmark" />
                             </label>
                           </li>
                         </ul>
                       </div>
-                      {/* /type_delivery */}
-                      
-                      <a className="btn_map mobile btn_filters" data-toggle="collapse" href="#collapseMap"><i className="icon_pin_alt" /></a>
-                      
+                            
+                      <a className="btn_map mobile btn_filters" data-toggle="collapse" href="#collapseMap"><i className="icon_pin_alt" /></a>  
                       <a href="#0" className="open_filters btn_filters"><i className="icon_adjust-vert" /><span>Filtri</span></a>
                       <div className="filter_col">
                         <div className="inner_bt clearfix">Filtri<a href="#" className="open_filters"><i className="icon_close" /></a></div>
-                        {/* /filter_type */}
+                      
                         <div className="filter_type">
                           
                           <h4><a 
@@ -169,38 +230,22 @@ const Listing_research = (props) => {
                             className="closed">
                               Categorie
                           </a></h4>
-                          <Collapse className="collapse" in={categorie}>
+                          <Collapse className="collapse" in={!categorie}>
                             <ul>
-                              <li>
-                                <label className="container_check">Piatti - Italiani <small>12</small>
-                                  <input type="checkbox" />
-                                  <span className="checkmark" />
-                                </label>
-                              </li>
-                              <li>
-                                <label className="container_check">Piatti - Japonesi <small>24</small>
-                                  <input type="checkbox" />
-                                  <span className="checkmark" />
-                                </label>
-                              </li>
-                              <li>
-                                <label className="container_check">Piatti Messicani <small>23</small>
-                                  <input type="checkbox" />
-                                  <span className="checkmark" />
-                                </label>
-                              </li>
-                              <li>
-                                <label className="container_check">Vegetarian <small>11</small>
-                                  <input type="checkbox" />
-                                  <span className="checkmark" />
-                                </label>
-                              </li>
+                              {category ? category.map((item)=> 
+                                <li>
+                                  <label className="container_check">{item.title_it}<small>{item.food_count}</small>
+                                    <input type="checkbox" name="categories" value={2} ref={register} />
+                                    <span className="checkmark" />
+                                  </label>
+                                </li>
+                              ) : ""}
                             </ul>
                           </Collapse>
 
                         </div>
-                        {/* /filter_type */}
-                        <div className="filter_type">
+                        
+                        {/* <div className="filter_type">
                           <h4><a
                               onClick={() => setDistanza(!distanza)}
                               aria-expanded={distanza}  
@@ -210,14 +255,13 @@ const Listing_research = (props) => {
                           <Collapse className="collapse" in={distanza}>
                             <>
                               <div className="distance"> Raggio intorno alla destinazione selezionata <span /> km</div>
-                              <div className="add_bottom_25"><input className="input_ranger" type="range" min={10} max={50} step={5} defaultValue={20} data-orientation="horizontal" /></div>
+                              <div className="add_bottom_25"><input className="input_ranger" ref={register} name="distance" type="range" min={10} max={50} step={5} defaultValue={20} data-orientation="horizontal" /></div>
                             </>
                           </Collapse>
 
-                        </div>
+                        </div> */}
 
-                        {/* /filter_type */}
-                        <div className="filter_type last">
+                        {/* <div className="filter_type last">
                           <h4><a
                             onClick={() => setValutazione(!valutazione)}
                             aria-expanded={valutazione}  
@@ -226,40 +270,22 @@ const Listing_research = (props) => {
                           
                           <Collapse className="collapse" in={valutazione}>
                             <ul>
-                              <li>
-                                <label className="container_check">Stupendo <small>06</small>
-                                  <input type="checkbox" />
-                                  <span className="checkmark" />
-                                </label>
-                              </li>
-                              <li>
-                                <label className="container_check">Molto Buono <small>12</small>
-                                  <input type="checkbox" />
-                                  <span className="checkmark" />
-                                </label>
-                              </li>
-                              <li>
-                                <label className="container_check">Buono <small>17</small>
-                                  <input type="checkbox" />
-                                  <span className="checkmark" />
-                                </label>
-                              </li>
-                              <li>
-                                <label className="container_check">Discreto <small>43</small>
-                                  <input type="checkbox" />
-                                  <span className="checkmark" />
-                                </label>
-                              </li>
+                                <li>
+                                  <label className="container_check">Stupendo <small>06</small>
+                                    <input type="checkbox" />
+                                    <span className="checkmark" />
+                                  </label>
+                                </li>                            
                             </ul>
                           </Collapse>
 
-                        </div>
+                        </div> */}
 
-                        {/* /filter_type */}
-                        <p><a href="#0" className="btn_1 outline full-width">Filtro</a></p>
+                        <p><button type="submit" className="btn_1 full-width">Filtro</button></p>
                       </div>
+                      </form>
                     </aside>
-                    
+                  
                     <div className="col-lg-9">
                       <div className="row">
                         <div className="col-12">
@@ -270,7 +296,7 @@ const Listing_research = (props) => {
                                   <div key={index} className="item col-md-10">
                                     <figure>
                                       <img src={food.cover} data-src={food.cover} alt="" className="owl-lazy" />
-                                      <Link onClick={openCard} data-id={food.id} to="/housewife_list"><h3>{food.country_en}</h3></Link>
+                                      <a onClick={countryFood} data-id={food.id}><h3>{food.country_en}</h3></a>
                                     </figure>
                                   </div>
                                 ) : ""}
@@ -281,40 +307,39 @@ const Listing_research = (props) => {
                       </div>
                       {/* /row */}
                       <div className="promo">
-                        <h3>Diventa subito partner di In Tavola The Food App</h3>
-                        <p>Tantissimi casalinghe si affidano a noi in tutta Italia.</p>
+                        <h3>Diventa subito partner di In Tavola Food App</h3>
+                        <p>Tantissime casalinghe si affidano a noi in tutta Italia.</p>
                       </div>
                       {/* /promo */}
                       <div className="row">
                         <div className="col-12"><h2 className="title_small">Casalinghe in Bergamo</h2></div>
-                        
-                        {housewife.length ? housewife.map((item, index)=>  
-                              <HouseWife
-                                key={index}
-                                img={HouseWife_image[index]}
-                                id={item.id}
-                                name={item.name} 
-                                city={item.city}
-                                ratings={item.rating_avg}
-                                housewife_type={item.housewife_type}                  
-                              />
-                            ) 
+                        {!loading ? 
+                          housewife.length ? housewife.slice(0, loadmore).map((item, index)=>  
+                                <HouseWife
+                                  key={index}
+                                  img={item.image}
+                                  id={item.id}
+                                  name={item.name} 
+                                  city={item.city}
+                                  ratings={item.rating_avg}
+                                  housewife_type={item.housewife_type}                  
+                                />
+                              ) 
+                          : 
+                              <h5 className="col-12" style={{height:"50vh", paddingTop:"25vh", display:"flex",justifyContent:"center"}}>Nessun dato corrispondente trovato</h5>
+            
                         : 
-                              <h5 className="col-12" style={{height:"50vh", paddingTop:"25vh", display:"flex",justifyContent:"center"}}>No matched data found</h5>
-                          
+                           <div className="loading-spiner">
+                                <PuffLoader  color="#f74f07" loading={loading} size={160} />
+                            </div> 
+                        
                         }
-
+                          
                       </div>
-                      {/* /row */}
-                      {/* <div className="pagination_fg">
-                        <Link to="#">«</Link>
-                        <Link to="#" className="active">1</Link>
-                        <Link to="#">2</Link>
-                        <Link to="#">3</Link>
-                        <Link to="#">4</Link>
-                        <Link to="#">5</Link>
-                        <Link to="#">»</Link>
-                      </div> */}
+            
+                      <div className="pagination_fg">
+                        <button className="btn btn-light" onClick={seaMore}>Load more...</button>
+                      </div>
                     </div>
                     {/* /col */}
                   </div>		

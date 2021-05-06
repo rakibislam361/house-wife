@@ -3062,9 +3062,7 @@ ul#top_menu li a.login:before {
   -moz-border-radius: 3px;
   -ms-border-radius: 3px;
   border-radius: 3px;
-  -webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
   line-height: 1;
   padding: 10px 15px;
   color: #444 !important;
@@ -6075,6 +6073,7 @@ a#forgot {
   color: #999;
   font-size: 11px;
   font-weight: 500;
+  margin-top: 2px;
 }
 
 #forgot_pw {
@@ -6135,6 +6134,7 @@ a.social_bt.users {
 
 a.social_bt.casalinga {
   background: #444 url("../img/casalinga.png") 10px center no-repeat;
+  padding-left: 35px;
 }
 
 .divider {

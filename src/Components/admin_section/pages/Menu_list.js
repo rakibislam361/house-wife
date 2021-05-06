@@ -30,7 +30,7 @@ const Menu_list = () => {
   
     },[deletItem]);
 
-const columns = 
+  const columns = 
     [
         { title: 'Name (english)', field: 'title_en' },
         { title: 'Name (italy)', field: 'title_it' },
@@ -61,10 +61,13 @@ const columns =
 
                 <div className="card mb-3">
                     <div className="card-body">
+                      <div className="">
+                           <Link to="/add_menu" style={{float: 'right'}} className="btn btn-info"><i className="fa fa-fw fa-plus-circle" /> Aggiungi Categoria</Link>
+                      </div>
                       <div className="table-responsive">
                         {data?  
                            <MaterialTable
-                              title="Menu List"
+                              title="Elenco Categorie"
                               columns={columns}
                               data={data}
                                 actions={[

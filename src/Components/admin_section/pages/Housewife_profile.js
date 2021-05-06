@@ -21,7 +21,50 @@ const Housewife_profile = () => {
     const token = localStorage.getItem("token");
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
-    
+    const [valChange, setvalChange] = useState(false)
+    const [image, setImage] = useState(null)
+
+    const imageHandler = (event) => {
+      if (event.target.name === "image") {
+            setImage(
+                 event.target.files[0],
+            );
+        }
+    }
+
+    const imageUpload = () =>{
+      const formData = new FormData();
+      formData.append("profile_image", image, image.name);
+
+      fetch(
+        `${packageJson.api_url}/api/profile/update`,
+        {
+          method: 'POST',
+          body: formData,
+           headers: {
+            Authorization: `Basic ${token}`,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          toast.success(result.message,{
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+
+        })
+        .catch((error) => {
+         
+        });
+
+    }
+
       useEffect(() => {
         try {
             async function load() {
@@ -34,17 +77,14 @@ const Housewife_profile = () => {
           
         } catch (error) {}
     
-      },[]);
+      },[valChange]);
       
       const loader =() =>{
         if(!loading){
             setLoading(true)
         }
-        
       }
-      
-      const [files, setFiles] = useState([]);
-      
+  
       const schema = yup.object().shape({
         name: yup.string().required(),
         phone: yup.string().required(),
@@ -55,38 +95,11 @@ const Housewife_profile = () => {
         zip_code: yup.string().required("zip code is a required field"),
         description_seo: yup.string(),
         keywords_seo: yup.string(),
-        image:yup.string(),
-        housewife_type: yup.string().required(),
+        housewife_type: yup.string(),
         map_url: yup.string(),
         type: yup.string(),
       });
-
-      //profile image dropify .....
-      const { getRootProps, getInputProps } = useDropzone({
-        accept: "image/*",
-        onDrop: (acceptedFiles) => {
-          setFiles(
-            acceptedFiles.map((file) =>
-              Object.assign(file, {
-                preview: URL.createObjectURL(file),
-              })
-            )
-          );
-        },
-      });
-
-      const imageUpload = ()=>{
-        
-      }
-
-      const images = files.map((file) => (
-        <div key={file.name}>
-          <div>
-            <img className="dropzone-image" src={file.preview} alt="preview" />
-          </div>
-        </div>
-      ));
-
+  
       const { register, handleSubmit, control, errors } = useForm({
         resolver: yupResolver(schema),
       });
@@ -112,7 +125,11 @@ const Housewife_profile = () => {
               draggable: true,
               progress: undefined,
             });
-             {response ? setLoading(false) : setLoading(true)}
+            setvalChange(true)
+            if(response){ 
+              setLoading(false)
+                
+             }else{ }
           })
            
           .catch((error) => {
@@ -151,49 +168,28 @@ const Housewife_profile = () => {
                     </h2>
                   </div>
             
-                 {loading ? 
-                  <div className="row">
-                          <div className="loading-spiner">
-                            <div className="col-sm-12 col-md-4 col-xl-3">
-                              <PropagateLoader  color="#f74f07" loading={loading} size={15} />
-                            </div>
-                        </div>
-                      </div>
-                 : user ?
-                        <div className="row">
+                 {user ? 
+                    <div className="row">
                           <div className="col-md-4">
                             <div className="form-group">
                               <label>Your cover photo</label>
                             </div>
-                              <form onSubmit={imageUpload}> 
                                 <div className="dropzone">
-                                <Controller
-                                  name="image"
-                                  ref={register}
-                                  control={control}
-                                  render={({ onChange }) => (
-                                    <div {...getRootProps()}>
-                                      <input {...getInputProps({ onChange })} />
-                                      <div className="dz-dropzone">
-                                        <label
-                                          className={
-                                            images.length > 0
-                                              ? "dropzone-image"
-                                              : "dropzone-label"
-                                          }
-                                        >
-                                          {images.length > 0
-                                            ? images
-                                            : "Drop files here to upload"}
-                                        </label>
-                                      </div>
-                                    </div>
-                                  )}
-                                />
-                              </div>    
-                            </form> 
+                                  {image ? 
+                                  <img style={{minHeight: '180px', maxHeight: '180px', width:"100%"}} src={URL.createObjectURL(image)}/> 
+                                  :
+                                  <img style={{minHeight: '180px', maxHeight: '180px', width:"100%"}} src={user.data.user.image_path}/> 
+                                  }
+                                </div>
+                              <form>
+                                <div className="form-group">
+                                    <input className="form-control" defaultValue={image} type="file" name="image" onChange={imageHandler} multiple />    
+                                    <input type="button" onClick={imageUpload} className="form-control btn btn-light mt-2" value="Image Upload" />
+                                </div>
+                              </form> 
                           </div>
-                            <form method="post" onSubmit={handleSubmit(onSubmit)}>
+                          
+                          <form method="post" onSubmit={handleSubmit(onSubmit)}>
                             <div className="col-md-12 add_top_30">
                             <div className="row">
                               <div className="col-md-12">
@@ -348,7 +344,7 @@ const Housewife_profile = () => {
                               <div className="col-md-6">
                                 <div className="form-group radio_c_group no_label">
                                   <label className="container_radio">
-                                    Withdrawal
+                                   Ritiro a domicilio
                                     <input
                                       type="radio"
                                       name="housewife_type"
@@ -361,7 +357,7 @@ const Housewife_profile = () => {
                                     <span className="checkmark" />
                                   </label>
                                   <label className="container_radio">
-                                    At Home
+                                   In tavola da me
                                     <input
                                       type="radio"
                                       name="housewife_type"
@@ -374,7 +370,7 @@ const Housewife_profile = () => {
                                     <span className="checkmark" />
                                   </label>
                                   <label className="container_radio">
-                                    Both
+                                    Ritiro a domicilio 
                                     <input
                                       type="radio"
                                       name="housewife_type"
@@ -433,6 +429,7 @@ const Housewife_profile = () => {
                                 </div>
                               </div>
                             </div>
+                            
                             <div className="row">
                               <div className="col-md-12">
                                 <div className="form-group">
@@ -480,8 +477,7 @@ const Housewife_profile = () => {
                           <PropagateLoader  color="#f74f07" loading={loading} size={15} />
                         </div>
                     </div>
-                  </div>
-                
+                  </div> 
                 }
                
               
@@ -490,35 +486,34 @@ const Housewife_profile = () => {
 
                 {/* /box_general*/}
                 <div className="row">
-                  <div className="col-md-8">
+                  <div className="col-md-6">
                     <div className="box_general padding_bottom">
                       <div className="header_box version_2">
                         <h2>
                           <i className="fa fa-lock" />
-                          Change password
+                          Cambia password
                         </h2>
                       </div>
                       <div className="form-group">
-                        <label>Old password</label>
+                        <label>Vecchia password</label>
                         <input className="form-control" type="password" />
                       </div>
                       <div className="form-group">
-                        <label>New password</label>
+                        <label>Nuova password</label>
                         <input className="form-control" type="password" />
                       </div>
                       <div className="form-group">
-                        <label>Confirm new password</label>
+                        <label>Conferma nuova password</label>
                         <input className="form-control" type="password" />
                       </div>
+                       <p><a href="#0" className="btn_1 medium mt-2">Salva</a></p>
+
                     </div>
+                    
                   </div>
                 </div>
                 {/* /row*/}
-                <p>
-                  <a href="" className="btn_1 medium">
-                    Save
-                  </a>
-                </p>
+  
               </div>
               {/* /.container-fluid*/}
             </div>

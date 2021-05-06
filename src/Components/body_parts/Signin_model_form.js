@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 toast.configure();
-export default function TransitionsModal() {
+export default function TransitionsModal(props) {
   const [{}, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
   const histry = useHistory(); 
@@ -54,28 +54,33 @@ export default function TransitionsModal() {
   const { register, handleSubmit, errors, reset } = useForm({  
     resolver:yupResolver(schema),
    }); 
-    
+   
    const onSubmit = (data) =>{
       loader();
       const response = axios.post(`${packageJson.api_url}/api/auth/login`, data)
-        .then(response =>{
-             toast.success(response.data.message,{
-              position: "bottom-left",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-                  
+        .then(response =>{      
             if (response.data.message) {
-                  {response ? setLoading(false) : setLoading(true)}    
+               toast.success(response.data.message,{
+                  position: "bottom-left",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+                  
+                  setLoading(false)   
                   localStorage.setItem('token', response.data.token);
                   localStorage.setItem('id', response.data.user.id);
                   localStorage.setItem('user', response.data.user_type);
-                  {response?.data.user.type === 1 ?  histry.push('/user_dashboard') :  histry.push('/housewife_dashboard')}
-          
+                  handleClose()
+                  if (props.heared_redirect == true){
+                    data.user.type === 1 ?  histry.push('/user_profile') : histry.push('/housewife_profile')
+                  }else{
+                  }
+        
+
             } else {
                   toast.error(response.data.error,{
                   position: "bottom-left",
@@ -91,7 +96,6 @@ export default function TransitionsModal() {
             }
         })
         .catch(error => {
-        
         });
 
     } 
@@ -107,7 +111,7 @@ export default function TransitionsModal() {
      dispatch({
         type: "SET_HEADER",
         header: popupHeader,
-        });
+      });
   };
 
   const handleClose = () => {
@@ -121,7 +125,7 @@ export default function TransitionsModal() {
 
   return (
     <div >
-      <a className="login" onClick={handleOpen}></a>
+      <a className={props.classname} onClick={handleOpen}></a>
       <Modal
         aria-labelledby="modal_header"
         aria-describedby="sign-in-dialog"

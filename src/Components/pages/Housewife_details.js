@@ -6,10 +6,13 @@ import axios from 'axios';
 import PuffLoader from "react-spinners/PuffLoader"
 import PropagateLoader from "react-spinners/PropagateLoader"
 import packageJson from './../../../package.json';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import FsLightbox from 'fslightbox-react'
 
-
+toast.configure();
 const Housewife_details = (props) => {
-
+  const [toggler, setToggler] = useState(false);
   const [number, setNumber ] = useState()
   const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
@@ -19,15 +22,27 @@ const Housewife_details = (props) => {
   const [housewife_name, setHousewifeName] = useState(); 
   const [housewifeData, setHousewifeData] = useState();
   const [HousewifeRating, setHousewifeRating] = useState();
+  const [HousewifeImage, setHousewifeImge] = useState();
+
+
+
   let id = window.location.pathname.split('/')[2];
+  let user_id = localStorage.getItem('id')
 
   let menu_image = ['menu_item_large_1.jpg',
   'location_11.jpg','location_12.jpg','location_list_1.jpg','location_list_2.jpg','location_list_3.jpg','location_list_4.jpg'
   ]
 
+  const image = []
+  if(foods){
+     foods.map((item)=>{
+        item.foods.map((food, index)=>{
+          image[index] = food.image
+        })
+     })
+  }
 
  const [scroll, setScroll] = useState(false);
-
  useEffect(() => {
    window.addEventListener("scroll", () => {
      setScroll(window.scrollY > 500);
@@ -36,28 +51,58 @@ const Housewife_details = (props) => {
 
   useEffect(() => {
     try {
-     
-          async function load () {
-          const response = await axios.get(`${packageJson.api_url}/api/housewife/show/`+id);
-          const data = await response; 
-          setHousewifeData(data.data)    
-          setNumber(data.data.housewife.phone)
-          setHousewifeName(data.data.housewife)
-          setHousewifeRating(data.data.housewife)
-          setFoods(data.data.foods)  
-          setLoading(false)             
+        async function load () {
+        const response = await axios.get(`${packageJson.api_url}/api/housewife/show/`+id, {
+          headers: {
+              'Access-Control-Allow-Origin': '*'
+          } 
+        });
+        const data = await response; 
+        setHousewifeData(data.data)    
+        setNumber(data.data.housewife.phone)
+        setHousewifeName(data.data.housewife)
+        setHousewifeRating(data.data.housewife)
+        setHousewifeImge(data.data.housewife.image)
+        setFoods(data.data.foods)  
+        setLoading(false)             
       }
       load()        
     } catch (error) {}
 
   },[]);
-  
+
+  const data = {
+    housewife_id:id,  
+    user_id : user_id
+  }
+  const addToFavorite = ()=>{
+    var config = {
+      method: "post",
+      url: `${packageJson.api_url}/api/user/wishlist?token=`+token,
+      data: data
+    };
+    axios(config)
+      .then((response) => {
+         toast.success(response.data.message,{
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+      })
+      
+      .catch((error) => { 
+      });
+  }
+
   const loader = () =>{
       if(!loading){
       setLoading(true)
       }    
   }
-
 
   const showNumber =() =>{
     loader();
@@ -73,7 +118,7 @@ const Housewife_details = (props) => {
       .catch((error) => {
         setLoading(false)
       });
-  };
+  }
 
 
   return (
@@ -88,8 +133,8 @@ const Housewife_details = (props) => {
           </div>          
         :
           <>
-            <div className="hero_in detail_page background-image" style={{backgroundImage : "url(img/hero_general.jpg)"}}>
-              <div className="wrapper opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)">
+            <div className="hero_in detail_page background-image" style={{backgroundImage : `url(${HousewifeImage? HousewifeImage : ""})`}}>
+              <div className="wrapper opacity-mask" style={{backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
                 <div className="container">
                   <div className="main_info">
                     <div className="row">
@@ -101,21 +146,27 @@ const Housewife_details = (props) => {
                         {housewife_name ? housewife_name.name : ""}- <a href="#" target="blank">Ottenere indicazioni</a>
                       </div>
                       <div className="col-xl-8 col-lg-7 col-md-6">
-                        
                         <div className="buttons clearfix">
                           <span className="magnific-gallery">
-                            <a href="img/hero_general_3.jpg" className="btn_hero" title="Photo title" data-effect="mfp-zoom-in"><i className="icon_image" />GALLERY</a>
-                            <a href="img/hero_general_1.jpg" title="Photo title" data-effect="mfp-zoom-in" />
-                            <a href="img/hero_general_2.jpg" title="Photo title" data-effect="mfp-zoom-in" />
+                             <a onClick={() => setToggler(!toggler)} className="btn_hero" title="Photo title" style={{ marginRight: '4px'}} data-effect="mfp-zoom-in"><i className="icon_image" />GALLERY</a>
+
+                            {token
+                            ? 
+                              <a className="btn_hero wishlist" onClick={addToFavorite}><i className="icon_heart" />Preferiti</a>                        
+                            : 
+                            <a className="add-fav-btn"> 
+                              <LoginModel classname="btn_hero wishlist add-fav-btn" color="#444" name="Preferiti" icon= "icon_heart" secondButton="REGISTRATI COME UTENTE" user_type={1} />
+                            </a>                                                                           
+                            }
                           </span>
-                          {token
-                          ? 
-                            <a className="btn_hero wishlist" style={{color:'white'}}><i className="icon_heart" />Preferiti</a>                        
-                          :
-                            <a className="btn_hero wishlist" style={{color:'white', height: '35px', marginTop:'20px'}}><i className="icon_heart" />
-                            </a>                                                  
-      
-                          }
+  
+                          <FsLightbox
+                              toggler={ toggler }
+                              sources={ image }
+                               
+                          />
+                          
+                         
                         </div>
 
                       </div>
@@ -131,7 +182,7 @@ const Housewife_details = (props) => {
               <div className="container">
                 <ul id="secondary_nav">
                   {foods? foods.map((food, index) =>food.foods.length > 0 ?<li key={index}><a className="list-group-item list-group-item-action" href={`${location.pathname}#section-${index}`}>{food.title_en}</a></li>:""): ""} 
-                  <li><a className="list-group-item list-group-item-action" href={"#section-5"}><i className="icon_chat_alt" />Recensioni</a></li>
+                  <li><a className="list-group-item list-group-item-action"><i className="icon_chat_alt" />Recensioni</a></li>
                 </ul>
               </div>
               <span />
@@ -156,10 +207,11 @@ const Housewife_details = (props) => {
                               </thead>
                               <tbody>
                                 {foods ? food.foods.map((item, index)=> 
-                                <tr key={index}>                    
+                                <tr key={index}>                   
                                   <td className="d-md-flex align-items-center">
                                     <figure>
-                                      <a href="" title="Photo title" data-effect="mfp-zoom-in"><img src={`img/${menu_image[index]}`} data-src={`img/${menu_image[index]}`} alt="thumb" className="lazy" /></a>
+                                      <a title="Photo title" data-effect="mfp-zoom-in"><img src={item.image} onClick={() => setToggler(!toggler)}
+                                       data-src={item.image} alt="thumb" className="lazy" /></a>
                                     </figure>
                                     <div className="flex-md-column">
                                       <h4>{item.title_en}</h4>
@@ -180,7 +232,7 @@ const Housewife_details = (props) => {
                         </section>
                         : ""
                       )
-                      : ""}
+                      : <h3>Nessun alimento disponibile</h3>}
                   </div>
 
                   <div className="col-lg-4" id="sidebar_fixed">
@@ -217,9 +269,11 @@ const Housewife_details = (props) => {
                           ? 
                             <a onClick={showNumber} className="btn_1 gradient full-width mb_5" style={{color:'white'}}>Show this number</a>                        
                           :
-                            <LoginModel name="Sign in now!" secondButton="REGISTRATI COME UTENTE" user_type={1} />
+                            <>
+                            <LoginModel classname={"btn_1 gradient full-width mb_5"} name="Sign in now!" secondButton="REGISTRATI COME UTENTE" user_type={1} />
+                            <div className="text-center"><small>Non hai un account? </small> <a href="/about">Registrati ora</a></div>
+                            </>
                           }
-                          <div className="text-center"><small>Non hai un account? </small> <a href="/about">Registrati ora</a></div>
                         </div>
                       </>
                       }
@@ -231,7 +285,7 @@ const Housewife_details = (props) => {
                           ? 
                             <Contact_model number={number} />                     
                           :
-                            <LoginModel name="CONTACT NOW" secondButton="REGISTRATI COME UTENTE" user_type={1} />
+                            <LoginModel classname="btn_hero wishlist add-fav-btn" color="#444" name="Preferiti" icon= "icon_heart" secondButton="REGISTRATI COME UTENTE" user_type={1} />
                           }
                       </div>
                   </div>
@@ -307,7 +361,7 @@ const Housewife_details = (props) => {
                     </div>
                     {/* /row */}
                     {/* /reviews */}
-                    <div className="text-right"><Link to ="/leave_review" className="btn_1 gradient">Lascia una recensione</Link></div>
+                    <div className="text-right"><Link to ={`/leave_review/${ id}`} className="btn_1 gradient">Lascia una recensione</Link></div>
                   </section>
                   {/* /section */}
                 </div>

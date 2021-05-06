@@ -15,24 +15,54 @@ import packageJson from './../../../package.json';
 
 toast.configure();
 const Partner = (props) => {
-  
-  const data = localStorage.getItem('settings')
-  const data_pars= JSON.parse(data)
 
   const [packages, setPackage] = useState();
   const user_type = localStorage.getItem('user');
+  const [settingsdata, setData ] = useState()
   
+  const contact_data = localStorage.getItem('contact')
+  const data_pars= JSON.parse(contact_data)
+
+  const patner = localStorage.getItem('patner')
+  const data_parse = JSON.parse(patner)
 
   const schema = yup.object().shape({
     name: yup.string().required(),
     email: yup.string().required().email(),
-    phone: yup.string().required(),
+    phone: yup.string().required().min(10),
     password: yup.string().required().min(6),
-    type: yup.string(),
+    type: yup.number().integer(),
     password_confirmation: yup.string().required("confirm password is a required field").min(6) .oneOf([yup.ref('password'), null], 'Passwords does not match'),
 
   });
   
+
+useEffect(() => {
+    try {
+         if (localStorage.getItem('patner') !== ""){
+            fetch(`${packageJson.api_url}/api/settings/become-a-housewife`)
+            .then((response)=> response.json())
+            .then((data)=>{
+                let patner_data = data.become_housewife_settings
+                let patnertData = []
+                if(patner_data && patner_data.length > 0){
+                    patner_data.map((value)=>{
+                        if(value.type == "image"){
+                            patnertData[value.meta_name] = value.image_path
+                        }else{
+                            patnertData[value.meta_name] = value.meta_value
+                        }
+                    })
+                    localStorage.setItem('patner', JSON.stringify(Object.assign({}, patnertData)));
+                }
+                setData("val")
+            })
+        }
+    } catch (error) {}
+     
+}, [settingsdata]);
+
+
  useEffect(() => {     
       try {
         fetch(`${packageJson.api_url}/api/package/index`)
@@ -58,47 +88,59 @@ const Partner = (props) => {
     loader();
     const response = axios.post(`${packageJson.api_url}/api/auth/register`, data)
     .then(response =>{
-          toast.success(response.data.message,{
-          position: "bottom-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        }); histry.push('/login');
-        reset();
-        {response ? setLoading(false) : setLoading(true)}
+      if(response.data.message){
+        var codeMessage = response.data.message;
+        toast.success(codeMessage,{
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            
+          });
+          histry.push('/login');
+          setLoading(false);
+          reset();
+
+      }else{
+        let messageKey = Object.keys(response.data)[0];
+        let message = response.data;
+        var codeMessage = message[messageKey][0];
+        toast.error(codeMessage,{
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setLoading(false);
+      }  
     })
     
     .catch(error => {
-        toast.error("Something went wrong !",{
-          position: "bottom-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        {error ? setLoading(false) : setLoading(true)}
-
+      setLoading(false);
     });
 
   } 
    
     return (
       <main>
-        <div className="hero_single inner_pages background-image" style={{backgroundImage : "url(img/blog-single.jpg)"}}>
-          <div className="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)">
+        {patner ?
+        <>
+        <div className="hero_single inner_pages background-image" style={{backgroundImage : `url(${data_parse ?data_parse.banner : ""})`}}>
+          <div className="opacity-mask" style={{backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
             <div className="container">
               <div className="row justify-content-center">
                 <div className="col-lg-10">
-                  <h1>Diventa subito partner di <br />In Tavola The Food App</h1>
-                  <p>Aumenta la tua visibilità fino al 100% grazie alla nostra piattaforma!</p>
+                  <h1 dangerouslySetInnerHTML={{__html: data_parse ?data_parse.banner_title : ""}}></h1>
+                  <p>{data_parse ?data_parse.banner_text : ""} </p>
                    {!user_type ? 
                       <div className="d-flex justify-content-center">
-                        <LoginModel name={"ISCRIVITI ORA"} secondButton="REGISTRATI COME CASALINGA" user_type={2} />
+                        <LoginModel classname={"btn_1 gradient full-width mb_5"} name={"ISCRIVITI ORA"} secondButton="REGISTRATI COME CASALINGA" user_type={2} />
                       </div>
                     : ""}
                   </div>
@@ -113,15 +155,15 @@ const Partner = (props) => {
           <div className="main_title center">
             <span><em /></span>
             <h2>In Tavola The Food App</h2>
-            <p>Tantissime casalinghe si affidano a noi in tutto il mondo</p>
+            <p>{data_parse ?data_parse.page_title_text : ""}</p>
           </div>
           <div className="row justify-content-center align-items-center add_bottom_15">
             <div className="col-lg-6">
               <div className="box_about">
                 <h3>Registrazione</h3>
-                <p className="lead">ONLINE o TELEFONICAMENTE</p>
-                <p>Registrati e crea la pagina profilo. Inserisci i tuoi dati, la tua posizione, gli orari e il tuo servizio.</p>
-                <img src="img/arrow_about.png" alt="" className="arrow_1" />
+                <div dangerouslySetInnerHTML={{__html:data_parse ?data_parse.step_1_text : "" }}></div>
+           
+                <img src={data_parse ?data_parse.step_1_image : ""} alt="" className="arrow_1" />
               </div>
             </div>
             <div className="col-lg-6 text-center d-none d-lg-block">
@@ -135,10 +177,10 @@ const Partner = (props) => {
             </div>
             <div className="col-lg-6">
               <div className="box_about">
-                <h3>Pubblica il tuo menu</h3>
-                <p className="lead">Nel pannello di controllo a te dedicato, nella sezione menu potrai presentare i tuoi piatti.</p>
+                <h3>{data_parse ?data_parse.step_2_title : ""}</h3>
+                <p className="lead">{data_parse ?data_parse.step_2_text : ""}</p>
                 {/*<p>Scegli il tuo piatto preferito, contatta direttamente la casalingha! Telefonicamente informa la casalinga su cosa vorresti mangiare, conferma il giorno e orario per il ritiro..</p>*/}
-                <img src="img/arrow_about.png" alt="" className="arrow_2" />
+                <img src={data_parse ?data_parse.step_2_image : ""} alt="" className="arrow_2" />
               </div>
             </div>
           </div>
@@ -146,66 +188,62 @@ const Partner = (props) => {
           <div className="row justify-content-center align-items-center">
             <div className="col-lg-6">
               <div className="box_about">
-                <h3>Consegna diretta</h3>
-                <p className="lead">Gli utenti verranno presso il tuo domicilio per il ritiro o a mangiare se tu desideri</p>
-                <p>Dalla tua dashboard avrai il controllo su chi ti contatterà per verificare la serietà dell'utente fornito da In Tavola The Food App.</p>
+                <h3>{data_parse ?data_parse.step_3_title : ""} </h3>
+                <div dangerouslySetInnerHTML={{__html:data_parse ?data_parse.step_3_text : ""}}></div>
               </div>
             </div>
             <div className="col-lg-6 text-center d-none d-lg-block">
-              <img src="img/about_3.png" alt="" className="img-fluid" width={400} height={400} />
+              <img src={data_parse ?data_parse.step_3_image : ""} alt="" className="img-fluid" width={400} height={400} />
             </div>
           </div>
           {/* /row */}
         </div>
 
-        {/* /container */}
-        <div>
-          <div className="container margin_60_40">
+  
+        <div className="container margin_60_40">
             <div className="main_title center">
-              <span><em /></span>
-              <h2>Perché diventare un partner di<br /> In Tavola The Food App?</h2>
-              <p>Tantissime casalinghe si affidano a noi in tutto il mondo</p>
+              <span><em /></span> 
+              <h2 dangerouslySetInnerHTML={{__html:data_parse ?data_parse.feature_title : ""}}></h2>
+              <p>{data_parse ?data_parse.feature_text : ""}</p>
             </div>
             <div className="row">
               <div className="col-lg-4 col-md-6">
-                <Link className="box_topic" to="#0">
-                  <span><i className="icon_globe-2" /></span>
-                  <h3>Aumenta la visibilità</h3>
-                  <p>Potrai guadagnare senza commissioni cucinando quello che vuoi.</p>
+                <Link className="box_topic" to={data_parse? data_parse.feature_1_link : ""}>
+                  <span><i className={data_parse ?data_parse.feature_1_icon_class : ""} /></span>
+                  <h3>{data_parse ?data_parse.feature_1_title : ""}</h3>
+                  <p>Affidati a strumenti di marketing efficaci per ricevere più ordini.</p>
                 </Link>
               </div>
               <div className="col-lg-4 col-md-6">
-                <Link className="box_topic" to="#0">
-                  <i className="icon_search-2" />
-                  <h3>Espandi la tua clientela</h3>
-                  <p>Scegli tu cosa cucinare e quando cucinare.</p>
+                <Link className="box_topic"  to={data_parse ?data_parse.feature_2_link : ""}>
+                  <i className={data_parse ?data_parse.feature_2_icon_class : ""} /> 
+                  <h3>{data_parse ?data_parse.feature_2_title : ""}</h3> 
+                  <p>Attrai nuovi clienti in zona e falli tornare a ordinare.</p>
                 </Link>
               </div>
               <div className="col-lg-4 col-md-6">
                 <Link className="box_topic" to="#0">
                   <i className="icon_lifesaver" />
                   <h3>Approfitta dei nostri servizi</h3>
-                  <p>Ti offriamo assistenza telefonica, anche tramite chat e mail.</p>
+                  <p>Abbiamo gli strumenti di crescita, assistenza e risparmio giusti.</p>
                 </Link>
               </div>
             </div>
           </div>
 
-          {/* /container */}
-        </div>
         <div className="bg_gray">
           <div className="container margin_60_40">			
             <div className="main_title center">
               <span><em /></span>
               <h2>I nostri piani tariffari</h2>
-              <p>Potrai iscriverti semplicemente dalla nostra piattaforma o telefonicamente contattando il seguente numero :  {data_pars? data_pars.contact : ""}</p>
+              <p>Potrai iscriverti semplicemente dalla nostra piattaforma o telefonicamente contattando il seguente numero : {data_pars ? data_pars.registration_number : ""}</p>
             </div>
             <div className="row plans">
               {packages? packages.map((single_package, index)=>
                 <MembershipPlan
                   index={index}
                   id={single_package.id}
-                  month={single_package.title_en}
+                  month={single_package.validity}
                   title={single_package.title_en}
                   dsc={single_package.description_en}
                   price={single_package.price}
@@ -239,7 +277,7 @@ const Partner = (props) => {
           </div>
           {/* /container */}
         </div>
-     {!user_type ?
+        {!user_type ?
         <div className="container margin_60_20" id="submit">
           <div className="row justify-content-center">
             <div className="col-lg-5">
@@ -264,7 +302,7 @@ const Partner = (props) => {
                       placeholder="Nome completo*" 
                       name="name" 
                       id="name_register"
-                      ref={register({ required: true })}/>
+                      ref={register}/>
                       {errors.name && <span className="error_message">{errors.name.message}</span>}
 
                     </div>
@@ -280,7 +318,7 @@ const Partner = (props) => {
                       placeholder="Email*" 
                       name="email" 
                       id="email_register"
-                      ref={register({ required: true })}/>
+                      ref={register}/>
                       {errors.email &&<span className="error_message">{errors.email.message}</span>}
                     </div>
                   </div>
@@ -295,7 +333,7 @@ const Partner = (props) => {
                       placeholder="Telefono*" 
                       name="phone" 
                       id="phone_register" 
-                      ref={register({ required: true })}/>
+                      ref={register}/>
                       {errors.phone &&<span className="error_message">{errors.phone.message}</span>}
                     </div>
                   </div>
@@ -309,7 +347,7 @@ const Partner = (props) => {
                       placeholder="Password*" 
                       name="password" 
                       id="password_register"
-                      ref={register({ required: true })} />
+                      ref={register} />
                       {errors.password && <span className="error_message">{errors.password.message}</span>}
                     </div>
                   </div>
@@ -323,10 +361,10 @@ const Partner = (props) => {
                       placeholder="Conferma Password*" 
                       name="password_confirmation" 
                       id="confir_password_register" 
-                      ref={register({ required: true })} />
+                      ref={register} />
                       {errors.password_confirmation && <span className="error_message">{errors.password_confirmation.message}</span>}
                     </div>
-                    <input name="type" type="hidden" className="" defaultValue={2} ref={register} />
+                    <input name="type" type="hidden" defaultValue="2" ref={register} />
                   </div>
                 </div>
                 <div className="form-group text-center">
@@ -338,6 +376,12 @@ const Partner = (props) => {
           </div>
         </div>
       : ""}
+      </>
+       :
+         <div className="loading-spiner">
+              <PuffLoader  color="#f74f07" loading={loading} size={160} />
+          </div>
+       }
       </main>
     )
 }
