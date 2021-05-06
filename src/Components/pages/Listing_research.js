@@ -232,10 +232,10 @@ const Listing_research = (props) => {
                           </a></h4>
                           <Collapse className="collapse" in={!categorie}>
                             <ul>
-                              {category ? category.map((item)=> 
+                              {category ? category.slice(0,10).map((item)=> 
                                 <li>
                                   <label className="container_check">{item.title_it}<small>{item.food_count}</small>
-                                    <input type="checkbox" name="categories" value={2} ref={register} />
+                                    <input type="checkbox" name="categories" value={item.id} ref={register} />
                                     <span className="checkmark" />
                                   </label>
                                 </li>

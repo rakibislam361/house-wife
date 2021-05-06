@@ -29,10 +29,6 @@ const Housewife_details = (props) => {
   let id = window.location.pathname.split('/')[2];
   let user_id = localStorage.getItem('id')
 
-  let menu_image = ['menu_item_large_1.jpg',
-  'location_11.jpg','location_12.jpg','location_list_1.jpg','location_list_2.jpg','location_list_3.jpg','location_list_4.jpg'
-  ]
-
   const image = []
   if(foods){
      foods.map((item)=>{
@@ -148,8 +144,12 @@ const Housewife_details = (props) => {
                       <div className="col-xl-8 col-lg-7 col-md-6">
                         <div className="buttons clearfix">
                           <span className="magnific-gallery">
-                             <a onClick={() => setToggler(!toggler)} className="btn_hero" title="Photo title" style={{ marginRight: '4px'}} data-effect="mfp-zoom-in"><i className="icon_image" />GALLERY</a>
-
+                    
+                            {image.length !== 0? 
+                             <a onClick={() =>setToggler(!toggler)} className="btn_hero" title="Photo title" style={{ marginRight: '4px'}} data-effect="mfp-zoom-in"><i className="icon_image" />GALLERY</a>
+                             :
+                             <a className="btn_hero" title="Photo title" style={{ marginRight: '4px'}} data-effect="mfp-zoom-in"><i className="icon_image" />GALLERY</a>
+                            }
                             {token
                             ? 
                               <a className="btn_hero wishlist" onClick={addToFavorite}><i className="icon_heart" />Preferiti</a>                        
