@@ -27,15 +27,21 @@ const Favorie_list = () => {
 const [data, setData] = useState();
 const columns = 
     [
-        { title: 'Immagine di copertina', field: 'image',
+        { title: 'Immagine', field: 'image',
            render: rowData =>{ 
-            const Housewife_name = rowData.name;  
-            const Housewife_image = rowData.image_url;  
+              const Housewife_image = rowData.image_url;  
             return(
               <>
                 <img src={Housewife_image ? Housewife_image : "img/600px-No_image_available.svg.png"} width={100} height={80} alt="" />
-                <span style={{marginLeft:'10%', fontSize: '25px'}}>{Housewife_name}</span>
               </>
+            )
+          }
+        },
+        {title: 'Housewife', field:'housewife_name',
+          render: rowData =>{
+              const Housewife_name = rowData.name;  
+            return(
+                <span style={{fontSize: '25px'}}>{Housewife_name}</span>
             )
           }
         }, 

@@ -285,7 +285,7 @@ const Housewife_details = (props) => {
                           ? 
                             <Contact_model number={number} />                     
                           :
-                            <LoginModel classname="btn_hero wishlist add-fav-btn" color="#444" name="Preferiti" icon= "icon_heart" secondButton="REGISTRATI COME UTENTE" user_type={1} />
+                            <LoginModel classname={"btn_1 gradient full-width mb_5"} name="Sign in now!" secondButton="REGISTRATI COME UTENTE" user_type={1} />
                           }
                       </div>
                   </div>
