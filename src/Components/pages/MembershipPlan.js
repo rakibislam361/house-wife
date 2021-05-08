@@ -21,10 +21,10 @@ const MembershipPlan = ({index, id,month,title,price,profile_gallery, dsc }) => 
         <>
             <div className={index==1 ? "plan plan-tall col-md-4" : "plan col-md-4" }>
                 <div className="plan-title">
-                    <h3>{month} Month</h3>
+                    <h3>{month} Mesi</h3>
                     <p>{title}</p>
                 </div>
-                <p className="plan-price">€ {price}</p>
+                <p className="plan-price">{price}€</p>
                 <p>{dsc}</p>
                 <button onClick={buyNow} className="btn_1 gray btn_scroll">Seleziona</button>
             </div>

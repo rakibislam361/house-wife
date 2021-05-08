@@ -172,12 +172,11 @@ const Home = () => {
                                         />
                                     </div>
                                 </div>
-                                
-                                <div className="col-lg-2">
-                                    <button className="btn_1 gradient" type="submit">Cerca</button>
-                                </div>    
-                            </div>
-                          </form>
+                            <div className="col-lg-2">
+                                <button className="btn_1 gradient" type="submit">Cerca</button>
+                            </div>    
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -251,13 +250,13 @@ const Home = () => {
                                 <small>{single_housewife.city}</small>
                                 <div className="item_title">
                                   <h3>{single_housewife.name}</h3>
-                                  <small>Address ....</small>
+                                  <small>{single_housewife.address? single_housewife.address:"nessun indirizzo"}</small>
                                 </div>
                               </Link>
                             </figure>
                             <ul>
                               <li>
-                                <span className="">{single_housewife.housewife_type==1? "Ritiro a domicilio" : single_housewife.housewife_type==2 ? " In tavola da me" :" Ritiro a dmicilio, In tavola da me..." }</span> 
+                                <span className="">{single_housewife.housewife_type==1? "Ritiro a domicilio" : single_housewife.housewife_type==2 ? " In tavola da me" :" Ritiro a dmicilio, In tavola da..." }</span> 
                               </li>
                               <li>
                                 <div className="score"><strong>{single_housewife.rating_avg ? single_housewife.rating_avg:"0.00" }</strong></div>

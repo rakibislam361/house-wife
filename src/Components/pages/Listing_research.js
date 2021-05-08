@@ -322,6 +322,7 @@ const Listing_research = (props) => {
                                   name={item.name} 
                                   city={item.city}
                                   ratings={item.rating_avg}
+                                  address={item.address}
                                   housewife_type={item.housewife_type}                  
                                 />
                               ) 

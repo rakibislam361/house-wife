@@ -111,13 +111,15 @@ const About_us = () => {
    
     return (
       <main>
-        <div className="hero_single inner_pages background-image" style={{backgroundImage : "url(img/access_bg.jpg)"}}>
+        {about_settings ? 
+        <>
+        <div className="hero_single inner_pages background-image" style={{backgroundImage : `url(${about_settings?about_settings.banner:""})`}}>
           <div className="opacity-mask" style={{backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
             <div className="container">
               <div className="row justify-content-center">
                 <div className="col-lg-10">
-                  <h1>Come Ordinare ?</h1>
-                  <p>Trova la Casalinga, consulta il menu, e mettiti in contatto telefonicamente!</p>
+                  <h1>{about_settings?about_settings.banner_title:""}</h1>
+                  <p>{about_settings?about_settings.banner_text:""}</p>
                   {!user_type ? 
                     <div className="d-flex justify-content-center">
                       <LoginModel classname={"btn_1 gradient full-width mb_5"} name={"REGISTRATI ORA"} secondButton="REGISTRATI COME UTENTE" user_type={1} />
@@ -134,33 +136,31 @@ const About_us = () => {
         <div className="container margin_30_20">			
           <div className="main_title center">
             <span><em /></span>
-            <h2>Facile da usare</h2>
-            <p>Scegli il piatto che preferisci e mettiti in contatto.</p>
+            <h2>{about_settings?about_settings.page_title:""}</h2>
+            <p>{about_settings?about_settings.page_title_text:""}</p>
           </div>
           <div className="row justify-content-center align-items-center add_bottom_15">
             <div className="col-lg-6">
               <div className="box_about">
-                <h3>Ricerca la casalinga</h3>
-                <p className="lead">Inserisci un piatto che desideri mangiare o la zona in cui ti trovi.</p>
-                <p>In Tavola Food App ti mostra TUTTE le casalinghe a disposizione, vicinanze tramite geolocalizzazione.</p>
+                <h3>{about_settings?about_settings.step_1_title:""}</h3>
+              
+                <p className="lead" dangerouslySetInnerHTML={{__html:about_settings.step_1_text}}></p>
                 <img src="img/arrow_about.png" alt="" className="arrow_1" />
               </div>
             </div>
             <div className="col-lg-6 text-center d-none d-lg-block">
-              <img src="img/about_1.png" alt="" className="img-fluid" width={500} height={500} />
+              <img src={about_settings?about_settings.step_1_image:""} alt="" className="img-fluid" width={500} height={500} />
             </div>
           </div>
           {/* /row */}
           <div className="row justify-content-center align-items-center add_bottom_15">
             <div className="col-lg-6 text-center d-none d-lg-block">
-              <img src="img/about_3.png" alt="" className="img-fluid" width={400} height={400} />
+                <img src={about_settings?about_settings.step_2_image:""} alt="" className="arrow_2"  width={500} height={500} />
             </div>
             <div className="col-lg-6">
               <div className="box_about">
-                <h3>Scegli un piatto</h3>
-                <p className="lead">Sei in giro e desideri mangiare come a casa?</p>
-                <p>Puoi scegliere in base alla distanza dal luogo di ritiro e alle recensioni aggregate o cercare il nome del tuo piatto preferito.</p>
-                <img src="img/arrow_about.png" alt="" className="arrow_2" />
+                <h3>{about_settings?about_settings.step_2_title:""}</h3> 
+                  <p dangerouslySetInnerHTML={{__html:about_settings.step_2_text }}></p>
               </div>
             </div>
           </div>
@@ -168,13 +168,12 @@ const About_us = () => {
           <div className="row justify-content-center align-items-center">
             <div className="col-lg-6">
               <div className="box_about">
-                <h3>Confronta</h3>
-                <p className="lead">Puoi consultare il menu di ogni casalinga intorno a te e confrontare ogni servizio che viene offerto.</p>
-                <p>Scegli il servizio più conveniente e mettiti in contatto!</p>
+                <h3>{about_settings?about_settings.step_3_title:""} </h3>
+                 <p dangerouslySetInnerHTML={{__html:about_settings.step_3_text }}></p>
               </div>
             </div>
             <div className="col-lg-6 text-center d-none d-lg-block">
-              <img src="img/about_2.png" alt="" className="img-fluid" width={300} height={300} />
+              <img src={about_settings?about_settings.step_3_image:""} alt="" className="img-fluid"  width={500} height={500} />
             </div>
           </div>
           {/* /row */}
@@ -281,6 +280,12 @@ const About_us = () => {
           </div>
         </div>
         : ""}
+        </>
+        :
+          <div className="loading-spiner">
+              <PuffLoader  color="#f74f07" loading={loading} size={160} />
+          </div>  
+        }
       </main>
 
     )
