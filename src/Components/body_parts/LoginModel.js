@@ -301,7 +301,7 @@ export default function TransitionsModal(props) {
                                       <button type="submit" className="btn_1 full-width mb_5">Sign in</button>
                                   </div>
                                   <div className="divider"><span>or</span></div>
-                                  <Link onClick={formChange} className="social_bt casalinga">{props.secondButton}</Link>         
+                                  <a onClick={formChange} style={{color: "white"}} className="social_bt casalinga">{props.secondButton}</a>         
                           
                               </div>
                           </div>
@@ -383,7 +383,7 @@ export default function TransitionsModal(props) {
                                     <input type="submit" className="btn_1 full-width mb_5" />
                                 </div>
                                 <div className="divider"><span>or</span></div>
-                                <Link onClick={formChange1} className="social_bt casalinga">torna alla pagina di accesso</Link>         
+                                <a onClick={formChange1} style={{color: "white"}} className="social_bt casalinga">torna alla pagina di accesso</a>         
                         
                             </div>
                         </div>

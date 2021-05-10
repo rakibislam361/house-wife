@@ -26,7 +26,7 @@ const Listing_header = () => {
 
     const data = localStorage.getItem('settings')
     const data_pars = JSON.parse(data)
-    const logo = data_pars.header_logo
+    const logo = data_pars.header_logo_mirror
   
     const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

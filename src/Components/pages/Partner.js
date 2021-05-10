@@ -77,6 +77,7 @@ useEffect(() => {
   }); 
 
   const [loading, setLoading] = useState(false);
+  const [loadings, setLoadings] = useState(true);
   
   const loader = () =>{
       if(!loading){
@@ -162,25 +163,24 @@ useEffect(() => {
               <div className="box_about">
                 <h3>Registrazione</h3>
                 <div dangerouslySetInnerHTML={{__html:data_parse ?data_parse.step_1_text : "" }}></div>
-           
-                <img src={data_parse ?data_parse.step_1_image : ""} alt="" className="arrow_1" />
+                <img src="img/arrow_about.png" alt="" class="arrow_1"></img>
               </div>
             </div>
             <div className="col-lg-6 text-center d-none d-lg-block">
-              <img src="img/about_1.png" alt="" className="img-fluid" width={500} height={500} />
+              <img src={data_parse ?data_parse.step_1_image : ""} alt="" className="img-fluid" width={500} height={500} />
             </div>
           </div>
           {/* /row */}
           <div className="row justify-content-center align-items-center add_bottom_15">
             <div className="col-lg-6 text-center d-none d-lg-block">
-              <img src="img/about_4.png" alt="" className="img-fluid" width={400} height={400} />
-            </div>
+              <img src={data_parse ?data_parse.step_2_image : ""} alt="" className="img-fluid" width={400} height={400} />
+            </div> 
             <div className="col-lg-6">
               <div className="box_about">
                 <h3>{data_parse ?data_parse.step_2_title : ""}</h3>
                 <p className="lead">{data_parse ?data_parse.step_2_text : ""}</p>
                 {/*<p>Scegli il tuo piatto preferito, contatta direttamente la casalingha! Telefonicamente informa la casalinga su cosa vorresti mangiare, conferma il giorno e orario per il ritiro..</p>*/}
-                <img src={data_parse ?data_parse.step_2_image : ""} alt="" className="arrow_2" />
+                <img src="img/arrow_about.png" alt="" class="arrow_2"></img>
               </div>
             </div>
           </div>
@@ -379,7 +379,7 @@ useEffect(() => {
       </>
        :
          <div className="loading-spiner">
-              <PuffLoader  color="#f74f07" loading={loading} size={160} />
+              <PuffLoader  color="#f74f07" loading={loadings} size={160} />
           </div>
        }
       </main>

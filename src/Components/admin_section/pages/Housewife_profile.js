@@ -93,8 +93,6 @@ const Housewife_profile = () => {
         city: yup.string().required(),
         country_id: yup.string().required(),
         zip_code: yup.string().required("zip code is a required field"),
-        description_seo: yup.string(),
-        keywords_seo: yup.string(),
         housewife_type: yup.string(),
         map_url: yup.string(),
         type: yup.string(),
@@ -352,7 +350,6 @@ const Housewife_profile = () => {
                                       id="housewife_type"
                                       ref={register}
                                       defaultChecked={user.data.user.housewife_type ==1 ? true : false}
-                                      
                                     />
                                     <span className="checkmark" />
                                   </label>
@@ -375,18 +372,22 @@ const Housewife_profile = () => {
                                       type="radio"
                                       name="housewife_type"
                                       value={3}
-                                      ref={register}
+                                      ref={register ({required: true})}
                                       id="housewife_type"
                                       defaultChecked={user.data.user.housewife_type == 3 ? true : false}
-
                                     />
                                     <span className="checkmark" />
                                   </label>
+                                   {errors.housewife_type && (
+                                    <span className="error_message">
+                                      {"select housewife"}
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                             </div>
                       
-                            <div className="row">
+                            {/* <div className="row">
                               <div className="col-md-12">
                                 <div className="form-group">
                                   <label>Description SEO</label>
@@ -407,7 +408,7 @@ const Housewife_profile = () => {
                                 </div>
                               </div>
                             </div>
-                    
+                     */}
                             <div className="row">
                               <div className="col-md-12">
                                 <div className="form-group">
@@ -431,7 +432,7 @@ const Housewife_profile = () => {
                             </div>
                             
                             <div className="row">
-                              <div className="col-md-12">
+                            {/*   <div className="col-md-12">
                                 <div className="form-group">
                                   <label>Keywords SEO</label>
                                   <input
@@ -457,7 +458,7 @@ const Housewife_profile = () => {
                                   ref={register}
                                 />
                               </div>
-
+                                  */}
                               <div className="col-md-12">
                                 <div className="form-group">
                                   <input
@@ -468,6 +469,7 @@ const Housewife_profile = () => {
                                 </div>
                               </div>
                             </div>
+                          
                           </div>
                            </form>
                             </div>

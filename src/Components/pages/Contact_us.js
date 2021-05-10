@@ -72,6 +72,7 @@ const schema = yup.object().shape({
   }
 
   const [loading, setLoading] = useState(false);
+  const [loadings, setLoadings] = useState(true);
   const data = localStorage.getItem('contact')
   const data_parse= JSON.parse(data)
 
@@ -94,7 +95,7 @@ const schema = yup.object().shape({
         {/* /hero_single */}
       {!data_parse? 
           <div className="loading-spiner">
-              <PuffLoader  color="#f74f07" loading={loading} size={160} />
+              <PuffLoader  color="#f74f07" loading={loadings} size={160} />
           </div>
       :
         <div className="bg_gray">

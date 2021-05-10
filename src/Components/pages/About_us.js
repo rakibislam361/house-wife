@@ -15,6 +15,7 @@ import packageJson from './../../../package.json';
 toast.configure();
 const About_us = () => {
   const [loading, setLoading] = useState(false);
+  const [loadings, setLoadings] = useState(true);
   const HowToOrder = localStorage.getItem('about_us')
   const about_settings = JSON.parse(HowToOrder)
   const [settingsdata, setData ] = useState()
@@ -153,14 +154,16 @@ const About_us = () => {
             </div>
           </div>
           {/* /row */}
+
           <div className="row justify-content-center align-items-center add_bottom_15">
             <div className="col-lg-6 text-center d-none d-lg-block">
-                <img src={about_settings?about_settings.step_2_image:""} alt="" className="arrow_2"  width={500} height={500} />
+              <img src={about_settings?about_settings.step_2_image:""} alt="" className="img-fluid" width={500} height={500} />                
             </div>
             <div className="col-lg-6">
               <div className="box_about">
                 <h3>{about_settings?about_settings.step_2_title:""}</h3> 
                   <p dangerouslySetInnerHTML={{__html:about_settings.step_2_text }}></p>
+                  <img src="img/arrow_about.png" alt="" class="arrow_2"></img>
               </div>
             </div>
           </div>
@@ -190,12 +193,12 @@ const About_us = () => {
                   tutte Ie casalinghe che vorrai, quando vorrai</p>
               </div>
               <div id="message-register" />
-                  {loading ?
-                    <div className="loading-spiner">
-                       <PuffLoader  color="#f74f07" loading={loading} size={160} />
-                    </div> 
+                {loading ?
+                  <div className="loading-spiner">
+                      <PuffLoader  color="#f74f07" loading={loading} size={160} />
+                  </div> 
                 :
-                  <form method="post" onSubmit={handleSubmit(onSubmit)}>
+                <form method="post" onSubmit={handleSubmit(onSubmit)}>
                 <h6>Dati personali</h6>
                 <div className="row">
                   <div className="col-lg-12">
@@ -283,7 +286,7 @@ const About_us = () => {
         </>
         :
           <div className="loading-spiner">
-              <PuffLoader  color="#f74f07" loading={loading} size={160} />
+              <PuffLoader  color="#f74f07" loading={loadings} size={160} />
           </div>  
         }
       </main>

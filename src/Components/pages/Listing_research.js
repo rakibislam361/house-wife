@@ -28,9 +28,9 @@ const Listing_research = (props) => {
     }
     let history = useHistory()
     let contry_food_id = window.location.pathname.split('/')[2];
+    const val = !isNaN(contry_food_id) ? "number" : "string"
 
-    console.log(loadmore)
-
+    
     const loader = () => {
       if(loading == false){
         setLoading(true)
@@ -45,6 +45,7 @@ const Listing_research = (props) => {
         } catch (error) {}
     },[])  
     
+    // search box
     const onSubmit = (data) =>{
       const dataVal = data.item.toString()
         loader()
@@ -112,7 +113,7 @@ const Listing_research = (props) => {
       let food_id = event.currentTarget.dataset.id
        loader()
         try {
-          fetch(`${packageJson.api_url}/api/housewifes?search=${food_id}`)
+          fetch(`${packageJson.api_url}/api/housewifes?country=${food_id}`)
           .then((response)=> response.json())
           .then((data)=>{
             setHousewife(data.housewives)
@@ -127,15 +128,25 @@ const Listing_research = (props) => {
     useEffect(() => {
       if(contry_food_id){
         loader()
-        try {
+        if(val==="number"){
+          try {
+            fetch(`${packageJson.api_url}/api/housewifes?country=${contry_food_id}`)
+            .then((response)=> response.json())
+            .then((data)=>{
+              setHousewife(data.housewives)
+              setLoading(false)
+            }) 
+          } catch (error) {}
+        }else{
+            try {
           fetch(`${packageJson.api_url}/api/housewifes?search=${contry_food_id}`)
           .then((response)=> response.json())
           .then((data)=>{
-            setHousewife(data.housewives)
-            setLoading(false)
-          }) 
+           setHousewife(data.housewives)
+           setLoading(false)
+          })
         } catch (error) {}
-
+        }
       }else{
         try {
             fetch(`${packageJson.api_url}/api/housewifes`)
@@ -193,8 +204,8 @@ const Listing_research = (props) => {
                     
                    <aside className="col-lg-3" id="sidebar_fixed">
                      <form onSubmit={handleSubmit(onsubmit)}> 
-                
-                      <div className="type_delivery">
+                    <div style={{display:'flex'}}>
+                        <div className="type_delivery">
                         <ul className="clearfix">
                           <li>
                             <label className="container_radio">Ritiro a domicilio, In tavola da me
@@ -217,10 +228,14 @@ const Listing_research = (props) => {
                         </ul>
                       </div>
                             
-                      <a className="btn_map mobile btn_filters" data-toggle="collapse" href="#collapseMap"><i className="icon_pin_alt" /></a>  
-                      <a href="#0" className="open_filters btn_filters"><i className="icon_adjust-vert" /><span>Filtri</span></a>
+                      {/* <a className="btn_map mobile btn_filters" data-toggle="collapse" href="#collapseMap"><i className="icon_pin_alt" /></a>   */}
+                      <div style={{width:'20%', paddingTop: '15%'}}>  
+                        <button type="submit" className="open_filters btn_filters"><i className="icon_adjust-vert" /><span>Filtri</span></button>
+                      </div>
+                    </div>
+
                       <div className="filter_col">
-                        <div className="inner_bt clearfix">Filtri<a href="#" className="open_filters"><i className="icon_close" /></a></div>
+                        <div className="inner_bt clearfix">Filtri<a href="#" className="open_filters"><i className="icon_close"/></a></div>
                       
                         <div className="filter_type">
                           
@@ -232,8 +247,8 @@ const Listing_research = (props) => {
                           </a></h4>
                           <Collapse className="collapse" in={!categorie}>
                             <ul>
-                              {category ? category.slice(0,10).map((item)=> 
-                                <li>
+                              {category ? category.map((item , index)=> 
+                                <li key={index}>
                                   <label className="container_check">{item.title_it}<small>{item.food_count}</small>
                                     <input type="checkbox" name="categories" value={item.id} ref={register} />
                                     <span className="checkmark" />

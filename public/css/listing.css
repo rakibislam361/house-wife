@@ -96,7 +96,7 @@ a.btn_map span {
   border-radius: 3px;
 }
 
-a.btn_filters {
+button.btn_filters {
   border: 1px solid #ededed;
   display: none;
   padding: 10px;
@@ -106,16 +106,16 @@ a.btn_filters {
   border-radius: 3px;
   height: 42px;
 }
-a.btn_filters span {
+button.btn_filters span {
   display: none;
 }
-a.btn_filters i {
+button.btn_filters i {
   font-size: 21px;
   font-size: 1.3125rem;
   color: #444;
 }
 @media (max-width: 991px) {
-  a.btn_filters {
+  button.btn_filters {
     float: right;
     display: block !important;
     margin: -7px 0 0 5px;
@@ -123,8 +123,15 @@ a.btn_filters i {
   }
 }
 
+@media(max-width:764px){
+  .slick-initialized .slick-slide{
+    padding-right: 5px;
+  }
+}
+
 .type_delivery {
   display: inline-block;
+  width: 80%;
 }
 .type_delivery ul {
   list-style: none;

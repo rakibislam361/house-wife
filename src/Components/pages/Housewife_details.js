@@ -25,18 +25,22 @@ const Housewife_details = (props) => {
   const [HousewifeImage, setHousewifeImge] = useState();
 
 
-
   let id = window.location.pathname.split('/')[2];
   let user_id = localStorage.getItem('id')
 
   const image = []
   if(foods){
-     foods.map((item)=>{
-        item.foods.map((food, index)=>{
-          image[index] = food.image
-        })
+     foods.map((item, index)=>{
+       if (item.foods.length){
+          item.foods.map((food, nIndex)=>{
+            if (food.image !== ""){
+                image.push(food.image);
+            }
+          })
+       }
      })
   }
+  
 
  const [scroll, setScroll] = useState(false);
  useEffect(() => {
@@ -49,9 +53,7 @@ const Housewife_details = (props) => {
     try {
         async function load () {
         const response = await axios.get(`${packageJson.api_url}/api/housewife/show/`+id, {
-          headers: {
-              'Access-Control-Allow-Origin': '*'
-          } 
+          headers: {'Access-Control-Allow-Origin': '*'} 
         });
         const data = await response; 
         setHousewifeData(data.data)    
@@ -88,9 +90,9 @@ const Housewife_details = (props) => {
             draggable: true,
             progress: undefined,
           });
-      })
-      
+      }) 
       .catch((error) => { 
+      
       });
   }
 
@@ -136,10 +138,11 @@ const Housewife_details = (props) => {
                     <div className="row">
                       <div className="col-xl-4 col-lg-5 col-md-6">
                         <div className="head">
+                        
                           <div className="score"><span>VOTAZIONE<em>{HousewifeRating ? HousewifeRating.length :""} Recensioni</em></span><strong>{HousewifeRating ? housewifeData.rating_avg: ""}</strong></div>
                         </div>
                         <h1>{housewife_name ? housewife_name.name: ""}</h1>
-                        {housewife_name ? housewife_name.name : ""}- <a href="#" target="blank">Ottenere indicazioni</a>
+                        {housewife_name ? housewife_name.name : ""}- <a href={housewife_name? housewife_name.map_url:""} target="blank">Ottenere indicazioni</a>
                       </div>
                       <div className="col-xl-8 col-lg-7 col-md-6">
                         <div className="buttons clearfix">
@@ -160,15 +163,11 @@ const Housewife_details = (props) => {
                             }
                           </span>
   
-                          <FsLightbox
-                              toggler={ toggler }
-                              sources={ image }
-                               
-                          />
-                          
-                         
+                         <FsLightbox
+                            toggler={toggler}
+                            sources={image}
+                            />
                         </div>
-
                       </div>
                     </div>
                     {/* /row */}

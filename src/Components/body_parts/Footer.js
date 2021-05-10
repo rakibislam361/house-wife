@@ -32,7 +32,6 @@ const Footer = () => {
                         <ul id="quick-collapse">
                             <li><Link to="/about">Come Ordinare</Link></li>
                             <li><Link to="/partner">Diventa Casalinga</Link></li>
-                            <li><Link to="/">Aiuto</Link></li>
                             <li><Link to="/contact_us">Contatti</Link></li>
                         </ul>
                     </Collapse>

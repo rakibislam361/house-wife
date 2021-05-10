@@ -58,12 +58,12 @@ const Side_nav = () => {
                              <li>
                                 <Link to="/food_list"><i className="fa fa-fw fa-edit" /> Elenco Piatti</Link>
                             </li>
-                            <li>
+                            {/* <li>
                                 <Link to="/add_menu"><i className="fa fa-fw fa-plus-circle" /> Aggiungi Categoria</Link>
-                            </li>
-                            <li>
+                            </li> */}
+                            {/* <li>
                                 <Link to="/menu_list"><i className="fa fa-fw fa-edit" /> Elenco Categorie</Link>
-                            </li>
+                            </li> */}
                         </ul>
                         </li>
                         <li className="nav-item" data-toggle="tooltip" data-placement="right" title="My profile">
@@ -94,7 +94,7 @@ const Side_nav = () => {
                     </ul>
                     <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
-                        <i class="fas fa-sign-out-alt">
+                        <i className="fas fa-sign-out-alt">
                             <Logout_model />
                         </i>
                     </li>

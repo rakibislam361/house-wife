@@ -151,7 +151,7 @@ const Home = () => {
     return (
         <main> 
           
-            <div className="hero_single version_2" style={top_banner ? {background: `#faf3cc url(${data_pars.top_banner}) center center no-repeat`} : ""}>
+            <div className="hero_single version_2" style={top_banner ? {background: `#faf3cc url(${data_pars.top_banner}) center center no-repeat` } : ""}>
               <div className="opacity-mask" style={{backgroundColor: 'rgba(0, 0, 0, 0.6)'}} >
                 <div className="container">
                   <div className="row justify-content-lg-start justify-content-md-center">
