@@ -162,7 +162,7 @@ useEffect(() => {
             <div className="col-lg-6">
               <div className="box_about">
                 <h3>Registrazione</h3>
-                <div dangerouslySetInnerHTML={{__html:data_parse ?data_parse.step_1_text : "" }}></div>
+                <p className="lead" dangerouslySetInnerHTML={{__html:data_parse ?data_parse.step_1_text : "" }}></p>
                 <img src="img/arrow_about.png" alt="" class="arrow_1"></img>
               </div>
             </div>
@@ -189,7 +189,7 @@ useEffect(() => {
             <div className="col-lg-6">
               <div className="box_about">
                 <h3>{data_parse ?data_parse.step_3_title : ""} </h3>
-                <div dangerouslySetInnerHTML={{__html:data_parse ?data_parse.step_3_text : ""}}></div>
+                <p className="lead" dangerouslySetInnerHTML={{__html:data_parse ?data_parse.step_3_text : ""}}></p>
               </div>
             </div>
             <div className="col-lg-6 text-center d-none d-lg-block">
@@ -214,13 +214,15 @@ useEffect(() => {
                   <p>Affidati a strumenti di marketing efficaci per ricevere più ordini.</p>
                 </Link>
               </div>
+
               <div className="col-lg-4 col-md-6">
-                <Link className="box_topic"  to={data_parse ?data_parse.feature_2_link : ""}>
+                <Link className="box_topic" to={data_parse ?data_parse.feature_2_link : ""}>
                   <i className={data_parse ?data_parse.feature_2_icon_class : ""} /> 
                   <h3>{data_parse ?data_parse.feature_2_title : ""}</h3> 
                   <p>Attrai nuovi clienti in zona e falli tornare a ordinare.</p>
                 </Link>
               </div>
+
               <div className="col-lg-4 col-md-6">
                 <Link className="box_topic" to="#0">
                   <i className="icon_lifesaver" />
@@ -228,6 +230,7 @@ useEffect(() => {
                   <p>Abbiamo gli strumenti di crescita, assistenza e risparmio giusti.</p>
                 </Link>
               </div>
+
             </div>
           </div>
 

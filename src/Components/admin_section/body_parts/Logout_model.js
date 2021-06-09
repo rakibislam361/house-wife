@@ -89,7 +89,7 @@ const logOut = () => {
   
   return (
     <>
-      <a className="nav-link-text" style={{cursor: 'pointer', color:'white', marginLeft:'3%'}} onClick={handleOpen}>Logout</a>
+      <a style={{cursor: 'pointer', marginLeft:'5px'}} onClick={handleOpen}>Logout</a>
       <Modal
         aria-labelledby="modal_header"
         aria-describedby="sign-in-dialog"

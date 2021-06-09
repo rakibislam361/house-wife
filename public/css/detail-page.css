@@ -529,7 +529,7 @@ a.menu_item:hover h3 {
   color: #444;
 }
 .table.cart-list td figure {
-  width: 60px;
+  width: 90px;
   height: 60px;
   overflow: hidden;
   display: inline-block;
@@ -544,7 +544,8 @@ a.menu_item:hover h3 {
 }
 .table.cart-list td figure img {
   width: 60px;
-  height: auto;
+  min-width: 60px;
+  height: 60px;
 }
 @media (max-width: 767px) {
   .table.cart-list td figure {

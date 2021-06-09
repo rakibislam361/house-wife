@@ -92,12 +92,14 @@ const Side_nav = () => {
                         </a>
                         </li>
                     </ul>
-                    <ul className="navbar-nav ml-auto">
-                    <li className="nav-item">
-                        <i className="fas fa-sign-out-alt">
-                            <Logout_model />
-                        </i>
-                    </li>
+                <ul className="navbar-nav ml-auto">
+                    <li className="nav-link text-center">
+                        <Link to='/'>TORNA AL SITO</Link>        
+                    </li>     
+                    <li className="nav-link">
+                        <i className="fas fa-sign-out-alt"/>
+                            <Logout_model /> 
+                    </li>   
                 </ul>
             </div>
 

@@ -367,7 +367,7 @@ const Housewife_profile = () => {
                                     <span className="checkmark" />
                                   </label>
                                   <label className="container_radio">
-                                    Ritiro a dmicilio, In tavola da me  
+                                    Ritiro a Domicilio, In tavola da me  
                                     <input
                                       type="radio"
                                       name="housewife_type"

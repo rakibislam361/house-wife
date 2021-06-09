@@ -162,7 +162,7 @@ const About_us = () => {
             <div className="col-lg-6">
               <div className="box_about">
                 <h3>{about_settings?about_settings.step_2_title:""}</h3> 
-                  <p dangerouslySetInnerHTML={{__html:about_settings.step_2_text }}></p>
+                  <p className="lead" dangerouslySetInnerHTML={{__html:about_settings.step_2_text }}></p>
                   <img src="img/arrow_about.png" alt="" class="arrow_2"></img>
               </div>
             </div>
@@ -172,7 +172,7 @@ const About_us = () => {
             <div className="col-lg-6">
               <div className="box_about">
                 <h3>{about_settings?about_settings.step_3_title:""} </h3>
-                 <p dangerouslySetInnerHTML={{__html:about_settings.step_3_text }}></p>
+                 <p className="lead" dangerouslySetInnerHTML={{__html:about_settings.step_3_text }}></p>
               </div>
             </div>
             <div className="col-lg-6 text-center d-none d-lg-block">
